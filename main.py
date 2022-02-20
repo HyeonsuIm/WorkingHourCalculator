@@ -3,7 +3,7 @@ from flask import Flask, abort, render_template, request
 app = Flask(__name__, static_url_path='/static')
 
 @app.route("/")
-def ShowManView():
+def ShowMainView():
     return render_template('html/main.html')
 
 if __name__ == "__main__":
