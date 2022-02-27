@@ -10,18 +10,41 @@ function renderCalendar()
     const startDayOfWeek = monthStartDay.getDay();
     /*document.createElement('<div>`${viewYear}년 ${viewMonth + 1}월`</div>')*/
 
-    elementStr ="<p id='year-month'>" + viewYear + "년 " + ( viewMonth + 1 ) + "월</p>"
-    elementStr += "<table style='margin:auto;text-align:center;'><tr>\n"
+    elementStr = "<table id='calendar-table'>"
+    elementStr +="<tr><td id='year-month' colspan='7'>" + viewYear + "년 " + ( viewMonth + 1 ) + "월</td></tr>"
+    
+    // 요일 생성
+    elementStr += "<tr><td class='sunday' id='month-weekday'>일</td>"
+    elementStr += "<td id='month-weekday'>월</td>"
+    elementStr += "<td id='month-weekday'>화</td>"
+    elementStr += "<td id='month-weekday'>수</td>"
+    elementStr += "<td id='month-weekday'>목</td>"
+    elementStr += "<td id='month-weekday'>금</td>"
+    elementStr += "<td class='saturday' id='month-weekday'>토</td></tr>"
+
+    // 앞쪽 빈칸
+    elementStr += "<tr>"
     for(i=0;i<startDayOfWeek;i++)
     {
-        elementStr += "<th id='month-day'>"
+        elementStr += "<td id='month-day-empty'> </td>"
     }
     
+    //날짜 생성
     for(i=1;i<=monthLastDay.getDate();i++)
     {
-        elementStr += "<th id='month-day'>" + i + "</td>"
+        dayOfWeek = (startDayOfWeek + i -1) % 7
+        classStr = ""
+        if(dayOfWeek == 6)
+        {
+            classStr = "class='saturday'"
+        }
+        else if(dayOfWeek == 0)
+        {
+            classStr = "class='sunday'"
+        }
+        elementStr += "<td id='month-day' " + classStr + ">" + i + "</td>"
 
-        if(((7 - startDayOfWeek) - ( i % 7) ) == 0)
+        if( dayOfWeek == 6)
         {
             elementStr += "</tr><tr>"
         }
@@ -41,19 +64,4 @@ function renderCalendar()
 
     document.querySelector('.calendarArea').innerHTML =
      = dates.join('');*/
-}
-
-function renderWeek(element, startDayOfWeek, startPrintDay)
-{
-    element.innerText += '\n'
-    for(i=0;i<startDayOfWeek;i++)
-    {
-        element.innerText += ' '
-    }
-
-    for(i=startDayOfWeek;i<7;i++)
-    {
-        element.innerText += `${i-startDayOfWeek + startPrintDay}일`
-        element.innerText += ' '
-    }
 }
