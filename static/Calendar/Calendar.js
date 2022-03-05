@@ -1,9 +1,8 @@
-const date = new Date();
-
-function renderCalendar()
+function renderCalendar(date)
 {
     const viewYear = date.getFullYear()
     const viewMonth = date.getMonth()
+    const viewDay = date.getDate()
 
     const monthStartDay = new Date(viewYear, viewMonth, 1)
     const monthLastDay = new Date(viewYear, viewMonth+1, 0)
@@ -42,7 +41,13 @@ function renderCalendar()
         {
             classStr = "class='sunday'"
         }
-        elementStr += "<td id='month-day' " + classStr + ">" + i + "</td>"
+
+        idStr = "id='month-day'"
+        if( viewDay == i)
+        {
+            idStr = "id='month-day-today'"
+        }
+        elementStr += "<td " + idStr + " " + classStr + ">" + i + "</td>"
 
         if( dayOfWeek == 6)
         {
@@ -53,15 +58,40 @@ function renderCalendar()
 
     const element = document.getElementById("calendarArea")
     element.innerHTML += elementStr
-    /*renderWeek(element, startDayOfWeek, 1)*/
+}
 
-/*
-    const TLDate = thisLast.getDate();
-    const thisDates = [...Array(TLDate + 1).keys()].slice(1);
-    thisDates.forEach((date, i) => {
-        thisDates[i] = `<div class="date">${date}</div>`;
-      })
+function renderWorkingHour(date)
+{
+    const viewYear = date.getFullYear()
+    const viewMonth = date.getMonth()
+    const viewDay = date.getDate()
 
-    document.querySelector('.calendarArea').innerHTML =
-     = dates.join('');*/
+    const monthStartDay = new Date(viewYear, viewMonth, 1)
+    const monthLastDay = new Date(viewYear, viewMonth+1, 0)
+    const startDayOfWeek = monthStartDay.getDay();
+    /*document.createElement('<div>`${viewYear}년 ${viewMonth + 1}월`</div>')*/
+
+    //날짜 생성
+    for(i=1;i<=monthLastDay.getDate();i++)
+    {
+        dayOfWeek = (startDayOfWeek + i -1) % 7
+        workingDayCnt = 0
+        if( dayOfWeek != 0 &&
+            dayOfWeek != 6)
+        {
+            workingDayCnt++;
+        }
+    }
+
+    maxWorkingHour = monthLastDay.getDate() / 7 * 5 * 8;
+
+    elementStr = "<table id='working-hour-table'>"
+    elementStr +="<tr><th>최대 근무가능 시간</th></tr>"
+    
+    // 요일 생성
+    elementStr += "<tr><td>" + maxWorkingHour +"</td></tr>"
+    elementStr += "</table>"
+
+    const element = document.getElementById("monthWorkingHour")
+    element.innerHTML += elementStr
 }

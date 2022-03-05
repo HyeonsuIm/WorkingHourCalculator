@@ -10,8 +10,20 @@
             <h1>time</h1>
         </div>
         <hr>
-        <div id="calendarArea" style="margin:auto;text-align:center;">
+        <div style="margin:0 auto;width:1180px">
+            <div id="calendarArea" style="margin:auto;text-align:center;float:left;width:732px;">
+            </div>
+            <div style="margin:auto;text-align:center;float:left;width:448px">
+                <div id="monthWorkingHour"> 
+                </div>
+                <div>
+                </div>
+            </div>
         </div>
     </body>
-    <script>renderCalendar()</script>
+    <script>
+        const date = new Date();
+        renderCalendar(date)
+        renderWorkingHour(date)
+    </script>
 </html>
