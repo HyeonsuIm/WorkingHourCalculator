@@ -72,26 +72,37 @@ function renderWorkingHour(date)
     /*document.createElement('<div>`${viewYear}년 ${viewMonth + 1}월`</div>')*/
 
     //날짜 생성
+    workingDayCnt = 0
+    workingDayCntAfterToday = 0
     for(i=1;i<=monthLastDay.getDate();i++)
     {
         dayOfWeek = (startDayOfWeek + i -1) % 7
-        workingDayCnt = 0
         if( dayOfWeek != 0 &&
             dayOfWeek != 6)
         {
             workingDayCnt++;
+            if(viewDay < i)
+            {
+                workingDayCntAfterToday++;
+            }
         }
     }
 
-    maxWorkingHour = monthLastDay.getDate() / 7 * 5 * 8;
+    maxWorkingHour = monthLastDay.getDate() / 7 * 52;
 
-    elementStr = "<table id='working-hour-table'>"
+    elementStr = "<table id='working-hour-table' style='border:1px solid;width:448px;text-align:left'>"
     elementStr +="<tr><th>최대 근무가능 시간</th></tr>"
     
     // 요일 생성
-    elementStr += "<tr><td>" + maxWorkingHour +"</td></tr>"
+    elementStr += "<tr><td>" + Math.round(maxWorkingHour*100)/100 +"</td></tr>"
     elementStr += "</table>"
 
-    const element = document.getElementById("monthWorkingHour")
-    element.innerHTML += elementStr
+    element = document.getElementById("month_working_hour")
+    element.innerHTML = elementStr
+    element = document.getElementById("working_done")
+    
+    remainedWorkingHour = maxWorkingHour - element.value;
+    element = document.getElementById("daily_working_hour")
+    
+    element.innerText = Math.round(remainedWorkingHour / workingDayCntAfterToday*100) / 100
 }

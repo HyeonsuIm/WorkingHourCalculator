@@ -10,13 +10,23 @@
             <h1>time</h1>
         </div>
         <hr>
-        <div style="margin:0 auto;width:1180px">
+        <div style="margin:0 auto;width:1180px;background-color:lightgray;">
             <div id="calendarArea" style="margin:auto;text-align:center;float:left;width:732px;">
             </div>
-            <div style="margin:auto;text-align:center;float:left;width:448px">
-                <div id="monthWorkingHour"> 
+            <div style="margin:auto;text-align:left;float:left;width:448px">
+                <div id="month_working_hour"> 
                 </div>
-                <div>
+                <div id="month_working_plan" style="margin:auto;margin-top:20px;border:1px solid">
+                    <table>
+                        <tr>
+                            <td>오늘까지 근무한 시간</td>
+                            <td><input id='working_done' type='number' value=0><input type='button' value='입력'" onclick='renderWorkingHour(date)'></input></td>
+                        </tr>
+                        <tr>
+                            <td>평균 일일 근무 필요 시간</td>
+                            <td id='daily_working_hour'></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
