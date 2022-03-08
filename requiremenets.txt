@@ -1,0 +1,13 @@
+click==8.0.3
+convertdate==2.4.0
+Flask==2.0.2
+hijri-converter==2.2.3
+holidays==0.13
+itsdangerous==2.0.1
+Jinja2==3.0.3
+korean-lunar-calendar==0.2.1
+MarkupSafe==2.0.1
+PyMeeus==0.5.11
+python-dateutil==2.8.2
+six==1.16.0
+Werkzeug==2.0.3
