@@ -5,32 +5,21 @@
     border:1px solid
 }
 
-/* 각 칸의 가로, 테두리 */
-#year-month, #month-weekday, #month-day-empty, #month-day, #month-day-today
-{
-    width:80px;
-    border:1px solid;
+/* 요일 높이 */
+#month-weekday{
+    height:40px !important;
 }
 
-/* 각 칸의 높이 */
-#year-month, #month-day-empty, #month-day, #month-day-today
+#calendar-table tr td
 {
+    width:80px;
     height:80px;
+    border:1px solid; 
 }
 
 #month-day-today
 {
     background-color:lightgray
-}
-
-/* 월, 일, 요일의 테두리 */
-/* #year-month, #month-day, #month-weekday{
-    border:1px solid;
-} */
-
-/* 요일 높이 */
-#month-weekday{
-    height:20px;
 }
 
 #month-day-empty{

@@ -20,7 +20,7 @@
                     <table>
                         <tr>
                             <td>오늘까지 근무한 시간</td>
-                            <td><input id='working_done' type='number' value=0><input type='button' value='입력'" onclick='renderWorkingHour(date)'></input></td>
+                            <td><input id='working_done' type='number' value=0><input type='button' value='입력'" onclick='render_working_hour(date)'></input></td>
                         </tr>
                         <tr>
                             <td>평균 일일 근무 필요 시간</td>
@@ -32,8 +32,8 @@
         </div>
     </body>
     <script>
-        const date = new Date();
-        renderCalendar(date)
-        renderWorkingHour(date)
+        const date = new Date()
+        render_calendar(date)
+        render_working_hour(date)
     </script>
 </html>

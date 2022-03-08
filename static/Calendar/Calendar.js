@@ -1,4 +1,4 @@
-function renderCalendar(date)
+function render_calendar(date)
 {
     const viewYear = date.getFullYear()
     const viewMonth = date.getMonth()
@@ -60,7 +60,7 @@ function renderCalendar(date)
     element.innerHTML += elementStr
 }
 
-function renderWorkingHour(date)
+function render_working_hour(date)
 {
     const viewYear = date.getFullYear()
     const viewMonth = date.getMonth()
