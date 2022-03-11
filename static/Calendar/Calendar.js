@@ -101,8 +101,8 @@ function render_working_hour(date)
     element.innerHTML = elementStr
     element = document.getElementById("working_done")
     
-    remainedWorkingHour = maxWorkingHour - element.value;
+    // remainedWorkingHour = maxWorkingHour - element.value;
     element = document.getElementById("daily_working_hour")
     
-    element.innerText = Math.round(remainedWorkingHour / workingDayCntAfterToday*100) / 100
+    element.innerText = Math.round(element.value / workingDayCntAfterToday*100) / 100
 }
