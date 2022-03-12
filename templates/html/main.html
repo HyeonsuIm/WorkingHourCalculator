@@ -3,6 +3,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>NVS month time</title>
         <script src="/static/Calendar/Calendar.js"></script>
+        <script src="/static/Calendar/WorkingHour.js"></script>
         <link rel="stylesheet" href="/static/Calendar/Calendar.css">
     </head>
     <body>
@@ -23,8 +24,16 @@
                             <td><input id='working_done' type='number' value=0><input type='button' value='입력'" onclick='render_working_hour(date)'></input></td>
                         </tr>
                         <tr>
-                            <td>평균 일일 근무 필요 시간</td>
-                            <td id='daily_working_hour'></td>
+                            <td>일일 근무 시간(최대)</td>
+                            <td id='daily_working_hour_max'></td>
+                        </tr>
+                        <tr>
+                            <td>일일 근무 시간(최소))</td>
+                            <td id='daily_working_hour_min'></td>
+                        </tr>
+                        <tr>
+                            <td>일일 근무 시간(평균)</td>
+                            <td id='daily_working_hour_avg'></td>
                         </tr>
                     </table>
                 </div>
