@@ -1,4 +1,4 @@
-function render_working_hour(date)
+function render_working_hour(date, holidayList)
 {
     const viewYear = date.getFullYear()
     const viewMonth = date.getMonth()
@@ -10,14 +10,14 @@ function render_working_hour(date)
     /*document.createElement('<div>`${viewYear}년 ${viewMonth + 1}월`</div>')*/
 
     //날짜 생성
-    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, viewDay)
+    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(holidayList, monthStartDay, monthLastDay, startDayOfWeek, viewDay)
     let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt, remainedWorkingDayCnt)
 
     MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, avgWorkingHour, minWorkingHour)
 }
 
-function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today_date)
+function GetWorkingDay(holidayList, monthStartDay, monthLastDay, startDayOfWeek, today_date)
 {
     totalDayCnt = monthLastDay.getDate()
     let workingDayCnt = 0
@@ -25,8 +25,10 @@ function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today_date)
     for(i=1;i<=totalDayCnt;i++)
     {
         dayOfWeek = (startDayOfWeek + i -1) % 7
+        dateStr = monthStartDay.getFullYear() + '-' + String(monthStartDay.getMonth() + 1).padStart(2,'0') + '-' + String(i).padStart(2,'0')
         if( dayOfWeek != 0 &&
-            dayOfWeek != 6)
+            dayOfWeek != 6 &&
+            -1 == holidayList.indexOf(dateStr) )
         {
             workingDayCnt++;
             if(today_date < i)
@@ -61,7 +63,7 @@ function MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
 
 function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, avgWorkingHour, minWorkingHour)
 {
-    remainedWorkingHour = document.getElementById("working_done").value
+    remainedWorkingHour = GetRemainedWorkingHour()
     
     remainedMaxWorkingHour = remainedWorkingHour
     remainedAvgWorkingHour = remainedWorkingHour - maxWorkingHour * 0.1
@@ -70,6 +72,25 @@ function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, avgW
     SetRemainedWorkingHour("daily_working_hour_max", Math.round( remainedMaxWorkingHour / workingDayCntAfterToday * 100) / 100)
     SetRemainedWorkingHour("daily_working_hour_avg", Math.round( remainedAvgWorkingHour / workingDayCntAfterToday * 100) / 100)
     SetRemainedWorkingHour("daily_working_hour_min", Math.round( remainedMinWorkingHour / workingDayCntAfterToday * 100) / 100)
+}
+
+function GetRemainedWorkingHour()
+{
+    const remainedWorkingHourKey = "remainWorkingHour"
+    let workingDoneElement = document.getElementById("working_done")
+    let remainedWorkingHour = workingDoneElement.value
+    let remainedWorkingHourCache = localStorage.getItem(remainedWorkingHourKey)
+    if( 0 == remainedWorkingHour )
+    {
+        remainedWorkingHour = remainedWorkingHourCache
+        workingDoneElement.value = remainedWorkingHourCache
+    }
+    else
+    {
+        localStorage.setItem(remainedWorkingHourKey, remainedWorkingHour)
+    }
+    
+    return remainedWorkingHour
 }
 
 function SetRemainedWorkingHour(elementId, value)

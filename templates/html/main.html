@@ -42,7 +42,11 @@
     </body>
     <script>
         const date = new Date()
-        render_calendar(date)
-        render_working_hour(date)
+        holidayList = [{% for i in data %} {% if i==data[0] %}"{{i}}"{% else %},"{{i}}"{% endif %} {% endfor %}]
+        
+        holidayList.push("2022-03-09")
+        holidayList.sort()
+        render_calendar(date, holidayList)
+        render_working_hour(date, holidayList)
     </script>
 </html>
