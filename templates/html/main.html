@@ -21,20 +21,24 @@
                 <div id="month_working_plan" style="margin:auto;margin-top:20px;border:1px solid">
                     <table>
                         <tr>
-                            <td>남은 근무 시간</td>
-                            <td><input id='working_done' type='number' value=0><input type='button' value='입력' onclick='render_working_hour(date, holidayList)'></input></td>
+                            <td >남은 근무 시간</td>
+                            <td ><input id='working_done' type='number' value=0><input type='button' value='입력' onclick='render_working_hour(date, holidayList)'></input></td>
+                            <td title='오늘 퇴근 기준 남은 근무시간' style='cursor:help'> ? </td>
                         </tr>
                         <tr>
                             <td>일일 근무 시간(최대)</td>
                             <td id='daily_working_hour_max'></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td>일일 근무 시간(최소))</td>
+                            <td>일일 근무 시간(최소)</td>
                             <td id='daily_working_hour_min'></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td>일일 근무 시간(평균)</td>
                             <td id='daily_working_hour_avg'></td>
+                            <td title='평균 : 최대근무 대비 90%이상 근무' style='cursor:help'> ? </td>
                         </tr>
                     </table>
                 </div>
