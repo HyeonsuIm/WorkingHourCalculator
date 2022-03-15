@@ -32,3 +32,8 @@ td.sunday, td.holiday{
 td.saturday{
     color:blue;
 }
+
+button.calendar_button{
+    background-color: white;
+    border-color:white;
+}

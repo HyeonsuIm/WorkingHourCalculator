@@ -1,8 +1,7 @@
-function render_working_hour(date, holidayList)
+function render_working_hour(date, current_date, holidayList)
 {
     const viewYear = date.getFullYear()
     const viewMonth = date.getMonth()
-    const viewDay = date.getDate()
 
     const monthStartDay = new Date(viewYear, viewMonth, 1)
     const monthLastDay = new Date(viewYear, viewMonth+1, 0)
@@ -10,7 +9,7 @@ function render_working_hour(date, holidayList)
     /*document.createElement('<div>`${viewYear}년 ${viewMonth + 1}월`</div>')*/
 
     //날짜 생성
-    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(holidayList, monthStartDay, monthLastDay, startDayOfWeek, viewDay)
+    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(holidayList, monthStartDay, monthLastDay, startDayOfWeek, current_date)
     let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt, remainedWorkingDayCnt)
 
     MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
@@ -25,10 +24,9 @@ function GetWorkingDay(holidayList, monthStartDay, monthLastDay, startDayOfWeek,
     for(i=1;i<=totalDayCnt;i++)
     {
         dayOfWeek = (startDayOfWeek + i -1) % 7
-        dateStr = monthStartDay.getFullYear() + '-' + String(monthStartDay.getMonth() + 1).padStart(2,'0') + '-' + String(i).padStart(2,'0')
         if( dayOfWeek != 0 &&
             dayOfWeek != 6 &&
-            -1 == holidayList.indexOf(dateStr) )
+            false == IsHoliday(holidayList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i))
         {
             workingDayCnt++;
             if(today_date < i)

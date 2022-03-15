@@ -2,6 +2,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>NVS month time</title>
+        <script src="/static/Calendar/CalendarAPI.js"></script>
         <script src="/static/Calendar/Calendar.js"></script>
         <script src="/static/Calendar/WorkingHour.js"></script>
         <link rel="stylesheet" href="/static/Calendar/Calendar.css">
@@ -41,12 +42,12 @@
         </div>
     </body>
     <script>
-        const date = new Date()
+        current_date = new Date()
         holidayList = [{% for i in data %} {% if i==data[0] %}"{{i}}"{% else %},"{{i}}"{% endif %} {% endfor %}]
         
         holidayList.push("2022-03-09")
         holidayList.sort()
-        render_calendar(date, holidayList)
-        render_working_hour(date, holidayList)
+        render_calendar(current_date, current_date.getDate(), holidayList)
+        render_working_hour(current_date, current_date.getDate(), holidayList)
     </script>
 </html>
