@@ -10,3 +10,16 @@ function IsHoliday(holidayList, year, month, date)
         return false;
     }
 }
+
+function IsVacation(vacationList, year, month, date)
+{
+    dateStr = year + '-' + String(month).padStart(2,'0') + '-' + String(date).padStart(2,'0')
+    if( -1 != vacationList.indexOf(dateStr) )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}

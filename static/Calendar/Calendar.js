@@ -1,4 +1,4 @@
-function render_calendar(date, current_date, holidayList)
+function render_calendar(date, current_date, holidayList, vacationList)
 {
     const currentyear = date.getFullYear()
     const currentMonth = date.getMonth() + 1
@@ -35,7 +35,7 @@ function render_calendar(date, current_date, holidayList)
     {
         let dayOfWeek = (startDayOfWeek + i - 1) % 7
         let classStr = ""
-        
+        let onclickStr = ""
         if( true == IsHoliday(holidayList, currentyear, currentMonth, i) )
         {
             classStr = "class='holiday'"
@@ -48,13 +48,22 @@ function render_calendar(date, current_date, holidayList)
         {
             classStr = "class='sunday'"
         }
+        else if( true == IsVacation(vacationList, currentyear, currentMonth, i))
+        {
+            classStr = "class='vacation'"
+            onclickStr = "onclick='displayHolidayPopup(" + currentyear + "," +currentMonth + "," + i + ")'"
+        }
+        else
+        {
+            onclickStr = "onclick='displayHolidayPopup(" + currentyear + "," +currentMonth + "," + i + ")'"
+        }
 
         let idStr = "id='month-day'"
         if( displayDay == i)
         {
             idStr = "id='month-day-today'"
         }
-        elementStr += "<td " + idStr + " " + classStr + ">" + i + "</td>"
+        elementStr += "<td " + idStr + " " + classStr + " " + onclickStr + " >" + i + "</td>"
 
         if( dayOfWeek == 6)
         {
@@ -91,6 +100,41 @@ function SetMonth(diff)
     {
         displayDay = dateTemp.getDate()
     }
-    render_calendar(current_date, displayDay, holidayList)
-    render_working_hour(current_date, displayDay, holidayList)
+    render_calendar(current_date, displayDay, holidayList, vacationList)
+    render_working_hour(current_date, displayDay, holidayList, vacationList)
+}
+
+function displayHolidayPopup(year, month, day)
+{
+    var isVacation = confirm('휴가?')
+    UpdateVacationDayInformation(year, month,day,isVacation)
+    UpdateAllVacation(vacationList)
+
+    render_calendar(current_date, current_date.getDate(), holidayList, vacationList)
+    render_working_hour(current_date, current_date.getDate(), holidayList, vacationList)
+}
+
+function UpdateVacationDayInformation(year,month,date,isVacation)
+{
+    const vacationKey = "vacation_"+year+"-"+ String(month).padStart(2,'0') + "-" + String(date).padStart(2,'0')
+    localStorage.setItem(vacationKey, isVacation)
+}
+
+function UpdateAllVacation()
+{
+    vacationList = []
+    for( let key in localStorage )
+    {
+        isVacation = localStorage.getItem(key)
+        if( "false" != isVacation )
+        {
+            let startIndex = key.indexOf('vacation_')
+            if( 0 == startIndex )
+            {
+                key = key.substring(startIndex+('vacation_').length)
+                //let [year, month,day] = key.split('-',3)
+                vacationList.push(key)
+            }
+        }
+    }
 }

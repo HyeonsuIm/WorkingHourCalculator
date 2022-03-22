@@ -9,14 +9,22 @@ function render_working_hour(date, current_date, holidayList)
     /*document.createElement('<div>`${viewYear}년 ${viewMonth + 1}월`</div>')*/
 
     //날짜 생성
-    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(holidayList, monthStartDay, monthLastDay, startDayOfWeek, current_date)
-    let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt, remainedWorkingDayCnt)
+    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(holidayList, vacationList, monthStartDay, monthLastDay, startDayOfWeek, current_date)
+    let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
 
     MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, avgWorkingHour, minWorkingHour)
+    
+    overtime_work = (maxWorkingHour - GetRemainedWorkingHour()) - minWorkingHour
+    if( overtime_work < 0 )
+    {
+        overtime_work = 0
+    }
+    
+    renderOvernightPay()
 }
 
-function GetWorkingDay(holidayList, monthStartDay, monthLastDay, startDayOfWeek, today_date)
+function GetWorkingDay(holidayList, vacationList, monthStartDay, monthLastDay, startDayOfWeek, today_date)
 {
     totalDayCnt = monthLastDay.getDate()
     let workingDayCnt = 0
@@ -26,7 +34,8 @@ function GetWorkingDay(holidayList, monthStartDay, monthLastDay, startDayOfWeek,
         dayOfWeek = (startDayOfWeek + i -1) % 7
         if( dayOfWeek != 0 &&
             dayOfWeek != 6 &&
-            false == IsHoliday(holidayList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i))
+            false == IsHoliday(holidayList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i) &&
+            false == IsVacation(vacationList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i) )
         {
             workingDayCnt++;
             if(today_date < i)
@@ -38,10 +47,10 @@ function GetWorkingDay(holidayList, monthStartDay, monthLastDay, startDayOfWeek,
     return [workingDayCnt, workingDayCntAfterToday]
 }
 
-function GetWorkingHours(totalDayCnt, totalWorkingDayCnt, remainedWorkingDayCnt)
+function GetWorkingHours(totalDayCnt, totalWorkingDayCnt)
 {
     let maxWorkingHour = totalDayCnt / 7 * 52;
-    let minWorkingHour = totalWorkingDayCnt * 8 < totalDayCnt / 7 * 40 ? totalWorkingDayCnt * 8 : totalDayCnt / 7 * 40
+    let minWorkingHour = totalWorkingDayCnt * 8 < totalDayCnt / 7 * 40 ? totalWorkingDayCnt * 8 : totalDayCnt / 7 * 40;
     let avgWorkingHour = maxWorkingHour * 0.9
     return [maxWorkingHour, avgWorkingHour, minWorkingHour]
 }
@@ -97,6 +106,32 @@ function SetRemainedWorkingHour(elementId, value)
     if( value > 0)
     {
         element.innerText = value
+    }
+    else
+    {
+        element.innerText = "0"
+    }
+}
+
+function renderOvernightPay()
+{
+    let element = document.getElementById('overnight_pay')
+    let payPerHourElement = document.getElementById("overnight_pay_per_hour")
+    let payPerHour = payPerHourElement.value
+
+    if( 0 == payPerHour )
+    {
+        payPerHourElement.value = localStorage.getItem('overtime_pay')
+        payPerHour = payPerHourElement.value
+    }
+    else
+    {
+        localStorage.setItem('overtime_pay', payPerHour)
+    }
+    
+    if( overtime_work > 0)
+    {
+        element.innerText = (Math.floor( overtime_work * 60 ) * (payPerHour / 60 )).toLocaleString()
     }
     else
     {

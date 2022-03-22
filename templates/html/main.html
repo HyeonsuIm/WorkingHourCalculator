@@ -1,7 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>NVS month time</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <script src="/static/Calendar/CalendarAPI.js"></script>
         <script src="/static/Calendar/Calendar.js"></script>
         <script src="/static/Calendar/WorkingHour.js"></script>
@@ -19,11 +24,11 @@
                 <div id="month_working_hour"> 
                 </div>
                 <div id="month_working_plan" style="margin:auto;margin-top:20px;border:1px solid">
-                    <table>
+                    <table class="table">
                         <tr>
-                            <td >남은 근무 시간</td>
-                            <td ><input id='working_done' type='number' value=0><input type='button' value='입력' onclick='render_working_hour(date, holidayList)'></input></td>
-                            <td title='오늘 퇴근 기준 남은 근무시간' style='cursor:help'> ? </td>
+                            <td><input type='number' class='form-control' placeholder='남은 근무 시간' id='working_done'/></td>
+                            <td><input type='button' class='btn btn-outline-dark' value='입력' onclick='render_working_hour(current_date, current_date.getDate(), holidayList, vacationList)'/></td>
+                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='오늘 퇴근 기준 남은 근무시간' style='cursor:help'/> </td>
                         </tr>
                         <tr>
                             <td>일일 근무 시간(최대)</td>
@@ -38,7 +43,17 @@
                         <tr>
                             <td>일일 근무 시간(평균)</td>
                             <td id='daily_working_hour_avg'></td>
-                            <td title='평균 : 최대근무 대비 90%이상 근무' style='cursor:help'> ? </td>
+                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='평균 : 최대근무 대비 90%이상 근무' style='cursor:help'/></td>
+                        </tr>
+                    </table>
+                    <table class="table">
+                        <tr>
+                            <td><input type='number' class='form-control' placeholder='시급' id='overnight_pay_per_hour'/></td>
+                            <td><input type='button' class='btn btn-outline-dark' value='입력' onclick='renderOvernightPay()'/></td>
+                        </tr>
+                        <tr>
+                            <td>금</td>
+                            <td id='overnight_pay'></td>
                         </tr>
                     </table>
                 </div>
@@ -46,12 +61,20 @@
         </div>
     </body>
     <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();   
+        });
+        overtime_work = 0
         current_date = new Date()
         holidayList = [{% for i in data %} {% if i==data[0] %}"{{i}}"{% else %},"{{i}}"{% endif %} {% endfor %}]
         
         holidayList.push("2022-03-09")
         holidayList.sort()
-        render_calendar(current_date, current_date.getDate(), holidayList)
-        render_working_hour(current_date, current_date.getDate(), holidayList)
+        vacationList = []
+        UpdateAllVacation(vacationList)
+        render_calendar(current_date, current_date.getDate(), holidayList, vacationList)
+        render_working_hour(current_date, current_date.getDate(), holidayList, vacationList)
+
+        renderOvernightPay()
     </script>
 </html>
