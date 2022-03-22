@@ -1,4 +1,4 @@
-function render_working_hour(date, current_date, holidayList)
+function render_working_hour(date, current_date)
 {
     const viewYear = date.getFullYear()
     const viewMonth = date.getMonth()
@@ -73,11 +73,11 @@ function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, avgW
     remainedWorkingHour = GetRemainedWorkingHour()
     
     remainedMaxWorkingHour = remainedWorkingHour
-    remainedAvgWorkingHour = remainedWorkingHour - maxWorkingHour * 0.1
+    remainedPlanWorkingHour = remainedWorkingHour - working_hour_plan
     remainedMinWorkingHour = minWorkingHour - (maxWorkingHour - remainedMaxWorkingHour)
 
+    SetRemainedWorkingHour("daily_working_hour_plan", Math.round( remainedPlanWorkingHour / workingDayCntAfterToday * 100) / 100)
     SetRemainedWorkingHour("daily_working_hour_max", Math.round( remainedMaxWorkingHour / workingDayCntAfterToday * 100) / 100)
-    SetRemainedWorkingHour("daily_working_hour_avg", Math.round( remainedAvgWorkingHour / workingDayCntAfterToday * 100) / 100)
     SetRemainedWorkingHour("daily_working_hour_min", Math.round( remainedMinWorkingHour / workingDayCntAfterToday * 100) / 100)
 }
 
@@ -113,9 +113,26 @@ function SetRemainedWorkingHour(elementId, value)
     }
 }
 
+function updateWorkingPlan()
+{
+    let workingPlanElement = document.getElementById('working_plan')
+    let workingPlan = workingPlanElement.value
+
+    if( 0 == workingPlan )
+    {
+        workingPlanElement.value = localStorage.getItem('working_plan')
+        workingPlan = workingPlanElement.value
+    }
+    else
+    {
+        localStorage.setItem('working_plan', workingPlan)
+    }
+    
+    working_hour_plan = workingPlan
+}
+
 function renderOvernightPay()
 {
-    let element = document.getElementById('overnight_pay')
     let payPerHourElement = document.getElementById("overnight_pay_per_hour")
     let payPerHour = payPerHourElement.value
 
@@ -129,6 +146,7 @@ function renderOvernightPay()
         localStorage.setItem('overtime_pay', payPerHour)
     }
     
+    let element = document.getElementById('overnight_pay')
     if( overtime_work > 0)
     {
         element.innerText = (Math.floor( overtime_work * 60 ) * (payPerHour / 60 )).toLocaleString()

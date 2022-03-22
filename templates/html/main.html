@@ -27,8 +27,18 @@
                     <table class="table">
                         <tr>
                             <td><input type='number' class='form-control' placeholder='남은 근무 시간' id='working_done'/></td>
-                            <td><input type='button' class='btn btn-outline-dark' value='입력' onclick='render_working_hour(current_date, current_date.getDate(), holidayList, vacationList)'/></td>
+                            <td><input type='button' class='btn btn-outline-dark' value='입력' onclick='render_working_hour(current_date, current_date.getDate())'/></td>
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='오늘 퇴근 기준 남은 근무시간' style='cursor:help'/> </td>
+                        </tr>
+                        <tr>
+                            <td><input type='number' class='form-control' placeholder='예상 시간' id='working_plan'/></td>
+                            <td><input type='button' class='btn btn-outline-dark' value='입력' onclick='updateWorkingPlan()'/></td>
+                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='남길 근무시간 입력' style='cursor:help'/> </td>
+                        </tr>
+                        <tr>
+                            <td>일일 근무 시간(입력)</td>
+                            <td id='daily_working_hour_plan'></td>
+                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='입력한 근무시간 기준 평균 근로필요 시간' style='cursor:help'/></td>
                         </tr>
                         <tr>
                             <td>일일 근무 시간(최대)</td>
@@ -40,11 +50,6 @@
                             <td id='daily_working_hour_min'></td>
                             <td></td>
                         </tr>
-                        <tr>
-                            <td>일일 근무 시간(평균)</td>
-                            <td id='daily_working_hour_avg'></td>
-                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='평균 : 최대근무 대비 90%이상 근무' style='cursor:help'/></td>
-                        </tr>
                     </table>
                     <table class="table">
                         <tr>
@@ -54,6 +59,7 @@
                         <tr>
                             <td>금</td>
                             <td id='overnight_pay'></td>
+                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='남은 근무시간 기준 야근비' style='cursor:help'/></td>
                         </tr>
                     </table>
                 </div>
@@ -65,6 +71,7 @@
             $('[data-toggle="tooltip"]').tooltip();   
         });
         overtime_work = 0
+        working_hour_plan = 0
         current_date = new Date()
         holidayList = [{% for i in data %} {% if i==data[0] %}"{{i}}"{% else %},"{{i}}"{% endif %} {% endfor %}]
         
@@ -72,9 +79,10 @@
         holidayList.sort()
         vacationList = []
         UpdateAllVacation(vacationList)
-        render_calendar(current_date, current_date.getDate(), holidayList, vacationList)
-        render_working_hour(current_date, current_date.getDate(), holidayList, vacationList)
+        render_calendar(current_date, current_date.getDate())
+        render_working_hour(current_date, current_date.getDate())
 
+        updateWorkingPlan()
         renderOvernightPay()
     </script>
 </html>

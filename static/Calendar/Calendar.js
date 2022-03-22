@@ -1,4 +1,4 @@
-function render_calendar(date, current_date, holidayList, vacationList)
+function render_calendar(date, current_date)
 {
     const currentyear = date.getFullYear()
     const currentMonth = date.getMonth() + 1
@@ -100,8 +100,8 @@ function SetMonth(diff)
     {
         displayDay = dateTemp.getDate()
     }
-    render_calendar(current_date, displayDay, holidayList, vacationList)
-    render_working_hour(current_date, displayDay, holidayList, vacationList)
+    render_calendar(current_date, displayDay)
+    render_working_hour(current_date, displayDay)
 }
 
 function displayHolidayPopup(year, month, day)
@@ -110,8 +110,8 @@ function displayHolidayPopup(year, month, day)
     UpdateVacationDayInformation(year, month,day,isVacation)
     UpdateAllVacation(vacationList)
 
-    render_calendar(current_date, current_date.getDate(), holidayList, vacationList)
-    render_working_hour(current_date, current_date.getDate(), holidayList, vacationList)
+    render_calendar(current_date, current_date.getDate())
+    render_working_hour(current_date, current_date.getDate())
 }
 
 function UpdateVacationDayInformation(year,month,date,isVacation)
