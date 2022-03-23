@@ -21,6 +21,12 @@ function render_working_hour(date, current_date)
         overtime_work = 0
     }
     
+    overtime_work_plan = (maxWorkingHour - working_hour_plan) - minWorkingHour
+    if( overtime_work_plan < 0 )
+    {
+        overtime_work_plan = 0
+    }
+
     renderOvernightPay()
 }
 
@@ -57,7 +63,7 @@ function GetWorkingHours(totalDayCnt, totalWorkingDayCnt)
 
 function MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
 {
-    elementStr = "<table id='working-hour-table' style='border:1px solid;width:448px;text-align:left'>"
+    elementStr = "<table class='table' id='working-hour-table' style='border:1px solid;border-color:lightgray;width:448px;text-align:left'>"
     elementStr +="<tr><th>최대 근무가능 시간</th></tr>"
     
     // 요일 생성
@@ -150,6 +156,16 @@ function renderOvernightPay()
     if( overtime_work > 0)
     {
         element.innerText = (Math.floor( overtime_work * 60 ) * (payPerHour / 60 )).toLocaleString()
+    }
+    else
+    {
+        element.innerText = "0"
+    }
+
+    element = document.getElementById('overnight_pay_plan')
+    if( overtime_work_plan > 0)
+    {
+        element.innerText = (Math.floor( overtime_work_plan * 60 ) * (payPerHour / 60 )).toLocaleString()
     }
     else
     {

@@ -7,7 +7,7 @@ function render_calendar(date, current_date)
     const monthLastDay = new Date(currentyear, currentMonth, 0)
     const startDayOfWeek = monthStartDay.getDay();
 
-    let elementStr = "<table id='calendar-table'>"
+    let elementStr = "<table class='table' id='calendar-table'>"
     elementStr +="<tr>\
     <td><button id='prev_button' class='calendar_button' onclick='SetMonth(-1)'><</button></td>\
     <td id='year-month' colspan='5'>" + currentyear + "년 " + ( currentMonth ) + "월</td>\
