@@ -36,7 +36,22 @@ td.vacation{
     color:red;
 }
 
-button.calendar_button{
-    background-color: white;
-    border-color:white;
+#side_area>div
+{
+    /*border:1px solid #dae1e6;*/
+    background-color:#f9f9f9;
+    border-radius: 10px;
+
+    margin:15px;
+}
+
+#side_area>div>table
+{
+    border:0px
+}
+
+#side_area>div>table>th, td
+{
+    border-top:1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 }

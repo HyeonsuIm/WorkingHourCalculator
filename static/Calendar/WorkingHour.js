@@ -63,15 +63,8 @@ function GetWorkingHours(totalDayCnt, totalWorkingDayCnt)
 
 function MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
 {
-    elementStr = "<table class='table' id='working-hour-table' style='border:1px solid;border-color:lightgray;width:448px;text-align:left'>"
-    elementStr +="<tr><th>최대 근무가능 시간</th></tr>"
-    
-    // 요일 생성
-    elementStr += "<tr><td>" + Math.round(maxWorkingHour*100)/100 +"</td></tr>"
-    elementStr += "</table>"
-
-    element = document.getElementById("month_working_hour")
-    element.innerHTML = elementStr
+    element = document.getElementById("month_max_working_hour")
+    element.innerHTML = Math.round(maxWorkingHour*100)/100
 }
 
 function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, avgWorkingHour, minWorkingHour)

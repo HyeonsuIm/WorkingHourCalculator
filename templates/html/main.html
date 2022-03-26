@@ -18,30 +18,33 @@
         </div>
         <hr>
         <div style="margin:0 auto;width:1180px;background-color:lightgray;">
-            <div id="calendarArea" style="margin:auto;text-align:center;float:left;width:732px;padding:20px 20px">
+            <div id="calendarArea" style="margin:auto;text-align:center;float:left;width:732px;padding:10px 10px;">
             </div>
-            <div style="margin:auto;text-align:left;float:left;width:448px">
-                <div id="month_working_hour" style='padding:20px 20px'> 
+            <div id="side_area"style="text-align:left;float:left;width:448px;">
+                <div id="month_working_hour"> 
+                    <table class='table' id='working-hour-table'>
+                        <tr><th>최대 근무가능 시간</th></tr>
+                        <tr><td id="month_max_working_hour"></td></tr>
+                    </table>
                 </div>
-                <div id="month_working_plan" style="margin:auto;padding:20px 20px">
-                    <table class="table" style='padding:20px 20px;border:1px solid;border-color:lightgray'>
+                <div id="month_working_input">
+                    <table class="table" >
                         <tr>
-                            <td colspan='2'><input type='number' class='form-control' placeholder='남은 근무 시간' id='working_done'/></td>
+                            <td colspan='2'><input type='number' class='form-control' placeholder='남은 근무 시간' id='working_done' onchange='UpdateAllViews()'/></td>
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='오늘 퇴근 기준 남은 근무시간' style='cursor:help'/> </td>
                         </tr>
                         <tr>
-                            <td colspan='2'><input type='number' class='form-control' placeholder='예상 시간' id='working_plan'/></td>
+                            <td colspan='2'><input type='number' class='form-control' placeholder='예상 시간' id='working_plan' onchange='UpdateAllViews()'/></td>
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='남길 근무시간 입력' style='cursor:help'/> </td>
                         </tr>
                         <tr>
-                            <td colspan='2'><input type='number' class='form-control' placeholder='시급' id='overnight_pay_per_hour'/></td>
-                        </tr>
-                        <tr>
-                            <td colspan='2' style='text-align:right'><input type='button' class='btn btn-outline-dark' value='입력' onclick='UpdateAllViews()'/></td>
+                            <td colspan='2'><input type='number' class='form-control' placeholder='시급' id='overnight_pay_per_hour' onchange='UpdateAllViews()'/></td>
+                            <td></td>
                         </tr>
                     </table>
-                    
-                    <table class="table" style='padding:20px 20px;border:1px solid;border-color:lightgray'>
+                </div>
+                <div id="month_working_plan">
+                    <table class="table">
                         <tr>
                             <td>일일 근무 시간(입력)</td>
                             <td id='daily_working_hour_plan'></td>
