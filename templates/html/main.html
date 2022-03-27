@@ -13,11 +13,11 @@
         <link rel="stylesheet" href="/static/Calendar/Calendar.css">
     </head>
     <body>
-        <div id='title' style="margin:auto;text-align:center;">
-            <h1>time</h1>
+        <div id='title' style="margin:0 auto;width:1180px;text-align:left;">
+            <h3>Work Hour</h3>
+            <hr>
         </div>
-        <hr>
-        <div style="margin:0 auto;width:1180px;background-color:lightgray;">
+        <div style="margin:0 auto;width:1180px;">
             <div id="calendarArea" style="margin:auto;text-align:center;float:left;width:732px;padding:10px 10px;">
             </div>
             <div id="side_area"style="text-align:left;float:left;width:448px;">
@@ -76,26 +76,35 @@
         </div>
     </body>
     <script>
+        UpdateGlobalDateInformation()
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();   
         });
-        overtime_work = 0
-        working_hour_plan = 0
-        current_date = new Date()
-        holidayList = [{% for i in data %} {% if i==data[0] %}"{{i}}"{% else %},"{{i}}"{% endif %} {% endfor %}]
-        
-        holidayList.push("2022-03-09")
-        holidayList.sort()
-        vacationList = []
+
 
         UpdateAllViews()
+
+        function UpdateGlobalDateInformation()
+        {
+            overtime_work = 0
+            working_hour_plan = 0
+            today = new Date()
+            displayDateYear = today.getFullYear()
+            displayDateMonth = today.getMonth()
+            displayDateDay = today.getDate()
+            holidayList = [{% for i in data %} {% if i==data[0] %}"{{i}}"{% else %},"{{i}}"{% endif %} {% endfor %}]
+            
+            holidayList.push("2022-03-09")
+            holidayList.sort()
+            vacationList = []
+        }
         function UpdateAllViews()
         {
             UpdateAllVacation(vacationList)
             updateWorkingPlan()
             
-            render_calendar(current_date, current_date.getDate())
-            render_working_hour(current_date, current_date.getDate())
+            render_calendar(displayDateYear, displayDateMonth, displayDateDay)
+            render_working_hour(displayDateYear, displayDateMonth, displayDateDay)
             renderOvernightPay()
         }
     </script>

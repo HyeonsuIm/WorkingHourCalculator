@@ -4,6 +4,10 @@
     text-align:center;
 }
 
+.calendar_header{
+    height:20px !important;
+}
+
 /* 요일 높이 */
 #month-weekday{
     height:20px !important;

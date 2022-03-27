@@ -1,7 +1,7 @@
-function render_working_hour(date, current_date)
+function render_working_hour(year, month, day)
 {
-    const viewYear = date.getFullYear()
-    const viewMonth = date.getMonth()
+    const viewYear = year
+    const viewMonth = month
 
     const monthStartDay = new Date(viewYear, viewMonth, 1)
     const monthLastDay = new Date(viewYear, viewMonth+1, 0)
@@ -9,7 +9,7 @@ function render_working_hour(date, current_date)
     /*document.createElement('<div>`${viewYear}년 ${viewMonth + 1}월`</div>')*/
 
     //날짜 생성
-    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(holidayList, vacationList, monthStartDay, monthLastDay, startDayOfWeek, current_date)
+    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(holidayList, vacationList, monthStartDay, monthLastDay, startDayOfWeek, day)
     let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
 
     MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
