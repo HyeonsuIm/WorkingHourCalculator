@@ -36,6 +36,9 @@ function render_calendar(year, month, day)
         let dayOfWeek = (startDayOfWeek + i - 1) % 7
         let classStr = ""
         let onclickStr = ""
+        let otherAttr = ""
+        let dataId= ""
+        let isNeedPopup = false
         if( true == IsHoliday(holidayList, currentyear, currentMonth, i) )
         {
             classStr = "class='holiday'"
@@ -51,19 +54,36 @@ function render_calendar(year, month, day)
         else if( true == IsVacation(vacationList, currentyear, currentMonth, i))
         {
             classStr = "class='vacation'"
-            onclickStr = "onclick='displayHolidayPopup(" + currentyear + "," +currentMonth + "," + i + ")'"
+            isNeedPopup = true;
+        }
+        else if( true == IsVacation(half_vacationList, currentyear, currentMonth, i))
+        {
+            classStr = "class='half_vacation'"
+            isNeedPopup = true;
         }
         else
         {
-            onclickStr = "onclick='displayHolidayPopup(" + currentyear + "," +currentMonth + "," + i + ")'"
+            classStr = "class='working'"
+            isNeedPopup = true;
+
         }
 
-        let idStr = "id='month-day'"
+        if( true == isNeedPopup )
+        {
+            onclickStr = "onclick='displayModal(this)'"
+            otherAttr = "data-toggle='modal'"
+            dataId += "data-id='"+ currentyear + "-" + String(currentMonth).padStart(2,'0') + "-" + String(i).padStart(2,'0') + "'"
+        }
+        let idStr ="id="
         if( displayDay == i)
         {
-            idStr = "id='month-day-today'"
+            idStr += "'month-day-today'"
         }
-        elementStr += "<td " + idStr + " " + classStr + " " + onclickStr + " >" + i + "</td>"
+        else
+        {
+            idStr += "'month-day'"
+        }
+        elementStr += "<td " + idStr + " " + classStr + " " + onclickStr + " " + otherAttr + " " + dataId + " >" + i + "</td>"
 
         if( dayOfWeek == 6)
         {
@@ -106,34 +126,65 @@ function SetMonth(diff)
 function displayHolidayPopup(year, month, day)
 {
     var isVacation = confirm('휴가?')
-    UpdateVacationDayInformation(year, month,day,isVacation)
-    UpdateAllVacation(vacationList)
+    if( true == isVacation )
+    {
+        AddVacationDayInformation(year, month,day,isVacation)
+    }
+    else
+    {
+        RemoveVacationDayInformation(year,month,day)
+    }
+    UpdateAllVacation()
 
     render_calendar(displayDateYear, displayDateMonth, displayDateDay)
     render_working_hour(displayDateYear, displayDateMonth, displayDateDay)
 }
 
-function UpdateVacationDayInformation(year,month,date,isVacation)
+function AddVacationDayInformation(year,month,date,isFullVacation)
 {
     const vacationKey = "vacation_"+year+"-"+ String(month).padStart(2,'0') + "-" + String(date).padStart(2,'0')
-    localStorage.setItem(vacationKey, isVacation)
+    localStorage.setItem(vacationKey, isFullVacation)
+}
+
+function RemoveVacationDayInformation(year,month,date)
+{
+    const vacationKey = "vacation_"+year+"-"+ String(month).padStart(2,'0') + "-" + String(date).padStart(2,'0')
+    localStorage.removeItem(vacationKey)
 }
 
 function UpdateAllVacation()
 {
     vacationList = []
+    half_vacationList = []
     for( let key in localStorage )
     {
-        isVacation = localStorage.getItem(key)
-        if( "false" != isVacation )
+        vacationType = localStorage.getItem(key)
+        if( 1 == vacationType )
         {
-            let startIndex = key.indexOf('vacation_')
-            if( 0 == startIndex )
-            {
-                key = key.substring(startIndex+('vacation_').length)
-                //let [year, month,day] = key.split('-',3)
-                vacationList.push(key)
-            }
+            //let [year, month,day] = key.split('-',3)
+            vacationList.push(key)
+        }
+        else if( 2 == vacationType)
+        {
+            half_vacationList.push(key)
         }
     }
+}
+
+function UpdateDayInfo(keyVal, type)
+{
+    if( type == 'full_day')
+    {
+        localStorage.setItem(keyVal, 1)
+    }
+    else if( type == 'half_day')
+    {
+        localStorage.setItem(keyVal, 2)
+    }
+    else
+    {
+        localStorage.removeItem(keyVal)
+    }
+    UpdateAllVacation();
+    UpdateAllViews();
 }

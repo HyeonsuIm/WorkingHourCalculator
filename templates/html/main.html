@@ -10,6 +10,7 @@
         <script src="/static/Calendar/CalendarAPI.js"></script>
         <script src="/static/Calendar/Calendar.js"></script>
         <script src="/static/Calendar/WorkingHour.js"></script>
+        <script src="/static/Calendar/CalendarViewHandler.js"></script>
         <link rel="stylesheet" href="/static/Calendar/Calendar.css">
     </head>
     <body>
@@ -73,39 +74,45 @@
                     </table>
                 </div>
             </div>
+        </div>        
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div align='left'>
+                        <h5 class="modal-title" id="exampleModalLabel">근태</h5>
+                    </div>
+                    <div align='right'>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    날짜 : <input type='text' id='keyVal' value=''/>
+                    <br>
+                    <input type='radio' name="radAnswer" id='full_day' value=1 checked/>
+                    <label for="full_day">휴가</label><br>
+                    <input type='radio' name="radAnswer" id='half_day' value=2/>
+                    <label for="half_day">반차</label><br>
+                    <input type='radio' name="radAnswer" id='working_day' value=3/>
+                    <label for="working_day">근무</label><br>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="UpdateDayInformationFromPopup()" data-dismiss ='modal'>Save changes</button>
+                </div>
+            </div>
+            </div>
         </div>
     </body>
     <script>
-        UpdateGlobalDateInformation()
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();   
         });
 
-
+        UpdateGlobalDateInformation([{% for i in data %} {% if i==data[0] %}"{{i}}"{% else %},"{{i}}"{% endif %} {% endfor %}])
         UpdateAllViews()
-
-        function UpdateGlobalDateInformation()
-        {
-            overtime_work = 0
-            working_hour_plan = 0
-            today = new Date()
-            displayDateYear = today.getFullYear()
-            displayDateMonth = today.getMonth()
-            displayDateDay = today.getDate()
-            holidayList = [{% for i in data %} {% if i==data[0] %}"{{i}}"{% else %},"{{i}}"{% endif %} {% endfor %}]
-            
-            holidayList.push("2022-03-09")
-            holidayList.sort()
-            vacationList = []
-        }
-        function UpdateAllViews()
-        {
-            UpdateAllVacation(vacationList)
-            updateWorkingPlan()
-            
-            render_calendar(displayDateYear, displayDateMonth, displayDateDay)
-            render_working_hour(displayDateYear, displayDateMonth, displayDateDay)
-            renderOvernightPay()
-        }
     </script>
 </html>

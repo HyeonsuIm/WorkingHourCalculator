@@ -9,7 +9,7 @@ function render_working_hour(year, month, day)
     /*document.createElement('<div>`${viewYear}년 ${viewMonth + 1}월`</div>')*/
 
     //날짜 생성
-    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(holidayList, vacationList, monthStartDay, monthLastDay, startDayOfWeek, day)
+    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
     let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
 
     MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
@@ -30,7 +30,7 @@ function render_working_hour(year, month, day)
     renderOvernightPay()
 }
 
-function GetWorkingDay(holidayList, vacationList, monthStartDay, monthLastDay, startDayOfWeek, today_date)
+function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today_date)
 {
     totalDayCnt = monthLastDay.getDate()
     let workingDayCnt = 0
@@ -43,10 +43,15 @@ function GetWorkingDay(holidayList, vacationList, monthStartDay, monthLastDay, s
             false == IsHoliday(holidayList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i) &&
             false == IsVacation(vacationList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i) )
         {
-            workingDayCnt++;
+            dayPlusVal = 1
+            if( true == IsVacation(half_vacationList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i))
+            {
+                dayPlusVal = 0.5
+            }
+            workingDayCnt += dayPlusVal;
             if(today_date < i)
             {
-                workingDayCntAfterToday++;
+                workingDayCntAfterToday += dayPlusVal;
             }
         }
     }
@@ -102,9 +107,11 @@ function GetRemainedWorkingHour()
 function SetRemainedWorkingHour(elementId, value)
 {
     element = document.getElementById(elementId)
+    let hour = Math.floor(value)
+    let minute = Math.floor(( value - hour ) * 60)
     if( value > 0)
     {
-        element.innerText = value
+        element.innerText = Math.ceil(value) + "h " + minute + "m"
     }
     else
     {

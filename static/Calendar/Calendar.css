@@ -39,6 +39,9 @@ td.saturday{
 td.vacation{
     color:red;
 }
+td.half_vacation{
+    color:pink;
+}
 
 #side_area>div
 {
