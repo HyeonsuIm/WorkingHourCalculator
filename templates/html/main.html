@@ -24,8 +24,14 @@
             <div id="side_area"style="text-align:left;float:left;width:448px;">
                 <div id="month_working_hour"> 
                     <table class='table' id='working-hour-table'>
-                        <tr><th>최대 근무가능 시간</th></tr>
-                        <tr><td id="month_max_working_hour"></td></tr>
+                        <tr>
+                            <td><b>최대 근무 시간</b></td>
+                            <td id="month_max_working_hour"></td>
+                        </tr>
+                        <tr>
+                            <td><b>최소 근무 시간</b></td>
+                            <td id="month_min_working_hour"></td>
+                        </tr>
                     </table>
                 </div>
                 <div id="month_working_input">
@@ -40,26 +46,26 @@
                         </tr>
                         <tr>
                             <td colspan='2'><input type='number' class='form-control' placeholder='시급' id='overnight_pay_per_hour' onchange='UpdateAllViews()'/></td>
-                            <td></td>
+                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='야근 시급' style='cursor:help'/> </td>
                         </tr>
                     </table>
                 </div>
                 <div id="month_working_plan">
                     <table class="table">
                         <tr>
-                            <td>일일 근무 시간(입력)</td>
+                            <td><b>일일 근무 시간(최소)</b></td>
+                            <td id='daily_working_hour_min'></td>
+                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='최소 근무시간 기준 평균 근로필요 시간' style='cursor:help'/></td>
+                        </tr>
+                        <tr>
+                            <td><b>일일 근무 시간(입력)</b></td>
                             <td id='daily_working_hour_plan'></td>
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='입력한 근무시간 기준 평균 근로필요 시간' style='cursor:help'/></td>
                         </tr>
                         <tr>
-                            <td>일일 근무 시간(최대)</td>
+                            <td><b>일일 근무 시간(최대)</b></td>
                             <td id='daily_working_hour_max'></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>일일 근무 시간(최소)</td>
-                            <td id='daily_working_hour_min'></td>
-                            <td></td>
+                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='최대 근무시간 기준 평균 근로필요 시간' style='cursor:help'/></td>
                         </tr>
                         <tr>
                             <td>금</td>

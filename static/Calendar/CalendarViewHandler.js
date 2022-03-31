@@ -27,6 +27,7 @@ function UpdateAllViews()
     
     render_calendar(displayDateYear, displayDateMonth, displayDateDay)
     render_working_hour(displayDateYear, displayDateMonth, displayDateDay)
+    render_calculated_working_hour(today.getFullYear(), today.getMonth(), today.getDate())
     renderOvernightPay()
 }
 

@@ -71,7 +71,7 @@ function render_calendar(year, month, day)
         if( true == isNeedPopup )
         {
             onclickStr = "onclick='displayModal(this)'"
-            otherAttr = "data-toggle='modal'"
+            otherAttr = "data-toggle='modal' style='cursor:pointer;'"
             dataId += "data-id='"+ currentyear + "-" + String(currentMonth).padStart(2,'0') + "-" + String(i).padStart(2,'0') + "'"
         }
         let idStr ="id="
@@ -119,8 +119,8 @@ function SetMonth(diff)
     {
         displayDateDay = today.getDate()
     }
-    render_calendar(displayDateYear, displayDateMonth, displayDateDay)
-    render_working_hour(displayDateYear, displayDateMonth, displayDateDay)
+
+    UpdateAllViews()
 }
 
 function displayHolidayPopup(year, month, day)
@@ -135,9 +135,7 @@ function displayHolidayPopup(year, month, day)
         RemoveVacationDayInformation(year,month,day)
     }
     UpdateAllVacation()
-
-    render_calendar(displayDateYear, displayDateMonth, displayDateDay)
-    render_working_hour(displayDateYear, displayDateMonth, displayDateDay)
+    UpdateAllViews()
 }
 
 function AddVacationDayInformation(year,month,date,isFullVacation)

@@ -13,6 +13,20 @@ function render_working_hour(year, month, day)
     let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
 
     MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
+}
+
+function render_calculated_working_hour(year,month,day)
+{
+    const viewYear = year
+    const viewMonth = month
+
+    const monthStartDay = new Date(viewYear, viewMonth, 1)
+    const monthLastDay = new Date(viewYear, viewMonth+1, 0)
+    const startDayOfWeek = monthStartDay.getDay();
+    
+    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
+    let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
+    
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, avgWorkingHour, minWorkingHour)
     
     overtime_work = (maxWorkingHour - GetRemainedWorkingHour()) - minWorkingHour
@@ -26,8 +40,6 @@ function render_working_hour(year, month, day)
     {
         overtime_work_plan = 0
     }
-
-    renderOvernightPay()
 }
 
 function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today_date)
@@ -68,8 +80,9 @@ function GetWorkingHours(totalDayCnt, totalWorkingDayCnt)
 
 function MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
 {
-    element = document.getElementById("month_max_working_hour")
-    element.innerHTML = Math.round(maxWorkingHour*100)/100
+    SetRemainedWorkingHour("month_max_working_hour", maxWorkingHour)
+    SetRemainedWorkingHour("month_min_working_hour", minWorkingHour)
+    
 }
 
 function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, avgWorkingHour, minWorkingHour)
@@ -80,9 +93,14 @@ function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, avgW
     remainedPlanWorkingHour = remainedWorkingHour - working_hour_plan
     remainedMinWorkingHour = minWorkingHour - (maxWorkingHour - remainedMaxWorkingHour)
 
-    SetRemainedWorkingHour("daily_working_hour_plan", Math.round( remainedPlanWorkingHour / workingDayCntAfterToday * 100) / 100)
-    SetRemainedWorkingHour("daily_working_hour_max", Math.round( remainedMaxWorkingHour / workingDayCntAfterToday * 100) / 100)
-    SetRemainedWorkingHour("daily_working_hour_min", Math.round( remainedMinWorkingHour / workingDayCntAfterToday * 100) / 100)
+    if( 0 == workingDayCntAfterToday )
+    {
+        workingDayCntAfterToday = 1
+    }
+
+    SetRemainedWorkingHour("daily_working_hour_plan", remainedPlanWorkingHour / workingDayCntAfterToday)
+    SetRemainedWorkingHour("daily_working_hour_max", remainedMaxWorkingHour / workingDayCntAfterToday)
+    SetRemainedWorkingHour("daily_working_hour_min", remainedMinWorkingHour / workingDayCntAfterToday)
 }
 
 function GetRemainedWorkingHour()
@@ -111,7 +129,7 @@ function SetRemainedWorkingHour(elementId, value)
     let minute = Math.floor(( value - hour ) * 60)
     if( value > 0)
     {
-        element.innerText = Math.ceil(value) + "h " + minute + "m"
+        element.innerText = hour + "h " + Math.round(minute) + "m"
     }
     else
     {
