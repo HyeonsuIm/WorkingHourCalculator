@@ -142,7 +142,7 @@ function updateWorkingPlan()
     let workingPlanElement = document.getElementById('working_plan')
     let workingPlan = workingPlanElement.value
 
-    if( 0 == workingPlan )
+    if( -1 == workingPlan )
     {
         workingPlanElement.value = localStorage.getItem('working_plan')
         workingPlan = workingPlanElement.value
