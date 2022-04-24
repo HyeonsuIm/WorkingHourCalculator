@@ -43,7 +43,7 @@ td.half_vacation{
     color:pink;
 }
 
-#side_area>div
+#side_area>div.side_view_div, #side_area>div>div>div.side_view_div
 {
     /*border:1px solid #dae1e6;*/
     background-color:#f9f9f9;

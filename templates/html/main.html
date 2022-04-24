@@ -22,7 +22,7 @@
             <div id="calendarArea" style="margin:auto;text-align:center;float:left;width:732px;padding:10px 10px;">
             </div>
             <div id="side_area"style="text-align:left;float:left;width:448px;">
-                <div id="month_working_hour"> 
+                <div class='side_view_div' id="month_working_hour"> 
                     <table class='table' id='working-hour-table'>
                         <tr>
                             <td><b>최대 근무 시간</b></td>
@@ -34,15 +34,11 @@
                         </tr>
                     </table>
                 </div>
-                <div id="month_working_input">
+                <div class='side_view_div' id="month_working_input">
                     <table class="table" >
                         <tr>
                             <td colspan='2'><input type='number' step='any' min='0' class='form-control' placeholder='남은 근무 시간' id='working_done' onchange='UpdateAllViews()'/></td>
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='오늘 퇴근 기준 남은 근무시간' style='cursor:help'/> </td>
-                        </tr>
-                        <tr>
-                            <td colspan='2'><input type='number' step='any' min='0' value="-1" class='form-control' placeholder='예상 시간' id='working_plan' onchange='UpdateAllViews()'/></td>
-                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='남길 근무시간 입력' style='cursor:help'/> </td>
                         </tr>
                         <tr>
                             <td colspan='2'><input type='number' step='100' min='0' class='form-control' placeholder='시급' id='overnight_pay_per_hour' onchange='UpdateAllViews()'/></td>
@@ -50,72 +46,114 @@
                         </tr>
                     </table>
                 </div>
-                <div id="month_working_plan">
-                    <table class="table">
-                        <tr>
-                            <td><b>일일 근무 시간(최소)</b></td>
-                            <td id='daily_working_hour_min'></td>
-                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='최소 근무시간 기준 평균 근로필요 시간' style='cursor:help'/></td>
-                        </tr>
-                        <tr>
-                            <td><b>일일 근무 시간(입력)</b></td>
-                            <td id='daily_working_hour_plan'></td>
-                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='입력한 근무시간 기준 평균 근로필요 시간' style='cursor:help'/></td>
-                        </tr>
-                        <tr>
-                            <td><b>일일 근무 시간(최대)</b></td>
-                            <td id='daily_working_hour_max'></td>
-                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='최대 근무시간 기준 평균 근로필요 시간' style='cursor:help'/></td>
-                        </tr>
-                        <tr>
-                            <td>금</td>
-                            <td id='overnight_pay'></td>
-                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='남은 근무시간 기준 야근비' style='cursor:help'/></td>
-                        </tr>
-                        <tr>
-                            <td>계획 금</td>
-                            <td id='overnight_pay_plan'></td>
-                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='계획 근무시간 기준 야근비' style='cursor:help'/></td>
-                        </tr>
-                    </table>
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#base_current">현재</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#base_maxmin">최대/최소</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#base_overtime">야근비</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade" id="base_current">
+                        <div class='side_view_div' id="month_working_input">
+                            <table class="table" >
+                                <tr>
+                                    <td colspan='2'><input type='number' step='any' min='0' value="-1" class='form-control' placeholder='예상 시간' id='working_plan' onchange='UpdateAllViews()'/></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='남길 근무시간 입력' style='cursor:help'/> </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class='side_view_div' id="month_working_plan">
+                            <table class="table">
+                                <tr>
+                                    <td><b>일일 근무 시간(입력)</b></td>
+                                    <td id='daily_working_hour_plan'></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='입력한 근무시간 기준 평균 근로필요 시간' style='cursor:help'/></td>
+                                </tr>
+                                <tr>
+                                    <td><b>현재 야근비</b></td>
+                                    <td id='overtime_work_based_current'></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='일일 8시간 근무 기준 현 야근비' style='cursor:help'/></td>
+                                </tr>
+                                <tr>
+                                    <td><b>입력시간 야근비</b></td>
+                                    <td id='overnight_pay_plan'></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='계획 근무시간 기준 야근비' style='cursor:help'/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="base_maxmin">
+                        <div class='side_view_div' id="month_working_plan">
+                            <table class="table">
+                                <tr>
+                                    <td><b>최소 일일 근무 시간</b></td>
+                                    <td id='daily_working_hour_min'></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='최소 근무시간 기준 평균 근로필요 시간' style='cursor:help'/></td>
+                                </tr>
+                                <tr>
+                                    <td><b>최대 일일 근무 시간</b></td>
+                                    <td id='daily_working_hour_max'></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='최대 근무시간 기준 평균 근로필요 시간' style='cursor:help'/></td>
+                                </tr>
+                                <tr>
+                                    <td><b>최대근무 야근비</b></td>
+                                    <td id='overnight_pay_max'></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='계획 근무시간 기준 야근비' style='cursor:help'/></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="base_overtime">
+                        미구현
+                    </div>
                 </div>
             </div>
         </div>        
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div align='left'>
-                        <h5 class="modal-title" id="exampleModalLabel">근태</h5>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <div align='left'>
+                            <h5 class="modal-title" id="exampleModalLabel">근태</h5>
+                        </div>
+                        <div align='right'>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     </div>
-                    <div align='right'>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <div class="modal-body">
+                        날짜 : <input type='text' id='keyVal' value=''/>
+                        <br>
+                        <input type='radio' name="radAnswer" id='full_day' value=1 checked/>
+                        <label for="full_day">휴가</label><br>
+                        <input type='radio' name="radAnswer" id='half_day' value=2/>
+                        <label for="half_day">반차</label><br>
+                        <input type='radio' name="radAnswer" id='working_day' value=3/>
+                        <label for="working_day">근무</label><br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="UpdateDayInformationFromPopup()" data-dismiss ='modal'>Save changes</button>
                     </div>
                 </div>
-                <div class="modal-body">
-                    날짜 : <input type='text' id='keyVal' value=''/>
-                    <br>
-                    <input type='radio' name="radAnswer" id='full_day' value=1 checked/>
-                    <label for="full_day">휴가</label><br>
-                    <input type='radio' name="radAnswer" id='half_day' value=2/>
-                    <label for="half_day">반차</label><br>
-                    <input type='radio' name="radAnswer" id='working_day' value=3/>
-                    <label for="working_day">근무</label><br>
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="UpdateDayInformationFromPopup()" data-dismiss ='modal'>Save changes</button>
-                </div>
-            </div>
             </div>
         </div>
     </body>
     <script>
         $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();   
+            $('dt').click(function()
+            {
+                $('dd').addClass('hidden');
+                $(this).next().removeClass('hidden');
+            });
+            $('[data-toggle="tooltip"]').tooltip();
         });
 
         UpdateGlobalDateInformation([{% for i in data %} {% if i==data[0] %}"{{i}}"{% else %},"{{i}}"{% endif %} {% endfor %}])

@@ -29,10 +29,11 @@ function render_calculated_working_hour(year,month,day)
     
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, avgWorkingHour, minWorkingHour)
     
-    overtime_work = (maxWorkingHour - GetRemainedWorkingHour()) - minWorkingHour
-    if( overtime_work < 0 )
+    overtime_work_max = maxWorkingHour - minWorkingHour
+    overtime_work_based_current = (maxWorkingHour - GetRemainedWorkingHour()) - ((totalWorkingDayCnt - remainedWorkingDayCnt) * 8 )
+    if( overtime_work_based_current < 0 )
     {
-        overtime_work = 0
+        overtime_work_based_current = 0
     }
     
     overtime_work_plan = (maxWorkingHour - working_hour_plan) - minWorkingHour
@@ -169,11 +170,21 @@ function renderOvernightPay()
     {
         localStorage.setItem('overtime_pay', payPerHour)
     }
-    
-    let element = document.getElementById('overnight_pay')
-    if( overtime_work > 0)
+
+    let element = document.getElementById('overtime_work_based_current')
+    if( overtime_work_based_current > 0)
     {
-        element.innerText = (Math.floor( overtime_work * 60 ) * (payPerHour / 60 )).toLocaleString()
+        element.innerText = (Math.floor( overtime_work_based_current * 60 ) * (payPerHour / 60 )).toLocaleString()
+    }
+    else
+    {
+        element.innerText = "0"
+    }
+    
+    element = document.getElementById('overnight_pay_max')
+    if( overtime_work_max > 0)
+    {
+        element.innerText = (Math.floor( overtime_work_max * 60 ) * (payPerHour / 60 )).toLocaleString()
     }
     else
     {
