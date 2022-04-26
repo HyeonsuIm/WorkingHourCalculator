@@ -30,10 +30,20 @@ function render_calculated_working_hour(year,month,day)
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, avgWorkingHour, minWorkingHour)
     
     overtime_work_max = maxWorkingHour - minWorkingHour
-    overtime_work_based_current = (maxWorkingHour - GetRemainedWorkingHour()) - ((totalWorkingDayCnt - remainedWorkingDayCnt) * 8 )
-    if( overtime_work_based_current < 0 )
+    normal_work_hour = (totalWorkingDayCnt - remainedWorkingDayCnt) * 8
+    normal_remain_work_hour = remainedWorkingDayCnt * 8
+    curr_work_hour = maxWorkingHour - GetRemainedWorkingHour()
+    overtime_work_based_current = curr_work_hour - normal_work_hour
+    if( normal_remain_work_hour > GetRemainedWorkingHour())
     {
-        overtime_work_based_current = 0
+        overtime_work_based_current = overtime_work_max
+    }
+    else
+    {
+        if( overtime_work_based_current < 0 )
+        {
+            overtime_work_based_current = 0
+        }
     }
     
     overtime_work_plan = (maxWorkingHour - working_hour_plan) - minWorkingHour
