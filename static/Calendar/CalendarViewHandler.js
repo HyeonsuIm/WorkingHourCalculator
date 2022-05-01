@@ -19,6 +19,9 @@ function UpdateGlobalDateInformation(holidayListParam)
     holidayList.sort()
     vacationList = []
     half_vacationList=[]
+
+    UpdateLeaveWorkTime()
+    UpdateRemainWorkingHour()
 }
 function UpdateAllViews()
 {

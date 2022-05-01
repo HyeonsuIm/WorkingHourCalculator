@@ -37,24 +37,31 @@
                 <div class='side_view_div' id="month_working_input">
                     <table class="table" >
                         <tr>
-                            <td colspan='2'><input type='number' step='any' min='0' class='form-control' placeholder='남은 근무 시간' id='working_done' onchange='UpdateAllViews()'/></td>
-                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='오늘 퇴근 기준 남은 근무시간' style='cursor:help'/> </td>
+                            <td colspan='2'><input type='number' step='any' min='0' value="-1" class='form-control' placeholder='현재 남은 근무 시간' id='working_done' onchange='UpdateRemainWorkingHourAndUpdate()'/></td>
+                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='현재 남은 근무시간' style='cursor:help'/> </td>
                         </tr>
                         <tr>
-                            <td colspan='2'><input type='number' step='100' min='0' class='form-control' placeholder='시급' id='overnight_pay_per_hour' onchange='UpdateAllViews()'/></td>
+                            <td colspan='2'><input type='time' class='form-control' placeholder='퇴근 예정 시간' id='leave_work_time' onchange='UpdateLeaveWorkTimeAndUpdate()'/></td>
+                            <!-- 
+                            <td><input type='checkbox'/></td> 
+                            -->
+                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='퇴근 예정 시간' style='cursor:help'/> </td>
+                        </tr>
+                        <tr>
+                            <td colspan='2'><input type='number' step='100' min='0' class='form-control' placeholder='시급' id='overnight_pay_hour' onchange='UpdateAllViews()'/></td>
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='야근 시급' style='cursor:help'/> </td>
                         </tr>
                     </table>
                 </div>
                 <ul class="nav nav-tabs">
                     <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#base_current">현재</a>
+                      <a class="nav-link active" data-toggle="tab" href="#base_current" aria-current="page">현재</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" data-toggle="tab" href="#base_maxmin">최대/최소</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#base_overtime">야근비</a>
+                      <a class="nav-link disabled" data-toggle="tab" tabindex="-1" href="#base_overtime" aria-disabled="true">야근비</a>
                     </li>
                 </ul>
                 <div class="tab-content">

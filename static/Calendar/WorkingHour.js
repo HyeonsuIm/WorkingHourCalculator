@@ -61,10 +61,7 @@ function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today_date)
     for(i=1;i<=totalDayCnt;i++)
     {
         dayOfWeek = (startDayOfWeek + i -1) % 7
-        if( dayOfWeek != 0 &&
-            dayOfWeek != 6 &&
-            false == IsHoliday(holidayList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i) &&
-            false == IsVacation(vacationList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i) )
+        if( true == IsWorkingDay(holidayList, vacationList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i, dayOfWeek) )
         {
             dayPlusVal = 1
             if( true == IsVacation(half_vacationList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i))
@@ -117,20 +114,19 @@ function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, avgW
 function GetRemainedWorkingHour()
 {
     const remainedWorkingHourKey = "remainWorkingHour"
-    let workingDoneElement = document.getElementById("working_done")
-    let remainedWorkingHour = workingDoneElement.value
-    let remainedWorkingHourCache = localStorage.getItem(remainedWorkingHourKey)
-    if( 0 == remainedWorkingHour )
-    {
-        remainedWorkingHour = remainedWorkingHourCache
-        workingDoneElement.value = remainedWorkingHourCache
-    }
-    else
-    {
-        localStorage.setItem(remainedWorkingHourKey, remainedWorkingHour)
-    }
+    let remainedWorkingHourArr = JSON.parse(localStorage.getItem(remainedWorkingHourKey))
+    remainedWorkingHour = parseFloat(remainedWorkingHourArr['remain_hour']);
     
-    return remainedWorkingHour
+    return remainedWorkingHour - today_remain_time_minute / 60
+}
+
+function GetRemainedWorkingStoreTime()
+{
+    const remainedWorkingHourKey = "remainWorkingHour"
+    let remainedWorkingHourArr = JSON.parse(localStorage.getItem(remainedWorkingHourKey))
+    let storeTime = remainedWorkingHourArr['store_time'];
+    
+    return storeTime
 }
 
 function SetRemainedWorkingHour(elementId, value)
@@ -166,9 +162,44 @@ function updateWorkingPlan()
     working_hour_plan = workingPlan
 }
 
+function UpdateRemainWorkingHourAndUpdate()
+{
+    UpdateRemainWorkingHour()
+    UpdateAllViews()
+}
+
+function UpdateRemainWorkingHour()
+{
+    const remainedWorkingHourKey = "remainWorkingHour"
+    let workingDoneElement = document.getElementById("working_done")
+    let today = new Date()
+    let remainedWorkingHour = workingDoneElement.value
+    let isSet = false
+    if( -1 == remainedWorkingHour )
+    {
+        let storageData = JSON.parse(localStorage.getItem(remainedWorkingHourKey))
+        if( typeof(storageData) == "object" )
+        {
+            workingDoneElement.value = storageData['remain_hour']
+            remainedWorkingHour = storageData['remain_hour']
+            isSet = true
+        }
+    }
+    
+    if( false == isSet)
+    {
+        let storageData = 
+        {
+            remain_hour:remainedWorkingHour,
+            store_time:today
+        }
+        localStorage.setItem(remainedWorkingHourKey, JSON.stringify(storageData))
+    }
+}
+
 function renderOvernightPay()
 {
-    let payPerHourElement = document.getElementById("overnight_pay_per_hour")
+    let payPerHourElement = document.getElementById("overnight_pay_hour")
     let payPerHour = payPerHourElement.value
 
     if( 0 == payPerHour )
@@ -209,5 +240,62 @@ function renderOvernightPay()
     else
     {
         element.innerText = "0"
+    }
+}
+
+function UpdateLeaveWorkTimeAndUpdate()
+{
+    UpdateLeaveWorkTime()
+    UpdateAllViews()
+}
+
+function UpdateLeaveWorkTime()
+{
+    let payPerHourElement = document.getElementById("leave_work_time")
+    let leave_time = payPerHourElement.value
+    const leave_time_key = 'leave_work_time'
+    if(leave_time == "")
+    {
+        if( -1 != Object.keys(localStorage).indexOf(leave_time_key) )
+        {
+            payPerHourElement.value = localStorage.getItem(leave_time_key)
+            leave_time = localStorage.getItem(leave_time_key)
+        }
+        else
+        {
+            leave_time = "18:00"
+        }
+    }
+    else
+    {
+        localStorage.setItem(leave_time_key, leave_time)
+    }
+    let today = new Date()
+    let store_time = new Date(GetRemainedWorkingStoreTime())
+    if( today.getMonth() == store_time.getMonth() &&
+        today.getDate() == store_time.getDate() &&
+        true == IsWorkingDay(holidayList, vacationList, today.getFullYear(), today.getMonth(), today.getDate(), today.getDay()))
+    {
+        let lunch_start_time_minute = 12 * 60 + 30
+        let lunch_finish_time_minute = 13 * 60 + 30
+
+        let store_time_minute = store_time.getHours() * 60 + store_time.getMinutes()
+        let leave_time_minute = parseInt(leave_time.split(':')[0] * 60) + parseInt(leave_time.split(':')[1])
+        if( store_time_minute < lunch_start_time_minute)
+        {
+            today_remain_time_minute = leave_time_minute - store_time_minute - 60
+        }
+        else if(store_time_minute < lunch_finish_time_minute)
+        {
+            today_remain_time_minute = leave_time_minute - store_time_minute - (lunch_finish_time_minute - store_time_minute)
+        }
+        else
+        {
+            today_remain_time_minute = leave_time_minute - store_time_minute
+        }
+    }
+    else
+    {
+        today_remain_time_minute = 0
     }
 }
