@@ -27,7 +27,7 @@ function render_calculated_working_hour(year,month,day)
     let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
     let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
     
-    SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, avgWorkingHour, minWorkingHour)
+    SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, minWorkingHour)
     
     overtime_work_max = maxWorkingHour - minWorkingHour
     normal_work_hour = (totalWorkingDayCnt - remainedWorkingDayCnt) * 8
@@ -93,12 +93,13 @@ function MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
     
 }
 
-function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, avgWorkingHour, minWorkingHour)
+function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, minWorkingHour)
 {
     remainedWorkingHour = GetRemainedWorkingHour()
-    
+
     remainedMaxWorkingHour = remainedWorkingHour
     remainedPlanWorkingHour = remainedWorkingHour - working_hour_plan
+    expectWorkingHour = (( working_overpay_plan / payPerHour ) + minWorkingHour) - (maxWorkingHour - remainedWorkingHour) // 예상남은근무시간 = 근무해야 하는 시간 - 현재까지 근무한 시간
     remainedMinWorkingHour = minWorkingHour - (maxWorkingHour - remainedMaxWorkingHour)
 
     if( 0 == workingDayCntAfterToday )
@@ -109,6 +110,7 @@ function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, avgW
     SetRemainedWorkingHour("daily_working_hour_plan", remainedPlanWorkingHour / workingDayCntAfterToday)
     SetRemainedWorkingHour("daily_working_hour_max", remainedMaxWorkingHour / workingDayCntAfterToday)
     SetRemainedWorkingHour("daily_working_hour_min", remainedMinWorkingHour / workingDayCntAfterToday)
+    SetRemainedWorkingHour("daily_working_hour_overpay_plan", expectWorkingHour / workingDayCntAfterToday)
 }
 
 function GetRemainedWorkingHour()
@@ -162,9 +164,32 @@ function updateWorkingPlan()
     working_hour_plan = workingPlan
 }
 
+function updateWorkingOverpayPlan()
+{
+    let overpayElement = document.getElementById('working_overpay')
+    let overpayPlan = overpayElement.value
+
+    if( -1 == overpayPlan )
+    {
+        overpayElement.value = localStorage.getItem('working_overpay')
+        overpayPlan = overpayElement.value
+    }
+    else
+    {
+        localStorage.setItem('working_overpay', overpayPlan)
+    }
+    
+    if( overpayPlan < 0 )
+    {
+        overpayPlan = 0
+    }
+    working_overpay_plan = overpayPlan
+}
+
 function UpdateRemainWorkingHourAndUpdate()
 {
     UpdateRemainWorkingHour()
+    updateWorkingOverpayPlan();
     UpdateAllViews()
 }
 
@@ -197,10 +222,10 @@ function UpdateRemainWorkingHour()
     }
 }
 
-function renderOvernightPay()
+function UpdateOvernightPayHour()
 {
     let payPerHourElement = document.getElementById("overnight_pay_hour")
-    let payPerHour = payPerHourElement.value
+    payPerHour = payPerHourElement.value
 
     if( 0 == payPerHour )
     {
@@ -211,7 +236,10 @@ function renderOvernightPay()
     {
         localStorage.setItem('overtime_pay', payPerHour)
     }
+}
 
+function renderOvernightPay()
+{
     let element = document.getElementById('overtime_work_based_current')
     if( overtime_work_based_current > 0)
     {

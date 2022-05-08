@@ -27,6 +27,8 @@ function UpdateAllViews()
 {
     UpdateAllVacation()
     updateWorkingPlan()
+    UpdateOvernightPayHour()
+    updateWorkingOverpayPlan();
     
     render_calendar(displayDateYear, displayDateMonth, displayDateDay)
     render_working_hour(displayDateYear, displayDateMonth, displayDateDay)

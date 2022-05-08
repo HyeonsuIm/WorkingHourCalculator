@@ -84,7 +84,7 @@
                                 <tr>
                                     <td><b>현재 야근비</b></td>
                                     <td id='overtime_work_based_current'></td>
-                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='일일 8시간 근무 기준 현 야근비' style='cursor:help'/></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='일일 8시간 근무 기준 금일 퇴근 했을 때 야근비' style='cursor:help'/></td>
                                 </tr>
                                 <tr>
                                     <td><b>입력시간 야근비</b></td>
@@ -116,7 +116,19 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="base_overtime">
-                        미구현
+                        <div class='side_view_div' id="month_working_overtime">
+                            <table class="table">
+                                <tr>
+                                    <td colspan='2'><input type='number' step='any' min='0' value="-1" class='form-control' placeholder='예상 야근비' id='working_overpay' onchange='UpdateAllViews()'/></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='예상 야근비' style='cursor:help'/> </td>
+                                </tr>
+                                <tr>
+                                    <td><b>일일 근무 시간</b></td>
+                                    <td id='daily_working_hour_overpay_plan'></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='예상 야근비 달성을 위한 일일 야근 시간' style='cursor:help'/></td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
