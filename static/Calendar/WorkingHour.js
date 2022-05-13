@@ -189,7 +189,8 @@ function updateWorkingOverpayPlan()
 function UpdateRemainWorkingHourAndUpdate()
 {
     UpdateRemainWorkingHour()
-    updateWorkingOverpayPlan();
+    updateWorkingOverpayPlan()
+    UpdateLeaveWorkTime()
     UpdateAllViews()
 }
 
