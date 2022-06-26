@@ -117,7 +117,20 @@ function GetRemainedWorkingHour()
 {
     const remainedWorkingHourKey = "remainWorkingHour"
     let remainedWorkingHourArr = JSON.parse(localStorage.getItem(remainedWorkingHourKey))
-    remainedWorkingHour = parseFloat(remainedWorkingHourArr['remain_hour']);
+    remainedWorkingHourStr = remainedWorkingHourArr['remain_hour']
+
+    remainedWorkingHour = 0
+    if(remainedWorkingHourStr.indexOf(":") != -1)
+    {
+        splitIndex = remainedWorkingHourStr.indexOf(":")
+        hour = parseInt(remainedWorkingHourStr.substr(0, splitIndex))
+        minute = parseInt(remainedWorkingHourStr.substr(splitIndex+1))
+        remainedWorkingHour = hour + (minute / 60)
+    }
+    else
+    {
+        remainedWorkingHour = parseFloat(remainedWorkingHourStr);
+    }
     
     return remainedWorkingHour - today_remain_time_minute / 60
 }
@@ -211,15 +224,45 @@ function UpdateRemainWorkingHour()
             isSet = true
         }
     }
-    
-    if( false == isSet)
+
+    let isValidValue = true
+    if( remainedWorkingHour != "" )
     {
-        let storageData = 
+        if( -1 == remainedWorkingHour.indexOf(":"))
         {
-            remain_hour:remainedWorkingHour,
-            store_time:today
+            if( isNaN(remainedWorkingHour))
+            {
+                isValidValue = false
+            }
+            else
+            {
+                value = parseFloat(remainedWorkingHour)
+                remainedWorkingHour = parseInt(value).toString() + ":" + parseInt((value-parseInt(value))*60).toString()
+                workingDoneElement.value = remainedWorkingHour
+            }
         }
-        localStorage.setItem(remainedWorkingHourKey, JSON.stringify(storageData))
+        else
+        {
+        }
+    }
+    
+
+    if(isValidValue == false)
+    {
+        workingDoneElement.style.borderColor="red"
+    }
+    else
+    {
+        workingDoneElement.style.borderColor="#ccc"
+        if( false == isSet)
+        {
+            let storageData = 
+            {
+                remain_hour:remainedWorkingHour,
+                store_time:today
+            }
+            localStorage.setItem(remainedWorkingHourKey, JSON.stringify(storageData))
+        }
     }
 }
 
@@ -302,8 +345,7 @@ function UpdateLeaveWorkTime()
     let today = new Date()
     let store_time = new Date(GetRemainedWorkingStoreTime())
     if( today.getMonth() == store_time.getMonth() &&
-        today.getDate() == store_time.getDate() &&
-        true == IsWorkingDay(holidayList, vacationList, today.getFullYear(), today.getMonth(), today.getDate(), today.getDay()))
+        today.getDate() == store_time.getDate() )
     {
         let lunch_start_time_minute = 12 * 60 + 30
         let lunch_finish_time_minute = 13 * 60 + 30
