@@ -37,7 +37,7 @@
                 <div class='side_view_div' id="month_working_input">
                     <table class="table" >
                         <tr>
-                            <td colspan='2'><input min='0' value="-1" class='form-control' placeholder='현재 남은 근무 시간' id='working_done' onchange='UpdateRemainWorkingHourAndUpdate()'/></td>
+                            <td colspan='2'><input min='0' value="" class='form-control' placeholder='현재 남은 근무 시간' id='working_done' onchange='UpdateRemainWorkingHourAndUpdate()'/></td>
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='현재 남은 근무시간(hh:mm)' style='cursor:help'/> </td>
                         </tr>
                         <tr>
@@ -54,18 +54,12 @@
                     </table>
                 </div>
                 <ul class="nav nav-tabs">
-                    <li class="nav-item">
-                      <a class="nav-link active" data-toggle="tab" href="#base_current" aria-current="page">현재</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" data-toggle="tab" href="#base_maxmin">최대/최소</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link disabled" data-toggle="tab" tabindex="-1" href="#base_overtime" aria-disabled="true">야근비</a>
-                    </li>
+                    <li class="nav-item active"><a data-toggle="tab" href="#base_current">현재</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#base_maxmin">최대/최소</a></li>
+                    <li class="nav-item"><a data-toggle="tab" tabindex="-1" href="#base_overtime">야근비</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade" id="base_current">
+                    <div class="tab-pane active" id="base_current">
                         <div class='side_view_div' id="month_working_input">
                             <table class="table" >
                                 <tr>

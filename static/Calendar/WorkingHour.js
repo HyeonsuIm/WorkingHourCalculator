@@ -139,7 +139,11 @@ function GetRemainedWorkingStoreTime()
 {
     const remainedWorkingHourKey = "remainWorkingHour"
     let remainedWorkingHourArr = JSON.parse(localStorage.getItem(remainedWorkingHourKey))
-    let storeTime = remainedWorkingHourArr['store_time'];
+    let storeTime = null
+    if(remainedWorkingHourArr)
+    {
+        storeTime = remainedWorkingHourArr['store_time'];
+    }
     
     return storeTime
 }
@@ -214,10 +218,10 @@ function UpdateRemainWorkingHour()
     let today = new Date()
     let remainedWorkingHour = workingDoneElement.value
     let isSet = false
-    if( -1 == remainedWorkingHour )
+    if( "" == remainedWorkingHour )
     {
         let storageData = JSON.parse(localStorage.getItem(remainedWorkingHourKey))
-        if( typeof(storageData) == "object" )
+        if( storageData )
         {
             workingDoneElement.value = storageData['remain_hour']
             remainedWorkingHour = storageData['remain_hour']
@@ -343,30 +347,31 @@ function UpdateLeaveWorkTime()
         localStorage.setItem(leave_time_key, leave_time)
     }
     let today = new Date()
-    let store_time = new Date(GetRemainedWorkingStoreTime())
-    if( today.getMonth() == store_time.getMonth() &&
-        today.getDate() == store_time.getDate() )
+    let store_time_obj = GetRemainedWorkingStoreTime()
+    today_remain_time_minute = 0
+    if( store_time_obj )
     {
-        let lunch_start_time_minute = 12 * 60 + 30
-        let lunch_finish_time_minute = 13 * 60 + 30
+        let store_time = new Date()
+        if( today.getMonth() == store_time.getMonth() &&
+            today.getDate() == store_time.getDate() )
+        {
+            let lunch_start_time_minute = 12 * 60 + 30
+            let lunch_finish_time_minute = 13 * 60 + 30
 
-        let store_time_minute = store_time.getHours() * 60 + store_time.getMinutes()
-        let leave_time_minute = parseInt(leave_time.split(':')[0] * 60) + parseInt(leave_time.split(':')[1])
-        if( store_time_minute < lunch_start_time_minute)
-        {
-            today_remain_time_minute = leave_time_minute - store_time_minute - 60
+            let store_time_minute = store_time.getHours() * 60 + store_time.getMinutes()
+            let leave_time_minute = parseInt(leave_time.split(':')[0] * 60) + parseInt(leave_time.split(':')[1])
+            if( store_time_minute < lunch_start_time_minute)
+            {
+                today_remain_time_minute = leave_time_minute - store_time_minute - 60
+            }
+            else if(store_time_minute < lunch_finish_time_minute)
+            {
+                today_remain_time_minute = leave_time_minute - store_time_minute - (lunch_finish_time_minute - store_time_minute)
+            }
+            else
+            {
+                today_remain_time_minute = leave_time_minute - store_time_minute
+            }
         }
-        else if(store_time_minute < lunch_finish_time_minute)
-        {
-            today_remain_time_minute = leave_time_minute - store_time_minute - (lunch_finish_time_minute - store_time_minute)
-        }
-        else
-        {
-            today_remain_time_minute = leave_time_minute - store_time_minute
-        }
-    }
-    else
-    {
-        today_remain_time_minute = 0
     }
 }

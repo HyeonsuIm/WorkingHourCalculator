@@ -15,6 +15,9 @@ function UpdateGlobalDateInformation(holidayListParam) {
 
     holidayList.push("2022-03-09")
     holidayList.push("2022-06-01")
+    holidayList.push("2022-08-01")
+    holidayList.push("2022-08-02")
+    holidayList.push("2022-08-03")
     holidayList.sort()
     vacationList = []
     half_vacationList = []
