@@ -43,13 +43,27 @@ td.half_vacation{
     color:pink;
 }
 
+#side_area, #calendarArea
+{
+    padding:30px 20px;
+    border-top:1px solid lightgray;
+}
+
+#title
+{
+    margin:0 auto;
+    width:1180px;
+    text-align:left;
+    padding:20px 20px;
+}
+
 #side_area>div.side_view_div, #side_area>div>div>div.side_view_div
 {
     /*border:1px solid #dae1e6;*/
     background-color:#f9f9f9;
     border-radius: 10px;
 
-    margin:15px;
+    /*margin:15px;*/
 }
 
 #side_area>div>table
