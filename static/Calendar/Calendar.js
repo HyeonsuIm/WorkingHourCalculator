@@ -30,10 +30,11 @@ function render_calendar(year, month, day)
     }
     
     let displayDay = day
+    let dayOfWeek = 0
     //날짜 생성
     for(i=1;i<=monthLastDay.getDate();i++)
     {
-        let dayOfWeek = (startDayOfWeek + i - 1) % 7
+        dayOfWeek = (startDayOfWeek + i - 1) % 7
         let classStr = ""
         let onclickStr = ""
         let otherAttr = ""
@@ -90,6 +91,10 @@ function render_calendar(year, month, day)
             elementStr += "</tr><tr>"
         }
     }
+    for(;dayOfWeek < 6;dayOfWeek++)
+    {
+        elementStr += "<td id='month-day'></td>"
+    }
     elementStr += "</tr></table>"
 
     let element = document.getElementById("calendarArea")
@@ -103,7 +108,7 @@ function SetMonth(diff)
         displayDateYear = displayDateYear - 1
         displayDateMonth = displayDateMonth + 12 + diff
     }
-    else if( diff > 0 && displayDateMonth + diff > 12)
+    else if( diff > 0 && displayDateMonth + diff >= 12)
     {
         displayDateYear = displayDateYear + 1
         displayDateMonth = displayDateMonth - 12 + diff
