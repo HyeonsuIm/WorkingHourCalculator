@@ -4,5 +4,7 @@ WORKDIR /usr/src/app
 
 COPY . .
 RUN pip3 install --no-cache-dir -r requiremenets.txt
+RUN apt-get update
+RUN apt-get -y install uwsgi uwsgi-plugin-python3
 EXPOSE 20000
-CMD ["python", "/usr/src/app/main.py"]
+CMD ["uwsgi", "uwsgi.ini"]
