@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+    flask:
+        build: ./appserver
+        container_name: flask
+        restart: always
+        environment:
+            - APP_NAME=FlaskTest
+        expose:
+            - 5000
+
+    nginx:
+        build: ./nginx
+        container_name: nginx
+        restart: always
+        ports:
+            - "20000:20000"
