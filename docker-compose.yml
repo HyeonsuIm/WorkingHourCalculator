@@ -1,14 +1,33 @@
 version: "3.7"
 
 services:
+    mysql:
+        image: mysql
+        container_name: mysql
+        volumes:
+            - workcalendar_dist:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=1
+        ports:
+            - "3306:3306"
+
     flask:
         build: ./appserver
         container_name: flask
         restart: always
         network_mode: host
+        # comments for dev task on the mac
+        #ports:
+        #    - "19999:19999"
 
     nginx:
         build: ./nginx
         container_name: nginx
         restart: always
         network_mode: host
+        # comments for dev task on the mac
+        #ports:
+        #    - "20000:20000"
+
+volumes:
+    workcalendar_dist:
