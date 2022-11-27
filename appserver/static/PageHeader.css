@@ -7,6 +7,23 @@
     border-bottom:1px solid lightgray;
 }
 
+a
+{
+    text-decoration-line:none;
+}
+
+/*
+#nav_content>a
+{
+    color:black;
+}
+*/
+
+.title_text>a
+{
+    color:#0d6efd;
+}
+
 .title>div
 {
     margin:auto;

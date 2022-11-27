@@ -28,7 +28,9 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
 
     let displayDay = day
     let dayOfWeek = 0
-    //날짜 생성
+    let workingHours = GetWorkingHour(currentyear, currentMonth)
+
+    //날짜 및 근무시간 생성
     for(i=1;i<=lastDay;i++)
     {
         dayOfWeek = (startDayOfWeek + i - 1) % 7
@@ -83,7 +85,14 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
         {
             idStr += "'month-day'"
         }
-        elementStr += "<td " + idStr + " " + classStr + " " + onclickStr + " " + otherAttr + " " + dataId + " >" + i + "</td>"
+
+        workingHour = ""
+        if(workingHours[i] != 0)
+        {
+            workingHour += (workingHours[i] / 60).toFixed(0) + ":" + String(workingHours[i] % 60).padStart(2,'0')
+        }
+
+        elementStr += "<td " + idStr + " " + classStr + " " + onclickStr + " " + otherAttr + " " + dataId + " >" + i + "<br>" + workingHour + "</td>"
 
         if( dayOfWeek == 6)
         {
@@ -208,4 +217,19 @@ function UpdateDayInfo(keyVal, type)
     }
     UpdateAllVacation();
     UpdateAllViews();
+}
+
+function GetWorkingHour(year, month)
+{
+    const workingHourKey = "WorkingHour:"+String(year)+"-"+ String(month).padStart(2,'0')
+    let datas = localStorage.getItem(workingHourKey)
+    if( null === datas)
+    {
+        datas = Array.from({length:32},()=>0)
+    }
+    else
+    {
+        datas = JSON.parse(datas)
+    }
+    return datas
 }
