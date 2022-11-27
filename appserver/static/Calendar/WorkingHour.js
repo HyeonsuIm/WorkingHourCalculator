@@ -375,3 +375,8 @@ function UpdateLeaveWorkTime()
         }
     }
 }
+
+function DisplayWorkingHoursModal()
+{
+    $('.working_hour_modal').modal('show');
+}

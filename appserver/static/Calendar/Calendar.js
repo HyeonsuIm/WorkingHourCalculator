@@ -1,17 +1,9 @@
-function render_calendar(year, month, day)
+function get_calendar_header_elements(currentyear, currentMonth)
 {
-    const currentyear = year
-    const currentMonth = month + 1
-
-    const monthStartDay = new Date(currentyear, currentMonth-1, 1)
-    const monthLastDay = new Date(currentyear, currentMonth, 0)
-    const startDayOfWeek = monthStartDay.getDay();
-
-    let elementStr = "<table class='table' id='calendar-table'>"
-    elementStr +="<tr>\
-    <td class='calendar_header'><button id='prev_button' class='btn btn-light' onclick='SetMonth(-1)'><</button></td>\
-    <td class='calendar_header' id='year-month' colspan='5'>" + currentyear + "년 " + ( currentMonth ) + "월</td>\
-    <td class='calendar_header'><button id='next_button' class='btn btn-light' onclick='SetMonth(1)'>></button></td></tr>"
+    let elementStr = "<tr>\
+        <td class='calendar_header'><button id='prev_button' class='btn btn-light' onclick='SetMonth(-1)'><</button></td>\
+        <td class='calendar_header' id='year-month' colspan='5'>" + currentyear + "년 " + ( currentMonth ) + "월</td>\
+        <td class='calendar_header'><button id='next_button' class='btn btn-light' onclick='SetMonth(1)'>></button></td></tr>"
     
     // 요일 생성
     elementStr += "<tr><td class='sunday' id='month-weekday'>일</td>"
@@ -21,18 +13,23 @@ function render_calendar(year, month, day)
     elementStr += "<td id='month-weekday'>목</td>"
     elementStr += "<td id='month-weekday'>금</td>"
     elementStr += "<td class='saturday' id='month-weekday'>토</td></tr>"
-    
+
+    return elementStr;
+}
+
+function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, currentMonth, day)
+{
     // 앞쪽 빈칸
-    elementStr += "<tr>"
+    let elementStr = "<tr>"
     for(i=0;i<startDayOfWeek;i++)
     {
         elementStr += "<td id='month-day-empty'> </td>"
     }
-    
+
     let displayDay = day
     let dayOfWeek = 0
     //날짜 생성
-    for(i=1;i<=monthLastDay.getDate();i++)
+    for(i=1;i<=lastDay;i++)
     {
         dayOfWeek = (startDayOfWeek + i - 1) % 7
         let classStr = ""
@@ -52,22 +49,23 @@ function render_calendar(year, month, day)
         {
             classStr = "class='sunday'"
         }
-        else if( true == IsVacation(vacationList, currentyear, currentMonth, i))
-        {
-            classStr = "class='vacation'"
-            isNeedPopup = true;
-        }
-        else if( true == IsVacation(half_vacationList, currentyear, currentMonth, i))
-        {
-            classStr = "class='half_vacation'"
-            isNeedPopup = true;
-        }
         else
         {
-            classStr = "class='working'"
             isNeedPopup = true;
-
+            if( true == IsVacation(vacationList, currentyear, currentMonth, i))
+            {
+                classStr = "class='vacation'"
+            }
+            else if( true == IsVacation(half_vacationList, currentyear, currentMonth, i))
+            {
+                classStr = "class='half_vacation'"
+            }
+            else
+            {
+                classStr = "class='working'"
+            }
         }
+
 
         if( true == isNeedPopup )
         {
@@ -75,6 +73,7 @@ function render_calendar(year, month, day)
             otherAttr = "data-toggle='modal' style='cursor:pointer;'"
             dataId += "data-id='"+ currentyear + "-" + String(currentMonth).padStart(2,'0') + "-" + String(i).padStart(2,'0') + "'"
         }
+
         let idStr ="id="
         if( displayDay == i)
         {
@@ -91,11 +90,30 @@ function render_calendar(year, month, day)
             elementStr += "</tr><tr>"
         }
     }
+
+    // 뒤쪽 빈칸
     for(;dayOfWeek < 6;dayOfWeek++)
     {
-        elementStr += "<td id='month-day'></td>"
+        elementStr += "<td id='month-day-empty'></td>"
     }
     elementStr += "</tr></table>"
+
+    return elementStr;
+}
+
+function render_calendar(year, month, day)
+{
+    const currentyear = year
+    const currentMonth = month + 1
+
+    const monthStartDay = new Date(currentyear, currentMonth-1, 1)
+    const monthLastDay = new Date(currentyear, currentMonth, 0)
+    const startDayOfWeek = monthStartDay.getDay();
+
+    let elementStr = "<table class='table' id='calendar-table'>"
+
+    elementStr += get_calendar_header_elements(currentyear, currentMonth)
+    elementStr += get_calendar_content_elements(startDayOfWeek, monthLastDay.getDate(), currentyear, currentMonth, day)
 
     let element = document.getElementById("calendarArea")
     element.innerHTML = elementStr

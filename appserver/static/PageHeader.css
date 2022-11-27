@@ -1,0 +1,24 @@
+.title
+{
+    margin:0 auto;
+    width:1180px;
+    height:80px;
+    padding:20px 20px;
+    border-bottom:1px solid lightgray;
+}
+
+.title>div
+{
+    margin:auto;
+    float:left;
+    width:50%;
+    height:60px;
+}
+
+#nav_content
+{
+    margin:0 auto;
+    padding:5px 5px;
+    float:right;
+    text-align:right;
+}

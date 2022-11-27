@@ -16,6 +16,11 @@ def show_main_view():
     info("* access user %s", request.remote_addr)
     return render_template('html/main.html', data=holidays)
 
+@app.route("/WorkingHourInput.html")
+def show_working_hour_input():
+    """ rendering working hour input page"""
+    return render_template('html/WorkingHourInput.html')
+
 def get_holiday_lists(year):
     """ Get holidays"""
     return list(KR(years=year).keys())
