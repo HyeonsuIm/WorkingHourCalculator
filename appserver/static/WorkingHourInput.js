@@ -48,6 +48,17 @@ function inputWorkingHours()
             updateWorkingHour(date.getFullYear(), date.getMonth()+1, date.getDate(), minute)
         }
     }
+
+
+
+    // var toastTrigger = document.getElementById('enter_working_hours')
+    // if (toastTrigger) 
+    // {
+    //     var toastLiveExample = document.getElementById('liveToast')
+    //     var toast = new bootstrap.Toast(toastLiveExample)
+    //     toast.show()
+    // }
+
     location.href='/'
 }
 

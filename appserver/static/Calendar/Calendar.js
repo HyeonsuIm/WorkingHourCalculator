@@ -1,8 +1,21 @@
-function get_calendar_header_elements(currentyear, currentMonth)
+function get_calendar_header_elements(currentyear, currentMonth, totalWorkingHour, getPaid)
 {
     let elementStr = "<tr>\
         <td class='calendar_header'><button id='prev_button' class='btn btn-light' onclick='SetMonth(-1)'><</button></td>\
-        <td class='calendar_header' id='year-month' colspan='5'>" + currentyear + "년 " + ( currentMonth ) + "월</td>\
+        <td class='calendar_header' id='year-month' colspan='5'>\
+            <div style='position:relative;display:block;'>\
+                " + currentyear + "년 " + ( currentMonth ) + "월\
+                <div style='line-height:15px;display:block;position:absolute;top:-5px;right:0px;bottom:auto'>"
+    if(totalWorkingHour>0)
+    {
+        elementStr += "<div style='float:left;text-align:left'><font size='2' color='#ccc'>근무<br>야근</font></div>"
+        elementStr += "<div style='float:right;text-align:left'><font size='2' color='#ccc'>" + totalWorkingHour + "h<br>" + getPaid + "</font></div>"
+    }
+                    
+    elementStr += "\
+                </div>\
+            </div>\
+        </td>\
         <td class='calendar_header'><button id='next_button' class='btn btn-light' onclick='SetMonth(1)'>></button></td></tr>"
     
     // 요일 생성
@@ -17,7 +30,7 @@ function get_calendar_header_elements(currentyear, currentMonth)
     return elementStr;
 }
 
-function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, currentMonth, day)
+function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, currentMonth, day, workingHours)
 {
     // 앞쪽 빈칸
     let elementStr = "<tr>"
@@ -28,7 +41,6 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
 
     let displayDay = day
     let dayOfWeek = 0
-    let workingHours = GetWorkingHour(currentyear, currentMonth)
 
     //날짜 및 근무시간 생성
     for(i=1;i<=lastDay;i++)
@@ -121,8 +133,21 @@ function render_calendar(year, month, day)
 
     let elementStr = "<table class='table' id='calendar-table'>"
 
-    elementStr += get_calendar_header_elements(currentyear, currentMonth)
-    elementStr += get_calendar_content_elements(startDayOfWeek, monthLastDay.getDate(), currentyear, currentMonth, day)
+    let workingHours = GetWorkingHour(currentyear, currentMonth)
+    let totalWorkingHour=0
+    for(i=1;i<=monthLastDay.getDate();i++)
+    {
+        totalWorkingHour += workingHours[i]
+    }
+
+    //날짜 생성
+    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
+    let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
+    
+    let totalOvertimePay = ((totalWorkingHour/60-minWorkingHour) * payPerHour)/1000
+    if (totalOvertimePay < 0) totalOvertimePay = 0
+    elementStr += get_calendar_header_elements(currentyear, currentMonth, (totalWorkingHour/60).toFixed(0), totalOvertimePay)
+    elementStr += get_calendar_content_elements(startDayOfWeek, monthLastDay.getDate(), currentyear, currentMonth, day, workingHours)
 
     let element = document.getElementById("calendarArea")
     element.innerHTML = elementStr
