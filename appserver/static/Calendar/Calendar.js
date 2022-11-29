@@ -6,10 +6,10 @@ function get_calendar_header_elements(currentyear, currentMonth, totalWorkingHou
             <div style='position:relative;display:block;'>\
                 " + currentyear + "년 " + ( currentMonth ) + "월\
                 <div style='line-height:15px;display:block;position:absolute;top:-5px;right:0px;bottom:auto'>"
-    if(totalWorkingHour>0)
+    if(totalWorkingHour > 0 )
     {
-        elementStr += "<div style='float:left;text-align:left'><font size='2' color='#ccc'>근무<br>야근</font></div>"
-        elementStr += "<div style='float:right;text-align:left'><font size='2' color='#ccc'>" + totalWorkingHour + "h<br>" + getPaid + "</font></div>"
+        elementStr += "<div style='float:left;text-align:left'><font size='2' color='#1c1c1c'>근무<br>야근</font></div>"
+        elementStr += "<div style='float:right;text-align:left'><font size='2' color='#1c1c1c'>" + totalWorkingHour + "h<br>" + getPaid + "</font></div>"
     }
                     
     elementStr += "\
@@ -101,7 +101,7 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
         workingHour = ""
         if(workingHours[i] != 0)
         {
-            workingHour += (workingHours[i] / 60).toFixed(0) + ":" + String(workingHours[i] % 60).padStart(2,'0')
+            workingHour += Math.floor((workingHours[i] / 60)) + ":" + String(workingHours[i] % 60).padStart(2,'0')
         }
 
         elementStr += "<td " + idStr + " " + classStr + " " + onclickStr + " " + otherAttr + " " + dataId + " >" + i + "<br>" + workingHour + "</td>"
@@ -144,8 +144,8 @@ function render_calendar(year, month, day)
     let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
     let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
     
-    let totalOvertimePay = ((totalWorkingHour/60-minWorkingHour) * payPerHour)/1000
-    if (totalOvertimePay < 0) totalOvertimePay = 0
+    let totalOvertimePay = (((totalWorkingHour/60-minWorkingHour) * payPerHour) / 10000).toFixed(1)
+    if (totalOvertimePay <= 0) totalOvertimePay = 0
     elementStr += get_calendar_header_elements(currentyear, currentMonth, (totalWorkingHour/60).toFixed(0), totalOvertimePay)
     elementStr += get_calendar_content_elements(startDayOfWeek, monthLastDay.getDate(), currentyear, currentMonth, day, workingHours)
 
