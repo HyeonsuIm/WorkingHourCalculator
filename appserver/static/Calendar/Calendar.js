@@ -9,7 +9,7 @@ function get_calendar_header_elements(currentyear, currentMonth, totalWorkingHou
     if(totalWorkingHour > 0 )
     {
         elementStr += "<div style='float:left;text-align:left'><font size='2' color='#1c1c1c'>근무<br>야근</font></div>"
-        elementStr += "<div style='float:right;text-align:left'><font size='2' color='#1c1c1c'>" + totalWorkingHour + "h<br>" + getPaid + "</font></div>"
+        elementStr += "<div style='float:right;text-align:left'><font size='2' color='#1c1c1c'>" + totalWorkingHour + "시간<br>" + getPaid + "만원</font></div>"
     }
                     
     elementStr += "\
