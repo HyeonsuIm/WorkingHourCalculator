@@ -1,7 +1,7 @@
 function displayModal(element) {
     var keyVal = element.getAttribute('data-id');
     $(".modal-body #keyVal").val(keyVal)
-    $('.modal').modal('show');
+    $('#day_modal').modal('show');
 }
 
 function UpdateGlobalDateInformation(holidayListParam) {

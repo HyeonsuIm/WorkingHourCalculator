@@ -9,10 +9,14 @@ itsdangerous==2.0.1
 Jinja2==3.0.3
 korean-lunar-calendar==0.2.1
 MarkupSafe==2.0.1
+mysql-connector-python==8.0.31
+protobuf==3.20.1
 pycparser==2.21
 PyMeeus==0.5.11
+PyMySQL==1.0.2
 pyOpenSSL==22.1.0
 python-dateutil==2.8.2
 six==1.16.0
+SQLAlchemy==1.4.44
 uWSGI==2.0.20
 Werkzeug==2.0.3

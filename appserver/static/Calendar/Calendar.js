@@ -146,7 +146,7 @@ function render_calendar(year, month, day)
     
     let totalOvertimePay = (((totalWorkingHour/60-minWorkingHour) * payPerHour) / 10000).toFixed(1)
     if (totalOvertimePay <= 0) totalOvertimePay = 0
-    elementStr += get_calendar_header_elements(currentyear, currentMonth, (totalWorkingHour/60).toFixed(0), totalOvertimePay)
+    elementStr += get_calendar_header_elements(currentyear, currentMonth, (totalWorkingHour/60).toFixed(1), totalOvertimePay)
     elementStr += get_calendar_content_elements(startDayOfWeek, monthLastDay.getDate(), currentyear, currentMonth, day, workingHours)
 
     let element = document.getElementById("calendarArea")
