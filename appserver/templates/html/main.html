@@ -174,18 +174,17 @@
             </div>
         </div>
         <!-- Modal result-->
-        <div class="modal fade" id="login_result" tabindex="-1">
+        <div class="modal fade" id="signin_result_modal" tabindex="-1">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">로그인</h5>
+                        <h5 class="modal-title">회원가입 성공</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
                     </div>
-                    <div class="modal-body" id="login_result_body">
+                    <div class="modal-body" id="signin_result_body">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="UpdateDayInformationFromPopup()" data-bs-dismiss ='modal'>Save changes</button>
                     </div>
                 </div>
             </div>
@@ -200,18 +199,17 @@
             });
             $('[data-toggle="tooltip"]').tooltip();
             //$('work_input').onclick=
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        displayLoginPopup( "{{message}}" )
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
         });
 
         UpdateGlobalDateInformation([{% for i in data %} {% if i==data[0] %}"{{i}}"{% else %},"{{i}}"{% endif %} {% endfor %}])
         UpdateAllViews()
         UpdateLoginContent()
-
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    displayLoginPopup(message)
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
     </script>
 </html>

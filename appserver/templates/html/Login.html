@@ -20,12 +20,12 @@
                 <a href="/" style="text-decoration-line:none;color:#0d6efd"><h3>Work Hour</h3></a>
             </div>
         </div>
-            {% if error %}
-                <p class=error><strong>Error:</strong> {{ error }}
-            {% endif %}
         <div class='content'>
             <form method="POST" action="LoginRequest" onsubmit="return validateForm()">
                 <div class="form-group">
+                    {# {% if error %}
+                        <p class=error><strong>Error:</strong> {{ error }}
+                    {% endif %} #}
                     <label for="userid">아이디</label>
                     <input type="text" class="form-control" id="userid" placeholder="아이디" name="userid"/>
                 </div>
@@ -46,5 +46,9 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
+        {% if error %}
+            alert("{{error}}")
+        {% endif %}
+        
     </script>
 </html>

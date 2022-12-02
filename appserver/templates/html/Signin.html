@@ -21,10 +21,10 @@
             </div>
         </div>
         <div class='content'>
-            {% if error %}
-                <p class=error><strong>Error:</strong> {{ error }}
-            {% endif %}
             <form method="POST" action="SigninRequest" onsubmit="return validateForm()">
+                {# {% if error %}
+                    <p class=error><strong>Error:</strong> {{ error }}
+                {% endif %} #}
                 <div class="form-group">
                     <label for="userid">아이디</label>
                     <input type="text" class="form-control" id="userid" placeholder="아이디" name="userid"/>
@@ -49,5 +49,8 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
         });
+        {% if error %}
+            alert("{{error}}")
+        {% endif %}
     </script>
 </html>

@@ -11,8 +11,9 @@ function UpdateLoginContent()
     }
 }
 
-function displayLoginPopup(element, string) {
-    var keyVal = element.getAttribute('data-id');
-    $('#login_result_body').innerHTML(string)
-    $('#login_result').modal('show');
+function displayLoginPopup(string) {
+    let bodyElement = document.getElementById("signin_result_body")
+    bodyElement.innerHTML = '<p>' + string + '</p>'
+
+    $('#signin_result_modal').modal('show')
 }

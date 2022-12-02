@@ -7,7 +7,7 @@
 #docker build -t $NODE_NAME ./appserver
 #docker run --name $NODE_NAME -p 20000:20000 $NODE_NAME &
 docker-compose stop
-docker-compose rm
+docker-compose rm -f
 
 git pull
 docker-compose up -d --build
