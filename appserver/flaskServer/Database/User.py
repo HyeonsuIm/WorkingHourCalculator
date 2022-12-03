@@ -12,7 +12,7 @@ class User():
     def check_user_exist(self):
         """Check user is exist or not"""
         user = self.database.execute(text("""
-            SELECT user_id, user_passwd
+            SELECT USER_ID, USER_PASSWD
             FROM USER
             WHERE user_id = :user_id"""), {
             'user_id' : self.user_id
@@ -23,7 +23,7 @@ class User():
     def get_member_id(self):
         """Check user is exist or not"""
         user = self.database.execute(text("""
-            SELECT member_id, user_passwd
+            SELECT MEMBER_ID, USER_PASSWD
             FROM USER
             WHERE user_id = :user_id"""), {
             'user_id' : self.user_id
@@ -36,8 +36,8 @@ class User():
         """Insert user"""
         return self.database.execute(text("""
                 INSERT INTO USER (
-                    user_id,
-                    user_passwd
+                    USER_ID,
+                    USER_PASSWD
                 ) VALUES (
                     :user_id,
                     :password

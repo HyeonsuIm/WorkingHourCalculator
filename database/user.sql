@@ -2,7 +2,14 @@ CREATE DATABASE `WORKING_HOUR_DB`;
 USE `WORKING_HOUR_DB`;
 
 CREATE TABLE `USER`(
-    `member_id` INT PRIMARY KEY AUTO_INCREMENT,
-    `user_id` varchar(256) NOT NULL,
-    `user_passwd` varchar(256) NOT NULL 
+    `MEMBER_ID` INT PRIMARY KEY AUTO_INCREMENT,
+    `USER_ID` varchar(256) NOT NULL,
+    `USER_PASSWD` varchar(256) NOT NULL 
 ); 
+
+CREATE TABLE `LOGS`(
+    `LOG_TIME` TIMESTAMP NOT NULL DEFAULT NOW(),
+    `MEMBER_ID` INT,
+    `ACCESS_IP` varchar(16) NOT NULL,
+    `LOG_STR` varchar(256)
+);
