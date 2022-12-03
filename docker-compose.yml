@@ -11,17 +11,19 @@ services:
         # secrets:
         #     - mysql_server_id
         #     - mysql_server_passwd
-        ports:
-            - "3306:3306"
+        network_mode: host
+        # comments for dev task on the mac
+        #ports:
+        #    - "3306:3306"
 
     flask:
         build: ./appserver
         container_name: flask
         restart: always
-        links:
-            - mysql:dbserver
         network_mode: host
         # comments for dev task on the mac
+        #links:
+        #    - mysql:dbserver
         #ports:
         #    - "19999:19999"
 
