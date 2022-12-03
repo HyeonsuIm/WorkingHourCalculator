@@ -11,7 +11,7 @@ It is used to calculate working hours and overtime fee per month.
 * Docker
   * nginx node
   * flask + uwsgi node
-  * mysql node(To be supported)
+  * mysql node
 
 <br>
 < Server >
