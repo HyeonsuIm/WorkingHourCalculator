@@ -14,6 +14,7 @@
         <script src="/static/Calendar/CalendarViewHandler.js"></script>
         <script src="/static/UserInfoHandler.js"></script>
         <script src="/static/MainPageHandler.js"></script>
+        <script src="/static/WorkingHourInput.js"></script>
         
         <link rel="stylesheet" href="/static/Calendar/Calendar.css">
         <link rel="stylesheet" href="/static/PageHeader.css">
@@ -63,7 +64,7 @@
                 <div class='side_view_div' id="month_working_input">
                     <table class="table" >
                         <tr>
-                            <td colspan='2'><input min='0' value="" class='form-control' placeholder='현재 남은 근무 시간' id='working_done' onchange='UpdateRemainWorkingHourAndUpdate()'/></td>
+                            <td colspan='2'><input min='0' value="" class='form-control' placeholder='현재 남은 근무 시간(ex. 123:53)' id='working_done' onchange='UpdateRemainWorkingHourAndUpdate()'/></td>
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='현재 남은 근무시간(hh:mm)' style='cursor:help'></i> </td>
                         </tr>
                         <tr>
@@ -79,7 +80,7 @@
                         </tr>
                         <tr>
                             <td colspan='2'><input type='number' step='100' min='0' class='form-control' placeholder='시급' id='overnight_pay_hour' onchange='UpdateAllViews()'/></td>
-                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='야근 시급' style='cursor:help'></i> </td>
+                            <td><i class="fa fa-info-circle" data-toggle="tooltip" title='야근 시급(ex. 9000)' style='cursor:help'></i> </td>
                         </tr>
                     </table>
                 </div>
@@ -95,7 +96,7 @@
                         <div class='side_view_div' id="month_working_input">
                             <table class="table" >
                                 <tr>
-                                    <td colspan='2'><input type='number' step='any' min='0' value="-1" class='form-control' placeholder='목표 시간' id='working_plan' onchange='UpdateAllViews()'/></td>
+                                    <td colspan='2'><input type='number' step='any' min='0' value="-1" class='form-control' placeholder='목표 시간(ex. 20)' id='working_plan' onchange='UpdateAllViews()'/></td>
                                     <td><i class="fa fa-info-circle" data-toggle="tooltip" title='남길 목표시간 입력' style='cursor:help'></i> </td>
                                 </tr>
                             </table>
@@ -167,15 +168,24 @@
                         <h5 class="modal-title">근태</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
                     </div>
-                    <div class="modal-body">
-                        날짜 : <input type='text' id='keyVal' value=''/>
+                    <div class="modal-body" style="display:flex;flex-direction:column;">
+                        날짜 : <br>
+                        <input class='form-control' id='keyVal' value=''/>
+                        근무시간 : <br>
+                        <input class='form-control' id="work_hour_day" value=''/>
                         <br>
-                        <input type='radio' name="radAnswer" id='full_day' value=1 checked/>
-                        <label for="full_day">휴가</label><br>
-                        <input type='radio' name="radAnswer" id='half_day' value=2/>
-                        <label for="half_day">반차</label><br>
-                        <input type='radio' name="radAnswer" id='working_day' value=3/>
-                        <label for="working_day">근무</label><br>
+                        <div>
+                            <input type='radio' class="form-check-input" name="radAnswer" id='working_day' value=3 checked/>
+                            <label class="form-check-label" for="working_day">근무</label><br>
+                        </div>
+                        <div>
+                            <input type='radio' class="form-check-input" name="radAnswer" id='full_day' value=1/>
+                            <label class="form-check-label" for="full_day">휴가</label><br>
+                        </div>
+                        <div>
+                            <input type='radio' class="form-check-input" name="radAnswer" id='half_day' value=2/>
+                            <label class="form-check-label" for="half_day">반차</label><br>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
