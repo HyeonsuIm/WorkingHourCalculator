@@ -20,15 +20,17 @@ class User():
 
         return True if user else False
 
-    def check_user_passwd_valid(self):
+    def get_member_id(self):
         """Check user is exist or not"""
         user = self.database.execute(text("""
-            SELECT user_passwd
+            SELECT member_id, user_passwd
             FROM USER
             WHERE user_id = :user_id"""), {
             'user_id' : self.user_id
             }).fetchone()
-        return check_password_hash(user[0], self.password) if user else False
+        if user:
+            return user[0] if check_password_hash(user[1], self.password) else None
+        return None
 
     def insert_table(self):
         """Insert user"""
