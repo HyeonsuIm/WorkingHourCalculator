@@ -2,7 +2,7 @@
 from logging import basicConfig, info, INFO
 
 from datetime import datetime
-from flask import Flask, render_template, request, flash, url_for, redirect, make_response
+from flask import Flask, render_template, request, flash, url_for, redirect, make_response, jsonify
 from sqlalchemy import create_engine
 from holidays import KR
 
@@ -109,10 +109,34 @@ def logout():
 
     return resp
 
+@app.route("/api/request/holidays", methods=['GET'])
+def get_holidays():
+    """Get holiday lists"""
+    year = int(request.args.get('year'))
+    return get_holiday_lists(year)
+
 
 def get_holiday_lists(year):
     """ Get holidays"""
-    return list(KR(years=year).keys())
+    holiday_list = ['{0:04d}-{1:02d}-{2:02d}'.format(key.year, key.month, key.day) for key in KR(years=year).keys()]
+    if year == 2023:
+        holiday_list.append("2023-01-24")
+    elif year == 2022:
+        holiday_list.append("2022-03-09")
+        holiday_list.append("2022-06-01")
+        holiday_list.append("2022-08-01")
+        holiday_list.append("2022-08-02")
+        holiday_list.append("2022-08-03")
+
+    holiday_list = sorted(holiday_list)
+    return jsonify({'holidays':holiday_list})
+
+# @app.route("/api/request/vacations", methods=['POST'])
+# def get_vacations():
+#     """Get vacation lists"""
+#     member_id = int(request.cookies.get('member_id'))
+
+#     return member_id
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=20000)

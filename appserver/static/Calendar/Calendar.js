@@ -159,11 +159,13 @@ function SetMonth(diff)
     {
         displayDateYear = displayDateYear - 1
         displayDateMonth = displayDateMonth + 12 + diff
+        RequestHolidays(displayDateYear)
     }
     else if( diff > 0 && displayDateMonth + diff >= 12)
     {
         displayDateYear = displayDateYear + 1
         displayDateMonth = displayDateMonth - 12 + diff
+        RequestHolidays(displayDateYear)
     }
     else
     {
@@ -177,21 +179,6 @@ function SetMonth(diff)
         displayDateDay = today.getDate()
     }
 
-    UpdateAllViews()
-}
-
-function displayHolidayPopup(year, month, day)
-{
-    var isVacation = confirm('휴가?')
-    if( true == isVacation )
-    {
-        AddVacationDayInformation(year, month,day,isVacation)
-    }
-    else
-    {
-        RemoveVacationDayInformation(year,month,day)
-    }
-    UpdateAllVacation()
     UpdateAllViews()
 }
 

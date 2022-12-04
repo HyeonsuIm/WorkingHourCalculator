@@ -18,27 +18,23 @@ function displayModal(element) {
     $('#day_modal').modal('show')
 }
 
-function UpdateGlobalDateInformation(holidayListParam) {
+function UpdateGlobalDateInformation() {
     overtime_work = 0
     working_hour_plan = 0
     today = new Date()
+    RequestHolidays(today.getFullYear())
+
     displayDateYear = today.getFullYear()
     displayDateMonth = today.getMonth()
     displayDateDay = today.getDate()
-    holidayList = holidayListParam
 
-    holidayList.push("2022-03-09")
-    holidayList.push("2022-06-01")
-    holidayList.push("2022-08-01")
-    holidayList.push("2022-08-02")
-    holidayList.push("2022-08-03")
-    holidayList.sort()
     vacationList = []
     half_vacationList = []
 
     UpdateLeaveWorkTime()
     UpdateRemainWorkingHour()
 }
+
 function UpdateAllViews() {
     UpdateAllVacation()
     updateWorkingPlan()
