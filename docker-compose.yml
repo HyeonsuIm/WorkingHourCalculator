@@ -21,6 +21,8 @@ services:
         container_name: flask
         restart: always
         network_mode: host
+        depends_on:
+            - mysql
         # comments for dev task on the mac
         #links:
         #    - mysql:dbserver
