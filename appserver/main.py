@@ -8,13 +8,18 @@ from holidays import KR
 
 from flaskServer.Database.User import User
 from flaskServer.Database.Logging import Logging
+from flaskServer.Database.UserWorking import UserWorking
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_pyfile("config.py")
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
-database = create_engine(app.config['DB_URL'], encoding = 'utf-8', max_overflow = 0)
+database = create_engine(app.config['DB_URL'], encoding = 'utf-8', pool_recycle=3600, echo=True)
 basicConfig(level=INFO)
+
+def print_log(str):
+    """Print log with time"""
+    info(f'{datetime.now()} {str}')
 
 @app.route("/")
 def show_main_view():
@@ -23,7 +28,7 @@ def show_main_view():
     member_id = request.cookies.get('member_id')
     if not user_id :
         user_id = request.args.get('userId')
-    info("user_id %s", user_id)
+    print_log(f"user_id {user_id}")
 
     date = datetime.now()
     holidays = get_holiday_lists(date.year)
@@ -131,12 +136,38 @@ def get_holiday_lists(year):
     holiday_list = sorted(holiday_list)
     return jsonify({'holidays':holiday_list})
 
-# @app.route("/api/request/vacations", methods=['POST'])
-# def get_vacations():
-#     """Get vacation lists"""
-#     member_id = int(request.cookies.get('member_id'))
+@app.route("/api/request/update_vacation", methods=['POST'])
+def update_vacation():
+    """Update vacation"""
+    member_id = int(request.cookies.get('member_id'))
+    year = int(request.form.get('year'))
+    month = int(request.form.get('month'))
+    day = int(request.form.get('day'))
+    type = int(request.form.get('type'))
+    user_db = UserWorking(database, member_id, year, month)
+     
+    user_db.set_working_day(day, type)
+    
+@app.route("/api/request/get_working_info")
+def get_working_info():
+    """get working information"""
+    member_id = int(request.cookies.get('member_id'))
+    year = int(request.form.get('year'))
+    month = int(request.form.get('month'))
+    user_db = UserWorking(database, member_id, year, month)
 
-#     return member_id
+    return user_db.get_working_info()
+
+@app.route("/api/request/set_working_hours")
+def set_working_hours():
+    """get working information"""
+    member_id = int(request.cookies.get('member_id'))
+    year = int(request.form.get('year'))
+    month = int(request.form.get('month'))
+    hours = int(request.form.get('hours'))
+    user_db = UserWorking(database, member_id, year, month)
+
+    user_db.set_working_hours(hours)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=20000)
