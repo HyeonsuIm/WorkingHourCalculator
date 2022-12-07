@@ -1,5 +1,5 @@
 from sqlalchemy import text
-from werkzeug.security import generate_password_hash, check_password_hash
+from json import dumps, loads
 
 class UserWorking():
     """Class for managing User Working information"""
@@ -31,19 +31,15 @@ class UserWorking():
         'member_id':self.member_id,
         'year':self.year,
         'month':self.month,
-        'working_info':working_info}).lastrowid # 새로 사용자가 생성되면 새로 생성된 사용자의 아이디를 읽어들인다.
+        'working_info':dumps(working_info)}).lastrowid
 
     def update_working_info(self, working_info):
         """set default column"""
         return self.database.execute(text("""
             UPDATE USER_WORKING
-                MONTH_WORK_TYPES_MINUTES=:working_info
-            WHERE
-                MEMBER_ID=:member_id
-                YEAR=:year
-                MONTH=:month
-            )"""), {
-            'working_info':working_info,
+            SET MONTH_WORK_TYPES_MINUTES=:working_info
+            WHERE MEMBER_ID=:member_id AND YEAR=:year AND MONTH=:month"""), {
+            'working_info':dumps(working_info),
             'member_id':self.member_id,
             'year':self.year,
             'month':self.month}).lastrowid # 새로 사용자가 생성되면 새로 생성된 사용자의 아이디를 읽어들인다.
@@ -54,7 +50,7 @@ class UserWorking():
         if not working_info:
             self.make_working_info_column()
             working_info = self.get_working_info()
-            
+        
         working_info['working_days'][day] = val
         return self.update_working_info(working_info)
     
@@ -72,11 +68,14 @@ class UserWorking():
 
     def get_working_info(self):
         """Check user is exist or not"""
-        return self.database.execute(text("""
+        result = self.database.execute(text("""
             SELECT MONTH_WORK_TYPES_MINUTES
             FROM USER_WORKING
             WHERE MEMBER_ID = :member_id AND YEAR = :year AND MONTH = :month"""), {
             'member_id' : self.member_id,
-            'yeay' : self.year,
+            'year' : self.year,
             'month' : self.month
             }).fetchone()
+        if result :
+            return loads(result[0])
+        return None

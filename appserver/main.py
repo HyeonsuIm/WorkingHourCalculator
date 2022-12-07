@@ -145,10 +145,11 @@ def update_vacation():
     day = int(request.form.get('day'))
     type = int(request.form.get('type'))
     user_db = UserWorking(database, member_id, year, month)
-     
+
     user_db.set_working_day(day, type)
-    
-@app.route("/api/request/get_working_info")
+    return "success"
+
+@app.route("/api/request/get_working_info", methods=['POST'])
 def get_working_info():
     """get working information"""
     member_id = int(request.cookies.get('member_id'))
@@ -158,7 +159,7 @@ def get_working_info():
 
     return user_db.get_working_info()
 
-@app.route("/api/request/set_working_hours")
+@app.route("/api/request/set_working_hours", methods=['POST'])
 def set_working_hours():
     """get working information"""
     member_id = int(request.cookies.get('member_id'))
