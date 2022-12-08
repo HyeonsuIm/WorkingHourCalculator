@@ -23,13 +23,11 @@ function UpdateGlobalDateInformation() {
     working_hour_plan = 0
     today = new Date()
     RequestHolidays(today.getFullYear())
+    RequestWorkingInfos(String(today.getFullYear())+"-"+String(today.getMonth()+1).padStart(2,"0"))
 
     displayDateYear = today.getFullYear()
     displayDateMonth = today.getMonth()
     displayDateDay = today.getDate()
-
-    vacationList = []
-    half_vacationList = []
 
     UpdateLeaveWorkTime()
     UpdateRemainWorkingHour()
@@ -59,17 +57,17 @@ function UpdateDayInformationFromPopup() {
             minute = times[0]*60 + times[1]*1
         }
         year_month_day = keyVal.split('-')
-        updateWorkingHour(Number(year_month_day[0]), Number(year_month_day[1]), Number(year_month_day[2]), minute)
+        UpdateWorkingHour(Number(year_month_day[0]), Number(year_month_day[1]), Number(year_month_day[2]), minute)
         UpdateAllViews()
     }
 
     if (document.getElementById("full_day").checked) {
-        UpdateDayInfo(keyVal, 'full_day')
+        UpdateDayInfo(keyVal, 1)
     }
     else if (document.getElementById("half_day").checked) {
-        UpdateDayInfo(keyVal, 'half_day')
+        UpdateDayInfo(keyVal, 2)
     }
     else {
-        UpdateDayInfo(keyVal, 'working_day')
+        UpdateDayInfo(keyVal, 0)
     }
 }

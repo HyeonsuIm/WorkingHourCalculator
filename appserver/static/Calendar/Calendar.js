@@ -171,7 +171,7 @@ function SetMonth(diff)
     {
         displayDateMonth += diff
     }
-
+    RequestWorkingInfos(String(displayDateYear)+"-"+String(displayDateMonth).padStart(2,"0"))
     displayDateDay = 0
     if( displayDateYear == today.getFullYear() &&
         displayDateMonth == today.getMonth() )
@@ -182,66 +182,32 @@ function SetMonth(diff)
     UpdateAllViews()
 }
 
-function AddVacationDayInformation(year,month,date,isFullVacation)
-{
-    const vacationKey = "vacation_"+year+"-"+ String(month).padStart(2,'0') + "-" + String(date).padStart(2,'0')
-    localStorage.setItem(vacationKey, isFullVacation)
-}
-
-function RemoveVacationDayInformation(year,month,date)
-{
-    const vacationKey = "vacation_"+year+"-"+ String(month).padStart(2,'0') + "-" + String(date).padStart(2,'0')
-    localStorage.removeItem(vacationKey)
-}
-
 function UpdateAllVacation()
 {
-    vacationList = []
-    half_vacationList = []
-    for( let key in localStorage )
-    {
-        vacationType = localStorage.getItem(key)
-        if( 1 == vacationType )
-        {
-            //let [year, month,day] = key.split('-',3)
-            vacationList.push(key)
-        }
-        else if( 2 == vacationType)
-        {
-            half_vacationList.push(key)
-        }
-    }
+    // vacationList = []
+    // half_vacationList = []
+    // for( let key in localStorage )
+    // {
+    //     vacationType = localStorage.getItem(key)
+    //     if( 1 == vacationType )
+    //     {
+    //         //let [year, month,day] = key.split('-',3)
+    //         vacationList.push(key)
+    //     }
+    //     else if( 2 == vacationType)
+    //     {
+    //         half_vacationList.push(key)
+    //     }
+    // }
 }
 
 function UpdateDayInfo(keyVal, type)
 {
-    if( type == 'full_day')
-    {
-        localStorage.setItem(keyVal, 1)
-    }
-    else if( type == 'half_day')
-    {
-        localStorage.setItem(keyVal, 2)
-    }
-    else
-    {
-        localStorage.removeItem(keyVal)
-    }
-    UpdateAllVacation();
+    UpdateVacations(keyVal, type)
     UpdateAllViews();
 }
 
 function GetWorkingHour(year, month)
 {
-    const workingHourKey = "WorkingHour:"+String(year)+"-"+ String(month).padStart(2,'0')
-    let datas = localStorage.getItem(workingHourKey)
-    if( null === datas)
-    {
-        datas = Array.from({length:32},()=>0)
-    }
-    else
-    {
-        datas = JSON.parse(datas)
-    }
-    return datas
+    return working_hours
 }

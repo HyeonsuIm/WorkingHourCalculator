@@ -165,10 +165,11 @@ def set_working_hours():
     member_id = int(request.cookies.get('member_id'))
     year = int(request.form.get('year'))
     month = int(request.form.get('month'))
-    hours = int(request.form.get('hours'))
+    day = int(request.form.get('day'))
+    minute = int(request.form.get('hour'))
     user_db = UserWorking(database, member_id, year, month)
 
-    user_db.set_working_hours(hours)
+    user_db.set_working_hour(day, minute)
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=20000)

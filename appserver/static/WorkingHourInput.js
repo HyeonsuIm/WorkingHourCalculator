@@ -45,7 +45,7 @@ function inputWorkingHours()
             {
                 minute = times[0]*60 + times[1]*1
             }
-            updateWorkingHour(date.getFullYear(), date.getMonth()+1, date.getDate(), minute)
+            UpdateWorkingHour(date.getFullYear(), date.getMonth()+1, date.getDate(), minute)
         }
     }
 
@@ -60,22 +60,4 @@ function inputWorkingHours()
     // }
 
     location.href='/'
-}
-
-function updateWorkingHour(year, month, day, minute)
-{
-    const workingHourKey = "WorkingHour:"+String(year)+"-"+ String(month).padStart(2,'0')
-    let datas = localStorage.getItem(workingHourKey)
-    if( null === datas)
-    {
-        datas = Array.from({length:32},()=>0)
-    }
-    else
-    {
-        datas = JSON.parse(datas)
-    }
-
-    datas[day] = minute;
-    localStorage.removeItem(workingHourKey)
-    localStorage.setItem(workingHourKey, JSON.stringify(datas))
 }

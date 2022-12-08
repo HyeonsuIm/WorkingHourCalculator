@@ -54,15 +54,14 @@ class UserWorking():
         working_info['working_days'][day] = val
         return self.update_working_info(working_info)
     
-    def set_working_hours(self, hours):
+    def set_working_hour(self, day, minute):
         """set working day information"""
         working_info = self.get_working_info()
         if not working_info:
             self.make_working_info_column()
             working_info = self.get_working_info()
         
-        for i, val in enumerate(hours):
-            working_info['working_hours'][i] = val
+        working_info['working_hours'][day] = minute
         
         return self.update_working_info(working_info)
 
