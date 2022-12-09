@@ -3,7 +3,10 @@
 
 Working hours calculator according to the self commuting system.
 
-It is used to calculate working hours and overtime fee per month.
+< Functions >
+* worked hours for each month
+* working hour limits and check remaining time
+* overtime fee for each month
 
 <br>
 < Server Diagram >
