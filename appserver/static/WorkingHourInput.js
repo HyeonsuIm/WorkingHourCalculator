@@ -38,7 +38,7 @@ function inputWorkingHours()
         const WORKING_HOUR_START_IDX = 20
         for(contentIdx=0;contentIdx<7;contentIdx++)
         {
-            let date = new Date(2000+yearMonthDay[0]*1, yearMonthDay[1]-1, yearMonthDay[2]*1 + contentIdx)
+            let date = new Date(2000+Number(yearMonthDay[0]), Number(yearMonthDay[1]), Number(yearMonthDay[2]) + contentIdx)
             let times = contents[contentIdx+WORKING_HOUR_START_IDX].split(':')
             let minute = 0;
             if( times.length == 2 )
@@ -48,8 +48,6 @@ function inputWorkingHours()
             UpdateWorkingHour(date.getFullYear(), date.getMonth()+1, date.getDate(), minute)
         }
     }
-
-
 
     // var toastTrigger = document.getElementById('enter_working_hours')
     // if (toastTrigger) 

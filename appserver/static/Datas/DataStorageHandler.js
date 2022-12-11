@@ -170,3 +170,23 @@ async function RequestWorkingInfos(year_month)
         }
     }
 }
+
+function UpdateAllLocalStorage()
+{
+    const oldKeyReg = /\d{4}-\d{2}-\d{2}/
+    removeKeyList = []
+    for( let key in localStorage )
+    {
+        if(oldKeyReg.test(key))
+        {
+            vacationType = localStorage.getItem(key)
+            UpdateVacations(key, Number(vacationType))
+            removeKeyList.push(key)
+        }
+    }
+
+    for( index=0;index<removeKeyList.length;index++)
+    {
+        localStorage.removeItem(removeKeyList[index])
+    }
+}
