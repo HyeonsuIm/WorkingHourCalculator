@@ -30,6 +30,7 @@ function inputWorkingHours()
     }
 
     let headers = strs[0].split("\t")
+    working_hour_map = {}
     for( strIdx=1;strIdx<strs.length;strIdx++ )
     {
         let contents = MakeSplitStr(strs[strIdx]).split(";")
@@ -39,16 +40,22 @@ function inputWorkingHours()
         for(contentIdx=0;contentIdx<7;contentIdx++)
         {
             let date = new Date(2000+Number(yearMonthDay[0]), Number(yearMonthDay[1]), Number(yearMonthDay[2]) + contentIdx)
+            key = String(date.getFullYear()) + "-" + String(date.getMonth()).padStart(2,"0")
+            if( false == working_hour_map.hasOwnProperty(key) )
+            {
+                working_hour_map[key] = []
+            }
+            
             let times = contents[contentIdx+WORKING_HOUR_START_IDX].split(':')
             let minute = 0;
             if( times.length == 2 )
             {
                 minute = times[0]*60 + times[1]*1
             }
-            UpdateWorkingHour(date.getFullYear(), date.getMonth()+1, date.getDate(), minute)
+            working_hour_map[key].append([date.getDate(), minute])
         }
     }
-
+    UpdateWorkingHours(working_hour_map)
     // var toastTrigger = document.getElementById('enter_working_hours')
     // if (toastTrigger) 
     // {
@@ -57,5 +64,5 @@ function inputWorkingHours()
     //     toast.show()
     // }
 
-    location.href='/'
+    //location.href='/'
 }

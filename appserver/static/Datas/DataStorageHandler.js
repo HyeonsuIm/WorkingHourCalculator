@@ -18,10 +18,10 @@ async function RequestHolidays(year)
         });
         console.log(response);
         holidayList = response.data['holidays']
+        UpdateAllViews()
     }catch(error){
         console.log(error);
     }
-    UpdateAllViews()
 }
 
 async function UpdateVacations(year_month_day, type)
@@ -47,9 +47,11 @@ async function UpdateVacations(year_month_day, type)
     else
     {
         try{
-            const response = await axios.post('/api/request/update_vacation',{
+            const response = await axios.post('/api/request/update_vacation',
+            {
+            },
+            {
                 params:{
-                    memberId:member_id,
                     year:year,
                     month:month,
                     day:day,
@@ -57,42 +59,48 @@ async function UpdateVacations(year_month_day, type)
                 }
             });
             console.log(response);
+            RequestWorkingInfos(String(year)+"-"+String(month).padStart(0,"2"))
         }catch(error){
             console.log(error);
         }
     }
-    RequestWorkingInfos(String(year)+"-"+String(month).padStart(0,"2"))
 }
 
-async function UpdateWorkingHour(year, month, day, minute)
+async function UpdateWorkingHours(working_hour_map)
 {
     member_id = getCookie('member_id')
     if(member_id==null)
     {
-        const workingHourKey = "WorkingHour:"+String(year)+"-"+ String(month).padStart(2,'0')
-        let datas = localStorage.getItem(workingHourKey)
-        if( null === datas)
+        for(let key in working_hour_map)
         {
-            datas = Array.from({length:32},()=>0)
+            const workingHourKey = "WorkingHour:"+key
+            let datas = localStorage.getItem(workingHourKey)
+            if( null === datas)
+            {
+                datas = Array.from({length:32},()=>0)
+            }
+            else
+            {
+                datas = JSON.parse(datas)
+            }
+            for(let data in working_hour_map[key])
+            {
+                datas[data[0]] = data[1];
+            }
+            localStorage.removeItem(workingHourKey)
+            localStorage.setItem(workingHourKey, JSON.stringify(datas))
         }
-        else
-        {
-            datas = JSON.parse(datas)
-        }
-        datas[Number(day)] = minute;
-        localStorage.removeItem(workingHourKey)
-        localStorage.setItem(workingHourKey, JSON.stringify(datas))
+        
     }
     else
     {
         try{
-            const response = await axios.post('/api/request/set_working_hour',{
+            const response = await axios.post('/api/request/set_working_hours',
+            {
+            },
+            {
                 params:{
-                    memberId:member_id,
-                    year:year,
-                    month:month,
-                    day:day,
-                    minute:minute
+                    map:JSON.stringify(working_hour_map)
                 }
             });
             console.log(response);
@@ -100,7 +108,6 @@ async function UpdateWorkingHour(year, month, day, minute)
             console.log(error);
         }
     }
-    RequestWorkingInfos(String(year)+"-"+String(month).padStart(0,"2"))
 }
 
 async function RequestWorkingInfos(year_month)
@@ -142,33 +149,46 @@ async function RequestWorkingInfos(year_month)
     else
     {
         try{
-            const response = await axios.post('/api/request/get_working_info',{
+            const response = await axios.post('/api/request/get_working_info',
+            {
+            },
+            {
                 params:{
-                    member_id:member_id,
                     year:year,
-                    month:month
+                    month:month,
                 }
             });
             console.log(response);
 
-            for(i=0;i<32;i++)
+            if(response.data['working_days'].length)
             {
-                if( response.data['working_days'][i] == 1)
+                for(i=0;i<32;i++)
                 {
-                    vacationList.push(String(year)+"-"+String(month).padStart(2,"0")+"-"+String(i).padStart(2,"0"))
+                    if( response.data['working_days'][i] == 1)
+                    {
+                        vacationList.push(String(year)+"-"+String(month).padStart(2,"0")+"-"+String(i).padStart(2,"0"))
+                    }
+                    else if( response.data['working_days'][i] == 2)
+                    {
+                        half_vacationList.push(String(year)+"-"+String(month).padStart(2,"0")+"-"+String(i).padStart(2,"0"))
+                    }
                 }
-                else if( response.data['working_days'][i] == 2)
-                {
-                    half_vacationList.push(String(year)+"-"+String(month).padStart(2,"0")+"-"+String(i).padStart(2,"0"))
-                }
-
-                working_hours = JSON.parse(response.data['working_hours'])
             }
-            
+
+            if(response.data['working_hours'].length)
+            {
+                working_hours = response.data['working_hours']
+            }
+            else
+            {
+                working_hours = Array.from({length:32},()=>0)
+            }
+            UpdateAllViews()
         }catch(error){
             console.log(error);
         }
     }
+    UpdateAllViews()
 }
 
 function UpdateAllLocalStorage()

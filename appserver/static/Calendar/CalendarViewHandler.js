@@ -57,7 +57,11 @@ function UpdateDayInformationFromPopup() {
             minute = times[0]*60 + times[1]*1
         }
         year_month_day = keyVal.split('-')
-        UpdateWorkingHour(Number(year_month_day[0]), Number(year_month_day[1]), Number(year_month_day[2]), minute)
+
+        key = year_month_day[0] + "-" + year_month_day[1].padStart(2,"0")
+        working_hour_dict = {}
+        working_hour_dict[key]=[[Number(year_month_day[2]), minute]]
+        UpdateWorkingHours(working_hour_dict)
         UpdateAllViews()
     }
 

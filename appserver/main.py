@@ -3,6 +3,7 @@ from logging import basicConfig, info, INFO
 
 from datetime import datetime
 from flask import Flask, render_template, request, flash, url_for, redirect, make_response, jsonify
+from json import loads
 from sqlalchemy import create_engine
 from holidays import KR
 
@@ -14,7 +15,7 @@ app = Flask(__name__, static_url_path='/static')
 app.config.from_pyfile("config.py")
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
-database = create_engine(app.config['DB_URL'], encoding = 'utf-8', pool_recycle=3600, echo=True)
+database = create_engine(app.config['DB_URL'], encoding = 'utf-8', pool_recycle=3600, echo=True, future=True)
 basicConfig(level=INFO)
 
 def print_log(str):
@@ -140,10 +141,10 @@ def get_holiday_lists(year):
 def update_vacation():
     """Update vacation"""
     member_id = int(request.cookies.get('member_id'))
-    year = int(request.form.get('year'))
-    month = int(request.form.get('month'))
-    day = int(request.form.get('day'))
-    type = int(request.form.get('type'))
+    year = int(request.args.get('year'))
+    month = int(request.args.get('month'))
+    day = int(request.args.get('day'))
+    type = int(request.args.get('type'))
     user_db = UserWorking(database, member_id, year, month)
 
     user_db.set_working_day(day, type)
@@ -153,23 +154,29 @@ def update_vacation():
 def get_working_info():
     """get working information"""
     member_id = int(request.cookies.get('member_id'))
-    year = int(request.form.get('year'))
-    month = int(request.form.get('month'))
+    year = int(request.args.get('year'))
+    month = int(request.args.get('month'))
     user_db = UserWorking(database, member_id, year, month)
 
-    return user_db.get_working_info()
+    result = user_db.get_working_info()
+    if result:
+        return result
+    else :
+        return {'working_days':[],'working_hours':[]}
 
 @app.route("/api/request/set_working_hours", methods=['POST'])
 def set_working_hours():
-    """get working information"""
+    """set working information"""
     member_id = int(request.cookies.get('member_id'))
-    year = int(request.form.get('year'))
-    month = int(request.form.get('month'))
-    day = int(request.form.get('day'))
-    minute = int(request.form.get('hour'))
-    user_db = UserWorking(database, member_id, year, month)
+    working_hours = loads(request.args.get('map'))
+    for key in working_hours:
+        year, month = key.split('-')
+        user_db = UserWorking(database, member_id, year, month)
+        if not user_db.set_working_hour(working_hours[key]):
+            info(f"fail {working_hours[key]}")
+        
 
-    user_db.set_working_hour(day, minute)
+    return 'success'
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=20000)

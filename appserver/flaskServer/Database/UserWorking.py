@@ -9,6 +9,7 @@ class UserWorking():
         self.member_id = member_id
         self.year = year
         self.month = month
+        self.conn = None
 
     def make_working_info_column(self):
         """set default column"""
@@ -16,7 +17,12 @@ class UserWorking():
             'working_days' : [0 for i in range(32)],
             'working_hours' : [0 for i in range(32)]
         }
-        return self.database.execute(text("""
+
+        execute_obj = self.database
+        if self.conn:
+            execute_obj = self.conn
+
+        return execute_obj.execute(text("""
             INSERT INTO USER_WORKING (
                 MEMBER_ID,
                 YEAR,
@@ -35,7 +41,10 @@ class UserWorking():
 
     def update_working_info(self, working_info):
         """set default column"""
-        return self.database.execute(text("""
+        execute_obj = self.database
+        if self.conn:
+            execute_obj = self.conn
+        return execute_obj.execute(text("""
             UPDATE USER_WORKING
             SET MONTH_WORK_TYPES_MINUTES=:working_info
             WHERE MEMBER_ID=:member_id AND YEAR=:year AND MONTH=:month"""), {
@@ -52,22 +61,28 @@ class UserWorking():
             working_info = self.get_working_info()
         
         working_info['working_days'][day] = val
-        return self.update_working_info(working_info)
+        result = self.update_working_info(working_info)
+        return result
     
-    def set_working_hour(self, day, minute):
+    def set_working_hour(self, day_minutes):
         """set working day information"""
         working_info = self.get_working_info()
         if not working_info:
             self.make_working_info_column()
             working_info = self.get_working_info()
         
-        working_info['working_hours'][day] = minute
+        for day, minute in day_minutes:
+            working_info['working_hours'][day] = minute
         
-        return self.update_working_info(working_info)
+        result = self.update_working_info(working_info)
+        return result
 
     def get_working_info(self):
         """Check user is exist or not"""
-        result = self.database.execute(text("""
+        execute_obj = self.database
+        if self.conn:
+            execute_obj = self.conn
+        result = execute_obj.execute(text("""
             SELECT MONTH_WORK_TYPES_MINUTES
             FROM USER_WORKING
             WHERE MEMBER_ID = :member_id AND YEAR = :year AND MONTH = :month"""), {
@@ -77,4 +92,5 @@ class UserWorking():
             }).fetchone()
         if result :
             return loads(result[0])
-        return None
+        else:
+            return None
