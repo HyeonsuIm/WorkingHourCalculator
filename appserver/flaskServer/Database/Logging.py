@@ -1,25 +1,17 @@
-from sqlalchemy import text
+from datetime import datetime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, DateTime
+Base = declarative_base()
 
-class Logging():
+class Logging(Base):
     """Class for managing User information"""
+    __tablename__ = 'LOGS'
+    LOG_TIME = Column(DateTime, nullable=False, default=datetime.utcnow, primary_key=True)
+    MEMBER_ID = Column(Integer)
+    ACCESS_IP = Column(String(16), nullable=False)
+    LOG_STR = Column(String((256)))
 
-    def __init__(self, database, member_id, access_ip):
-        self.database = database
-        self.member_id = member_id
-        self.access_ip = access_ip
-
-    def insert_table(self, log_str):
-        """Insert log"""
-        return self.database.execute(text("""
-                INSERT INTO LOGS (
-                    MEMBER_ID,
-                    ACCESS_IP,
-                    LOG_STR
-                ) VALUES (
-                    :member_id,
-                    :access_ip,
-                    :log_str
-                )"""), {
-            'member_id':self.member_id,
-            'access_ip':self.access_ip,
-            'log_str':log_str}).lastrowid # 새로 사용자가 생성되면 새로 생성된 사용자의 아이디를 읽어들인다.
+    def __init__(self, member_id, access_ip, log_str):
+        self.MEMBER_ID = member_id
+        self.ACCESS_IP = access_ip
+        self.LOG_STR = log_str

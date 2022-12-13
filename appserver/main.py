@@ -5,10 +5,13 @@ from datetime import datetime
 from flask import Flask, render_template, request, flash, url_for, redirect, make_response, jsonify
 from json import loads
 from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+
 from holidays import KR
 
-from flaskServer.Database.User import User
-from flaskServer.Database.Logging import Logging
+from flaskServer.Database.UserHandler import UserHandler
+from flaskServer.Database.LogHandler import LogHandler
 from flaskServer.Database.UserWorking import UserWorking
 
 app = Flask(__name__, static_url_path='/static')
@@ -16,6 +19,10 @@ app.config.from_pyfile("config.py")
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
 database = create_engine(app.config['DB_URL'], encoding = 'utf-8', pool_recycle=3600, echo=True, future=True)
+Base = declarative_base()
+#Base.metadata.create_all(database)
+db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=database))
+
 basicConfig(level=INFO)
 
 def print_log(str):
@@ -33,8 +40,9 @@ def show_main_view():
 
     date = datetime.now()
     holidays = get_holiday_lists(date.year)
-    log = Logging(database, member_id, request.remote_addr)
-    log.insert_table('Access User')
+    log = LogHandler(db_session, member_id, request.remote_addr, 'Access User')
+    log.insertLog()
+    
     return render_template('html/main.html', data=holidays, userId=user_id)
 
 @app.route("/WorkingHourInput.html")
@@ -61,13 +69,14 @@ def confirm_log_in():
     if not(userid and password):
             return "입력되지 않은 정보가 있습니다"
     else:
-        user = User(database, userid, password)
+        
+        user_handler = UserHandler(db_session, userid, password)
         error = ""
-        if user.check_user_exist() :
-            member_id = user.get_member_id()
+        if user_handler.check_user_exist() :
+            member_id = user_handler.get_member_id()
             if member_id:
-                log = Logging(database, member_id, request.remote_addr)
-                log.insert_table('Login User')
+                log = LogHandler(db_session, member_id, request.remote_addr, 'Login User')
+                log.insertLog()
                 flash('로그인이 성공하였습니다.')
 
                 resp = make_response(redirect(url_for('show_main_view', userId=userid)))
@@ -90,11 +99,12 @@ def confirm_sign_in():
     if not(userid and password):
             error= "입력되지 않은 정보가 있습니다"
     else:
-        user = User(database, userid, password)
-        if user.check_user_exist() :
+        
+        user_handler = UserHandler(db_session, userid, password)
+        if user_handler.check_user_exist() :
             error= "이미 존재하는 유저입니다."
         else :
-            user.insert_table()
+            user_handler.insert_table()
             flash('회원가입이 완료되었습니다. 가입한 아이디로 로그인 해 주세요.')
             return redirect(url_for('show_main_view'))
 
@@ -106,8 +116,8 @@ def logout():
     user_id = request.cookies.get('user_id')
     member_id = request.cookies.get('member_id')
     if user_id and member_id :
-        log = Logging(database, member_id, request.remote_addr)
-        log.insert_table('Logout User')
+        log = LogHandler(db_session, member_id, request.remote_addr, 'Logout User')
+        log.insertLog()
     
     resp = make_response(redirect(url_for('show_main_view', userId=None)))
     resp.delete_cookie('member_id')
