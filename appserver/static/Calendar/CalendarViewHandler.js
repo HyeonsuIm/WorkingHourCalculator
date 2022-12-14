@@ -48,6 +48,16 @@ function UpdateAllViews() {
 function UpdateDayInformationFromPopup() {
     let keyVal = document.getElementById("keyVal").value
     let working_hour = document.getElementById('work_hour_day').value
+    if (document.getElementById("full_day").checked) {
+        UpdateDayInfo(keyVal, 1)
+    }
+    else if (document.getElementById("half_day").checked) {
+        UpdateDayInfo(keyVal, 2)
+    }
+    else {
+        UpdateDayInfo(keyVal, 0)
+    }
+    
     if(working_hour != '')
     {
         let times = working_hour.split(':')
@@ -61,17 +71,6 @@ function UpdateDayInformationFromPopup() {
         key = year_month_day[0] + "-" + year_month_day[1].padStart(2,"0")
         working_hour_dict = {}
         working_hour_dict[key]=[[Number(year_month_day[2]), minute]]
-        UpdateWorkingHours(working_hour_dict)
-        UpdateAllViews()
-    }
-
-    if (document.getElementById("full_day").checked) {
-        UpdateDayInfo(keyVal, 1)
-    }
-    else if (document.getElementById("half_day").checked) {
-        UpdateDayInfo(keyVal, 2)
-    }
-    else {
-        UpdateDayInfo(keyVal, 0)
+        UpdateWorkingHours(working_hour_dict, key)
     }
 }

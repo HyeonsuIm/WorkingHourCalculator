@@ -52,10 +52,10 @@ function inputWorkingHours()
             {
                 minute = times[0]*60 + times[1]*1
             }
-            working_hour_map[key].append([date.getDate(), minute])
+            working_hour_map[key].push([date.getDate(), minute])
         }
     }
-    UpdateWorkingHours(working_hour_map)
+    UpdateWorkingHours(working_hour_map, null)
     // var toastTrigger = document.getElementById('enter_working_hours')
     // if (toastTrigger) 
     // {

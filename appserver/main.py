@@ -10,18 +10,24 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from holidays import KR
 
-from flaskServer.Database.UserHandler import UserHandler
 from flaskServer.Database.LogHandler import LogHandler
-from flaskServer.Database.UserWorking import UserWorking
+from flaskServer.Database.UserHandler import UserHandler
+from flaskServer.Database.UserWorkingHandler import UserWorkingHandler
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_pyfile("config.py")
 app.secret_key = 'super secret key'
 app.config['SESSION_TYPE'] = 'filesystem'
-database = create_engine(app.config['DB_URL'], encoding = 'utf-8', pool_recycle=3600, echo=True, future=True)
+engine = create_engine(
+    app.config['DB_URL'],
+    encoding = 'utf-8',
+    pool_recycle=3600,
+    echo=False,
+    future=True,
+    isolation_level='SERIALIZABLE')
 Base = declarative_base()
 #Base.metadata.create_all(database)
-db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=database))
+db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 
 basicConfig(level=INFO)
 
@@ -155,9 +161,9 @@ def update_vacation():
     month = int(request.args.get('month'))
     day = int(request.args.get('day'))
     type = int(request.args.get('type'))
-    user_db = UserWorking(database, member_id, year, month)
+    user_db = UserWorkingHandler(member_id, year, month)
 
-    user_db.set_working_day(day, type)
+    user_db.set_working_day(engine, day, type)
     return "success"
 
 @app.route("/api/request/get_working_info", methods=['POST'])
@@ -166,26 +172,21 @@ def get_working_info():
     member_id = int(request.cookies.get('member_id'))
     year = int(request.args.get('year'))
     month = int(request.args.get('month'))
-    user_db = UserWorking(database, member_id, year, month)
+    user_db = UserWorkingHandler(member_id, year, month)
 
-    result = user_db.get_working_info()
-    if result:
-        return result
-    else :
-        return {'working_days':[],'working_hours':[]}
+    return user_db.get_working_info(engine)
 
 @app.route("/api/request/set_working_hours", methods=['POST'])
 def set_working_hours():
     """set working information"""
     member_id = int(request.cookies.get('member_id'))
     working_hours = loads(request.args.get('map'))
+    print(member_id, working_hours)
     for key in working_hours:
         year, month = key.split('-')
-        user_db = UserWorking(database, member_id, year, month)
-        if not user_db.set_working_hour(working_hours[key]):
-            info(f"fail {working_hours[key]}")
+        user_db = UserWorkingHandler(member_id, year, month)
+        user_db.set_working_hour(engine, working_hours[key])
         
-
     return 'success'
 
 if __name__ == "__main__":

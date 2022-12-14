@@ -1,4 +1,4 @@
-from User import User
+from flaskServer.Database.User import User
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class UserHandler():
@@ -15,7 +15,7 @@ class UserHandler():
 
     def get_member_id(self):
         """Check user is exist or not"""
-        user = self.db_session.query(User).filter_by(USER_ID=self.user_id)
+        user = self.db_session.query(User.MEMBER_ID, User.USER_PASSWD).filter_by(USER_ID=self.user_id).first()
         if user:
             return user[0] if check_password_hash(user[1], self.user_passwd) else None
         return None

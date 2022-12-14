@@ -59,14 +59,13 @@ async function UpdateVacations(year_month_day, type)
                 }
             });
             console.log(response);
-            RequestWorkingInfos(String(year)+"-"+String(month).padStart(0,"2"))
         }catch(error){
             console.log(error);
         }
     }
 }
 
-async function UpdateWorkingHours(working_hour_map)
+async function UpdateWorkingHours(working_hour_map, year_month)
 {
     member_id = getCookie('member_id')
     if(member_id==null)
@@ -90,7 +89,7 @@ async function UpdateWorkingHours(working_hour_map)
             localStorage.removeItem(workingHourKey)
             localStorage.setItem(workingHourKey, JSON.stringify(datas))
         }
-        
+        UpdateAllViews()
     }
     else
     {
@@ -104,6 +103,10 @@ async function UpdateWorkingHours(working_hour_map)
                 }
             });
             console.log(response);
+            if( year_month != null)
+            {
+                RequestWorkingInfos(year_month)
+            }
         }catch(error){
             console.log(error);
         }
