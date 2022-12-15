@@ -1,4 +1,4 @@
-from UserWorking import UserWorking
+from flaskServer.Database.UserWorking import UserWorking
 from sqlalchemy.orm import Session
 
 
