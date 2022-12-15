@@ -24,13 +24,38 @@ async function RequestHolidays(year)
     }
 }
 
+function UpdateLocalVacation(year_month_day, type)
+{
+    idx = vacationList.indexOf(year_month_day)
+    if( -1 != idx )
+    {
+        vacationList.splice(idx, 1)
+    }
+    idx = half_vacationList.indexOf(year_month_day)
+    if( -1 != idx )
+    {
+        half_vacationList.splice(idx, 1)
+    }
+    
+    if( 1 == type )
+    {
+        vacationList.push(year_month_day)
+    }
+    else if( 2 == type)
+    {
+        half_vacationList.push(year_month_day)
+    }
+    UpdateAllViews()
+}
+
 async function UpdateVacations(year_month_day, type)
 {
     member_id = getCookie('member_id')
     let [year, month, day] = year_month_day.split('-',3)
+    const key = String(year)+"-"+String(month).padStart(2,"0")
     if(member_id==null)
     {        
-        const vacationKey = "vacation:"+String(year)+"-"+String(month).padStart(2,"0")
+        const vacationKey = "vacation:"+key
         let datas = localStorage.getItem(vacationKey)
         if( null === datas)
         {
@@ -43,6 +68,7 @@ async function UpdateVacations(year_month_day, type)
         datas[Number(day)] = type;
         localStorage.removeItem(vacationKey)
         localStorage.setItem(vacationKey, JSON.stringify(datas))
+        UpdateLocalVacation(year_month_day, type)
     }
     else
     {
@@ -58,11 +84,23 @@ async function UpdateVacations(year_month_day, type)
                     type:type
                 }
             });
-            console.log(response);
+            UpdateLocalVacation(year_month_day, type)
         }catch(error){
             console.log(error);
         }
     }
+}
+
+function UpdateLocalWorkingHour(working_hour_map, year_month)
+{
+    if(year_month in working_hour_map)
+    {
+        for(let i=0;i<working_hour_map[year_month].length;i++)
+        {
+            working_hours[working_hour_map[year_month][i][0]] = working_hour_map[year_month][i][1];
+        }
+    }
+    UpdateAllViews()
 }
 
 async function UpdateWorkingHours(working_hour_map, year_month)
@@ -82,14 +120,21 @@ async function UpdateWorkingHours(working_hour_map, year_month)
             {
                 datas = JSON.parse(datas)
             }
-            for(let data in working_hour_map[key])
+            for(let i=0;i<working_hour_map[key].length;i++)
             {
-                datas[data[0]] = data[1];
+                datas[working_hour_map[key][i][0]] = working_hour_map[key][i][1];
             }
             localStorage.removeItem(workingHourKey)
             localStorage.setItem(workingHourKey, JSON.stringify(datas))
         }
-        UpdateAllViews()
+        if( year_month != null)
+        {
+            UpdateLocalWorkingHour(working_hour_map, year_month)
+        }
+        else
+        {
+            location.href='/'
+        }
     }
     else
     {
@@ -102,10 +147,9 @@ async function UpdateWorkingHours(working_hour_map, year_month)
                     map:JSON.stringify(working_hour_map)
                 }
             });
-            console.log(response);
             if( year_month != null)
             {
-                RequestWorkingInfos(year_month)
+                UpdateLocalWorkingHour(working_hour_map, year_month)
             }
             else
             {
@@ -152,6 +196,7 @@ async function RequestWorkingInfos(year_month)
         {
             working_hours = JSON.parse(datas)
         }
+        UpdateAllViews()
     }
     else
     {
@@ -165,7 +210,6 @@ async function RequestWorkingInfos(year_month)
                     month:month,
                 }
             });
-            console.log(response);
 
             if(response.data['working_days'].length)
             {
@@ -195,7 +239,6 @@ async function RequestWorkingInfos(year_month)
             console.log(error);
         }
     }
-    UpdateAllViews()
 }
 
 function UpdateAllLocalStorage()

@@ -162,7 +162,8 @@ def update_vacation():
     vacation_type = int(request.args.get('type'))
     user_db = UserWorkingHandler(member_id, year, month)
 
-    user_db.set_working_day(engine, day, vacation_type)
+    if not user_db.set_working_day(engine, day, vacation_type):
+        user_db.set_working_day(engine, day, vacation_type)
     return "success"
 
 @app.route("/api/request/get_working_info", methods=['POST'])
@@ -184,7 +185,8 @@ def set_working_hours():
     for key in working_hours:
         year, month = key.split('-')
         user_db = UserWorkingHandler(member_id, year, month)
-        user_db.set_working_hour(engine, working_hours[key])
+        if not user_db.set_working_hour(engine, working_hours[key]):
+            user_db.set_working_hour(engine, working_hours[key])
         
     return 'success'
 

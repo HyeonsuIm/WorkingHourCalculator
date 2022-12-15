@@ -178,33 +178,11 @@ function SetMonth(diff)
     {
         displayDateDay = today.getDate()
     }
-
-    UpdateAllViews()
-}
-
-function UpdateAllVacation()
-{
-    // vacationList = []
-    // half_vacationList = []
-    // for( let key in localStorage )
-    // {
-    //     vacationType = localStorage.getItem(key)
-    //     if( 1 == vacationType )
-    //     {
-    //         //let [year, month,day] = key.split('-',3)
-    //         vacationList.push(key)
-    //     }
-    //     else if( 2 == vacationType)
-    //     {
-    //         half_vacationList.push(key)
-    //     }
-    // }
 }
 
 function UpdateDayInfo(keyVal, type)
 {
     UpdateVacations(keyVal, type)
-    UpdateAllViews();
 }
 
 function GetWorkingHour(year, month)

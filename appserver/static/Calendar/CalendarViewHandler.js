@@ -1,3 +1,7 @@
+displayDateYear = 2022
+displayDateMonth = 1
+displayDateDay = 1
+
 function displayModal(element) {
     var keyVal = element.getAttribute('data-id');
 
@@ -22,8 +26,6 @@ function UpdateGlobalDateInformation() {
     overtime_work = 0
     working_hour_plan = 0
     today = new Date()
-    RequestHolidays(today.getFullYear())
-    RequestWorkingInfos(String(today.getFullYear())+"-"+String(today.getMonth()+1).padStart(2,"0"))
 
     displayDateYear = today.getFullYear()
     displayDateMonth = today.getMonth()
@@ -31,10 +33,11 @@ function UpdateGlobalDateInformation() {
 
     UpdateLeaveWorkTime()
     UpdateRemainWorkingHour()
+    RequestHolidays(displayDateYear)
+    RequestWorkingInfos(String(displayDateYear)+"-"+String(displayDateMonth+1).padStart(2,"0"))
 }
 
 function UpdateAllViews() {
-    UpdateAllVacation()
     updateWorkingPlan()
     UpdateOvernightPayHour()
     updateWorkingOverpayPlan();
