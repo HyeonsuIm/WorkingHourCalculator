@@ -107,6 +107,10 @@ async function UpdateWorkingHours(working_hour_map, year_month)
             {
                 RequestWorkingInfos(year_month)
             }
+            else
+            {
+                location.href='/'
+            }
         }catch(error){
             console.log(error);
         }
