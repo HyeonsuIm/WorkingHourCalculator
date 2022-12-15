@@ -1,4 +1,4 @@
-from flaskServer.Database.Logging import Logging
+from Logging import Logging
 
 class LogHandler():
     """Class for managing log information"""

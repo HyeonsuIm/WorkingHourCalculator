@@ -1,9 +1,9 @@
 """Web server main"""
 from logging import basicConfig, info, INFO
+from json import loads
 
 from datetime import datetime
 from flask import Flask, render_template, request, flash, url_for, redirect, make_response, jsonify
-from json import loads
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -73,9 +73,8 @@ def confirm_log_in():
     password = request.form.get('password')
 
     if not(userid and password):
-            return "입력되지 않은 정보가 있습니다"
+        return "입력되지 않은 정보가 있습니다"
     else:
-        
         user_handler = UserHandler(db_session, userid, password)
         error = ""
         if user_handler.check_user_exist() :
@@ -86,8 +85,9 @@ def confirm_log_in():
                 flash('로그인이 성공하였습니다.')
 
                 resp = make_response(redirect(url_for('show_main_view', userId=userid)))
-                resp.set_cookie('member_id', str(member_id))
-                resp.set_cookie('user_id', userid)
+                resp.set_cookie('member_id', str(member_id), max_age=3600*12)
+                resp.set_cookie('user_id', userid, max_age=3600*12)
+
                 return resp
             else:
                 error= "비밀번호가 틀렸습니다."
@@ -103,9 +103,8 @@ def confirm_sign_in():
 
     error = ""
     if not(userid and password):
-            error= "입력되지 않은 정보가 있습니다"
+        error= "입력되지 않은 정보가 있습니다"
     else:
-        
         user_handler = UserHandler(db_session, userid, password)
         if user_handler.check_user_exist() :
             error= "이미 존재하는 유저입니다."
@@ -124,7 +123,7 @@ def logout():
     if user_id and member_id :
         log = LogHandler(db_session, member_id, request.remote_addr, 'Logout User')
         log.insertLog()
-    
+
     resp = make_response(redirect(url_for('show_main_view', userId=None)))
     resp.delete_cookie('member_id')
     resp.delete_cookie('user_id')
@@ -160,10 +159,10 @@ def update_vacation():
     year = int(request.args.get('year'))
     month = int(request.args.get('month'))
     day = int(request.args.get('day'))
-    type = int(request.args.get('type'))
+    vacation_type = int(request.args.get('type'))
     user_db = UserWorkingHandler(member_id, year, month)
 
-    user_db.set_working_day(engine, day, type)
+    user_db.set_working_day(engine, day, vacation_type)
     return "success"
 
 @app.route("/api/request/get_working_info", methods=['POST'])

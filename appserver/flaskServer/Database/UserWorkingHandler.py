@@ -1,6 +1,6 @@
-from flaskServer.Database.UserWorking import UserWorking
-from json import dumps,loads
+from UserWorking import UserWorking
 from sqlalchemy.orm import Session
+
 
 class UserWorkingHandler():
     """Class for managing User Working information"""

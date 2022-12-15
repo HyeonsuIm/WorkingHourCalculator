@@ -1,7 +1,7 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import ForeignKey, PrimaryKeyConstraint, Column, Integer, JSON
 
-from flaskServer.Database.User import User
+from User import User
 
 Base = declarative_base()
 
