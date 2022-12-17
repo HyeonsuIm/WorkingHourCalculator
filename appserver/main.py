@@ -2,7 +2,7 @@
 from logging import basicConfig, info, INFO
 from json import loads
 
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from flask import Flask, render_template, request, flash, url_for, redirect, make_response, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -28,7 +28,7 @@ engine = create_engine(
 Base = declarative_base()
 #Base.metadata.create_all(database)
 db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
-KST = datetime.timezone(datetime.timedelta(hours=9))
+KST = timezone(timedelta(hours=9))
 
 basicConfig(level=INFO)
 
