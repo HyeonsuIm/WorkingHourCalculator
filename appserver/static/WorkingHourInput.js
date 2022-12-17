@@ -40,7 +40,7 @@ function inputWorkingHours()
         for(contentIdx=0;contentIdx<7;contentIdx++)
         {
             let date = new Date(2000+Number(yearMonthDay[0]), Number(yearMonthDay[1]), Number(yearMonthDay[2]) + contentIdx)
-            key = String(date.getFullYear()) + "-" + String(date.getMonth()).padStart(2,"0")
+            key = String(date.getFullYear()) + "-" + String(date.getMonth()+1).padStart(2,"0")
             if( false == working_hour_map.hasOwnProperty(key) )
             {
                 working_hour_map[key] = []

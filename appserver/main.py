@@ -28,12 +28,13 @@ engine = create_engine(
 Base = declarative_base()
 #Base.metadata.create_all(database)
 db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
+KST = datetime.timezone(datetime.timedelta(hours=9))
 
 basicConfig(level=INFO)
 
 def print_log(str):
     """Print log with time"""
-    info(f'{datetime.now()} {str}')
+    info(f'{datetime.now(KST)} {str}')
 
 @app.route("/")
 def show_main_view():
