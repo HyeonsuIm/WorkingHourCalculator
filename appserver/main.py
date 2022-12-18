@@ -27,7 +27,7 @@ engine = create_engine(
     isolation_level='SERIALIZABLE')
 Base = declarative_base()
 #Base.metadata.create_all(database)
-db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
+session_maker = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 KST = timezone(timedelta(hours=9))
 
 basicConfig(level=INFO)
@@ -47,7 +47,7 @@ def show_main_view():
 
     date = datetime.now()
     holidays = get_holiday_lists(date.year)
-    log = LogHandler(db_session, member_id, request.remote_addr, 'Access User')
+    log = LogHandler(session_maker, member_id, request.remote_addr, 'Access User')
     log.insertLog()
     
     return render_template('html/main.html', data=holidays, userId=user_id)
@@ -76,12 +76,12 @@ def confirm_log_in():
     if not(userid and password):
         return "입력되지 않은 정보가 있습니다"
     else:
-        user_handler = UserHandler(db_session, userid, password)
+        user_handler = UserHandler(session_maker, userid, password)
         error = ""
         if user_handler.check_user_exist() :
             member_id = user_handler.get_member_id()
             if member_id:
-                log = LogHandler(db_session, member_id, request.remote_addr, 'Login User')
+                log = LogHandler(session_maker, member_id, request.remote_addr, 'Login User')
                 log.insertLog()
                 flash('로그인이 성공하였습니다.')
 
@@ -106,7 +106,7 @@ def confirm_sign_in():
     if not(userid and password):
         error= "입력되지 않은 정보가 있습니다"
     else:
-        user_handler = UserHandler(db_session, userid, password)
+        user_handler = UserHandler(session_maker, userid, password)
         if user_handler.check_user_exist() :
             error= "이미 존재하는 유저입니다."
         else :
@@ -122,7 +122,7 @@ def logout():
     user_id = request.cookies.get('user_id')
     member_id = request.cookies.get('member_id')
     if user_id and member_id :
-        log = LogHandler(db_session, member_id, request.remote_addr, 'Logout User')
+        log = LogHandler(session_maker, member_id, request.remote_addr, 'Logout User')
         log.insertLog()
 
     resp = make_response(redirect(url_for('show_main_view', userId=None)))
@@ -163,8 +163,8 @@ def update_vacation():
     vacation_type = int(request.args.get('type'))
     user_db = UserWorkingHandler(member_id, year, month)
 
-    if not user_db.set_working_day(engine, day, vacation_type):
-        user_db.set_working_day(engine, day, vacation_type)
+    if not user_db.set_working_day(session_maker, day, vacation_type):
+        user_db.set_working_day(session_maker, day, vacation_type)
     return "success"
 
 @app.route("/api/request/get_working_info", methods=['POST'])
@@ -175,7 +175,7 @@ def get_working_info():
     month = int(request.args.get('month'))
     user_db = UserWorkingHandler(member_id, year, month)
 
-    return user_db.get_working_info(engine)
+    return user_db.get_working_info(session_maker)
 
 @app.route("/api/request/set_working_hours", methods=['POST'])
 def set_working_hours():
@@ -186,8 +186,8 @@ def set_working_hours():
     for key in working_hours:
         year, month = key.split('-')
         user_db = UserWorkingHandler(member_id, year, month)
-        if not user_db.set_working_hour(engine, working_hours[key]):
-            user_db.set_working_hour(engine, working_hours[key])
+        if not user_db.set_working_hour(session_maker, working_hours[key]):
+            user_db.set_working_hour(session_maker, working_hours[key])
         
     return 'success'
 

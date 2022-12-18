@@ -9,63 +9,57 @@ class UserWorkingHandler():
         self.year = year
         self.month = month
     
-    def set_working_day(self, engine, day, val):
+    def set_working_day(self, session_maker, day, val):
         """set working day information"""
         success = True
-        Session = sessionmaker(bind=engine, autocommit=False, autoflush=False)
-        session = Session()
-        with session.begin():
-            session.connection(execution_options={'isolation_level':'SERIALIZABLE'})
-            is_add=False
-            is_success, working_info = self.__get_working_info(session)
-            if is_success is False:
-                is_add=True
-            
-            working_info['working_days'][day] = val
+        
+        with session_maker.begin() as session:
             try:
+                is_add=False
+                is_success, working_info = self.__get_working_info(session, True)
+                if is_success is False:
+                    is_add=True
+                
+                working_info['working_days'][day] = val
                 self.__update_working_info(session, working_info, is_add)
-            except:
+            except Exception as err:
+                print(f"error : {err=}, {type(err)=}")
                 success=False
-                session.rollback()
-        session.close()
         return success
     
-    def set_working_hour(self, engine, day_minutes):
+    def set_working_hour(self, session_maker, day_minutes):
         """set working day information"""
         success = True
-        Session = sessionmaker(bind=engine, autocommit=False, autoflush=False)
-        session = Session()
-        with session.begin():
-            session.connection(execution_options={'isolation_level':'SERIALIZABLE'})
-            is_success, working_info = self.__get_working_info(session)
-            is_add=False
-            if is_success is False:
-                is_add=True
-            
-            for day, minute in day_minutes:
-                working_info['working_hours'][day] = minute
+        with session_maker.begin() as session:
             try:
+                is_success, working_info = self.__get_working_info(session, True)
+                is_add=False
+                if is_success is False:
+                    is_add=True
+                
+                for day, minute in day_minutes:
+                    working_info['working_hours'][day] = minute
+            
                 self.__update_working_info(session, working_info, is_add)
-            except:
-                session.rollback()
+            except Exception as err:
+                print(f"error : {err=}, {type(err)=}")
                 success=False
-        session.close()
         return success
 
-    def get_working_info(self, engine):
+    def get_working_info(self, session_maker):
         """Check user is exist or not"""
-        Session = sessionmaker(bind=engine, autocommit=False, autoflush=False)
-        session = Session()
         result = None
-        with session.begin():
-            session.connection(execution_options={'isolation_level':'SERIALIZABLE'})
-            result = self.__get_working_info(session)
-        session.close()
+        with session_maker.begin() as session:
+            result = self.__get_working_info(session, False)
         return result[1]
 
-    def __get_working_info(self, session):
+    def __get_working_info(self, session, for_update):
         """Check user is exist or not"""
-        result = session.query(UserWorking.MONTH_WORK_TYPES_MINUTES).filter_by(MEMBER_ID=self.member_id, YEAR=self.year, MONTH=self.month).first()
+        query = session.query(UserWorking.MONTH_WORK_TYPES_MINUTES).filter_by(MEMBER_ID=self.member_id, YEAR=self.year, MONTH=self.month)
+        if for_update :
+            result = query.with_for_update().first()
+        else:
+            result = query.first()
         if result :
             return [True, result[0]]
         else:
