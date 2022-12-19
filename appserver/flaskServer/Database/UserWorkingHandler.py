@@ -63,7 +63,6 @@ class UserWorkingHandler():
         if result :
             return [True, result[0]]
         else:
-            session.rollback()
             return [False, self.__get_default_working_info()]
 
     def __get_default_working_info(self):
