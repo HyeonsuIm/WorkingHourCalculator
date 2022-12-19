@@ -13,37 +13,46 @@ class UserWorkingHandler():
         """set working day information"""
         success = True
         
-        with session_maker.begin() as session:
-            try:
-                is_add=False
-                is_success, working_info = self.__get_working_info(session, True)
-                if is_success is False:
-                    is_add=True
-                
-                working_info['working_days'][day] = val
-                self.__update_working_info(session, working_info, is_add)
-            except Exception as err:
-                print(f"error : {err=}, {type(err)=}")
-                success=False
+        try:
+            with session_maker.begin() as session:
+                try:
+                    is_add=False
+                    is_success, working_info = self.__get_working_info(session, True)
+                    if is_success is False:
+                        is_add=True
+                    
+                    working_info['working_days'][day] = val
+                    self.__update_working_info(session, working_info, is_add)
+                except Exception as err:
+                    print(f"error : {err=}, {type(err)=}")
+                    success=False
+        except Exception as err:
+            print(f"error : {err=}, {type(err)=}")
+            success=False
+
         return success
     
     def set_working_hour(self, session_maker, day_minutes):
         """set working day information"""
         success = True
-        with session_maker.begin() as session:
-            try:
-                is_success, working_info = self.__get_working_info(session, True)
-                is_add=False
-                if is_success is False:
-                    is_add=True
+        try:
+            with session_maker.begin() as session:
+                try:
+                    is_success, working_info = self.__get_working_info(session, True)
+                    is_add=False
+                    if is_success is False:
+                        is_add=True
+                    
+                    for day, minute in day_minutes:
+                        working_info['working_hours'][day] = minute
                 
-                for day, minute in day_minutes:
-                    working_info['working_hours'][day] = minute
-            
-                self.__update_working_info(session, working_info, is_add)
-            except Exception as err:
-                print(f"error : {err=}, {type(err)=}")
-                success=False
+                    self.__update_working_info(session, working_info, is_add)
+                except Exception as err:
+                    print(f"error : {err=}, {type(err)=}")
+                    success=False
+        except Exception as err:
+            print(f"error : {err=}, {type(err)=}")
+            success=False
         return success
 
     def get_working_info(self, session_maker):
