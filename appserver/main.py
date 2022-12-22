@@ -24,7 +24,7 @@ engine = create_engine(
     pool_recycle=3600,
     echo=False,
     future=True,
-    isolation_level='SERIALIZABLE')
+    isolation_level='REPEATABLE READ')
 Base = declarative_base()
 #Base.metadata.create_all(database)
 session_maker = sessionmaker(bind=engine, autocommit=False, autoflush=False)

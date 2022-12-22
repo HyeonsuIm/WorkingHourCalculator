@@ -39,3 +39,20 @@ a
     float:right;
     text-align:right;
 }
+
+footer 
+{
+    width : 100%;
+    height : 60px;
+    position : absolute;
+    left: 0;
+    bottom: 0;
+}
+
+footer>div
+{
+    border-top:1px solid lightgray;
+    margin:0 auto;
+    width:1180px;
+    display:block;
+}
