@@ -85,7 +85,7 @@ def confirm_log_in():
                 log.insertLog()
                 flash('로그인이 성공하였습니다.')
 
-                resp = make_response(redirect(url_for('show_main_view', userId=userid)))
+                resp = make_response(redirect(url_for('show_main_view')))
                 resp.set_cookie('member_id', str(member_id), max_age=3600*12)
                 resp.set_cookie('user_id', userid, max_age=3600*12)
 

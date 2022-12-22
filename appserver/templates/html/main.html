@@ -65,21 +65,46 @@
                         </tr>
                     </table>
                 </div>
-                <div class='side_view_div' id="month_working_input">
+                <div class='side_view_div' id="month_working_hour"> 
                     <table class="table" >
                         <tr>
+                            <td>
+                                <div class="form-check" style="float:left">
+                                    <label class="form-check-label" for="select_base_input">입력 기준 계산</label>
+                                    <input class="form-check-input" type="radio" name="select_base" value="input" id="select_base_input" checked onclick="setBaseSelect()">
+                                </div>
+                            </td>
+                            <td>
+                                <div style="float:right;text-align:right">
+                                    <i class="fa fa-info-circle" data-toggle="tooltip" title='입력박스 시간기준' style='cursor:help'></i>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-check" style="float:left">
+                                    <label class="form-check-label" for="select_base_calendar">달력 기준 계산</label>
+                                    <input class="form-check-input" type="radio" name="select_base" value="calendar" id="select_base_calendar" onclick="setBaseSelect()">
+                                </div>
+                            </td>
+                            <td>
+                                <div style="float:right;text-align:right">
+                                    <i class="fa fa-info-circle" data-toggle="tooltip" title='달력 근무시간 기준' style='cursor:help'></i>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class='side_view_div' id="month_working_input">
+                    <table class="table" >
+                        <tr class="input_base_data_row">
                             <td colspan='2'><input min='0' value="" class='form-control' placeholder='현재 남은 근무 시간(ex. 123:53)' id='working_done' onchange='UpdateRemainWorkingHourAndUpdate()'/></td>
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='현재 남은 근무시간(hh:mm)' style='cursor:help'></i> </td>
                         </tr>
-                        <tr>
+                        <tr class="input_base_data_row">
                             <td colspan='2'>
                                 <div class="cs-form">
                                     <input type='time' class='form-control' placeholder='퇴근 예정 시간' id='leave_work_time' onchange='UpdateLeaveWorkTimeAndUpdate()'/>
                                 </div>
                             </td>
-                            <!-- 
-                            <td><input type='checkbox'/></td> 
-                            -->
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='퇴근 예정 시간' style='cursor:help'></i> </td>
                         </tr>
                         <tr>
