@@ -23,6 +23,7 @@ function setBaseSelect()
         if(display) elements[index].style.display=""
         else elements[index].style.display="none"
     }
+    UpdateAllViews()
 }
 
 function getSelectBase()

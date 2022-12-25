@@ -27,14 +27,15 @@ function render_calculated_working_hour(year,month,day)
     let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
     let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
     
-    SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, minWorkingHour)
+    let remainWorkingHour = GetRemainedWorkingHour(maxWorkingHour, day)
+    SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, minWorkingHour, remainWorkingHour)
     
     overtime_work_max = maxWorkingHour - minWorkingHour
     normal_work_hour = (totalWorkingDayCnt - remainedWorkingDayCnt) * 8
     normal_remain_work_hour = remainedWorkingDayCnt * 8
-    curr_work_hour = maxWorkingHour - GetRemainedWorkingHour()
+    curr_work_hour = maxWorkingHour - remainWorkingHour
     overtime_work_based_current = curr_work_hour - normal_work_hour
-    if( normal_remain_work_hour > GetRemainedWorkingHour())
+    if( normal_remain_work_hour > remainWorkingHour)
     {
         overtime_work_based_current = overtime_work_max
     }
@@ -93,10 +94,8 @@ function MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
     
 }
 
-function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, minWorkingHour)
+function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, minWorkingHour, remainedWorkingHour)
 {
-    remainedWorkingHour = GetRemainedWorkingHour()
-
     remainedMaxWorkingHour = remainedWorkingHour
     remainedPlanWorkingHour = remainedWorkingHour - working_hour_plan
     expectWorkingHour = (( working_overpay_plan / payPerHour ) + minWorkingHour) - (maxWorkingHour - remainedWorkingHour) // 예상남은근무시간 = 근무해야 하는 시간 - 현재까지 근무한 시간
@@ -113,26 +112,45 @@ function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, minW
     SetRemainedWorkingHour("daily_working_hour_overpay_plan", expectWorkingHour / workingDayCntAfterToday)
 }
 
-function GetRemainedWorkingHour()
+function GetRemainedWorkingHour(maxWorkingHour, currentDay)
 {
-    const remainedWorkingHourKey = "remainWorkingHour"
-    let remainedWorkingHourArr = JSON.parse(localStorage.getItem(remainedWorkingHourKey))
-    remainedWorkingHourStr = remainedWorkingHourArr['remain_hour']
-
-    remainedWorkingHour = 0
-    if(remainedWorkingHourStr.indexOf(":") != -1)
+    let select = getSelectBase()
+    if(select=="input")
     {
-        splitIndex = remainedWorkingHourStr.indexOf(":")
-        hour = parseInt(remainedWorkingHourStr.substr(0, splitIndex))
-        minute = parseInt(remainedWorkingHourStr.substr(splitIndex+1))
-        remainedWorkingHour = hour + (minute / 60)
+        const remainedWorkingHourKey = "remainWorkingHour"
+        let remainedWorkingHourArr = JSON.parse(localStorage.getItem(remainedWorkingHourKey))
+        remainedWorkingHourStr = remainedWorkingHourArr['remain_hour']
+
+        remainedWorkingHour = 0
+        if(remainedWorkingHourStr.indexOf(":") != -1)
+        {
+            splitIndex = remainedWorkingHourStr.indexOf(":")
+            hour = parseInt(remainedWorkingHourStr.substr(0, splitIndex))
+            minute = parseInt(remainedWorkingHourStr.substr(splitIndex+1))
+            remainedWorkingHour = hour + (minute / 60)
+        }
+        else
+        {
+            remainedWorkingHour = parseFloat(remainedWorkingHourStr);
+        }
+        
+        return remainedWorkingHour - today_remain_time_minute / 60
     }
     else
     {
-        remainedWorkingHour = parseFloat(remainedWorkingHourStr);
+        return GetTotalWorkingHour(maxWorkingHour, currentDay)
     }
-    
-    return remainedWorkingHour - today_remain_time_minute / 60
+}
+
+function GetTotalWorkingHour(maxWorkingHour, currentDay)
+{
+    working_hours = GetWorkingHour()
+    total_miniute = 0
+    for(i=0;i<currentDay;i++)
+    {
+        total_miniute += working_hours[i]
+    }
+    return maxWorkingHour - (total_miniute / 60)
 }
 
 function GetRemainedWorkingStoreTime()
