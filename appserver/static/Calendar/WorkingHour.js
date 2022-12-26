@@ -70,7 +70,7 @@ function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today_date)
                 dayPlusVal = 0.5
             }
             workingDayCnt += dayPlusVal;
-            if(today_date < i)
+            if(today_date <= i)
             {
                 workingDayCntAfterToday += dayPlusVal;
             }
@@ -134,11 +134,11 @@ function GetRemainedWorkingHour(maxWorkingHour, currentDay)
             remainedWorkingHour = parseFloat(remainedWorkingHourStr);
         }
         
-        return remainedWorkingHour - today_remain_time_minute / 60
+        return remainedWorkingHour// - today_remain_time_minute / 60
     }
     else
     {
-        return GetTotalWorkingHour(maxWorkingHour, currentDay)
+        return GetTotalWorkingHour(maxWorkingHour, currentDay)// - today_remain_time_minute / 60
     }
 }
 
@@ -225,7 +225,7 @@ function UpdateRemainWorkingHourAndUpdate()
 {
     UpdateRemainWorkingHour()
     updateWorkingOverpayPlan()
-    UpdateLeaveWorkTime()
+    //UpdateLeaveWorkTime()
     UpdateAllViews()
 }
 

@@ -31,7 +31,7 @@ function UpdateGlobalDateInformation() {
     displayDateMonth = today.getMonth()
     displayDateDay = today.getDate()
 
-    UpdateLeaveWorkTime()
+    //UpdateLeaveWorkTime()
     UpdateRemainWorkingHour()
     RequestHolidays(displayDateYear)
     RequestWorkingInfos(String(displayDateYear)+"-"+String(displayDateMonth+1).padStart(2,"0"))
