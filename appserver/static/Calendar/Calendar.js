@@ -171,13 +171,14 @@ function SetMonth(diff)
     {
         displayDateMonth += diff
     }
-    RequestWorkingInfos(String(displayDateYear)+"-"+String(displayDateMonth+1).padStart(2,"0"))
     displayDateDay = 0
     if( displayDateYear == today.getFullYear() &&
         displayDateMonth == today.getMonth() )
     {
         displayDateDay = today.getDate()
     }
+    
+    RequestWorkingInfos(String(displayDateYear)+"-"+String(displayDateMonth+1).padStart(2,"0"))
 }
 
 function UpdateDayInfo(keyVal, type)

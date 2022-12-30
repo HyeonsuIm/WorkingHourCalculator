@@ -5,6 +5,22 @@ function displayLoginPopup(string) {
     $('#signin_result_modal').modal('show')
 }
 
+function setElementVisibility(isCurrentMonth)
+{
+    restoreSelectBase()
+    let display=false
+    if(isCurrentMonth)
+    {
+        display=true
+    }
+    elements = document.getElementsByClassName('only_current_month')
+    for(let index=0;index<elements.length;index++)
+    {
+        if(display) elements[index].style.display=""
+        else elements[index].style.display="none"
+    }
+}
+
 function setBaseSelect()
 {
     result = getSelectBaseInput()

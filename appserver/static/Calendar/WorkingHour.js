@@ -6,7 +6,6 @@ function render_working_hour(year, month, day)
     const monthStartDay = new Date(viewYear, viewMonth, 1)
     const monthLastDay = new Date(viewYear, viewMonth+1, 0)
     const startDayOfWeek = monthStartDay.getDay();
-    /*document.createElement('<div>`${viewYear}년 ${viewMonth + 1}월`</div>')*/
 
     //날짜 생성
     let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
@@ -15,7 +14,7 @@ function render_working_hour(year, month, day)
     MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
 }
 
-function render_calculated_working_hour(year,month,day)
+function render_calculated_working_hour(year,month,day, isCurrentMonth)
 {
     const viewYear = year
     const viewMonth = month
@@ -24,10 +23,15 @@ function render_calculated_working_hour(year,month,day)
     const monthLastDay = new Date(viewYear, viewMonth+1, 0)
     const startDayOfWeek = monthStartDay.getDay();
     
-    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
+    let [totalWorkingDayCnt, remainedWorkingDayCntTemp] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
     let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
     
-    let remainWorkingHour = GetRemainedWorkingHour(maxWorkingHour, day)
+    let remainWorkingHour = maxWorkingHour
+    let remainedWorkingDayCnt = remainedWorkingDayCntTemp
+    if(isCurrentMonth)
+    {
+        remainWorkingHour, remainedWorkingDayCnt = GetRemainedWorkingHour(maxWorkingHour, day, remainedWorkingDayCntTemp)
+    }
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, minWorkingHour, remainWorkingHour)
     
     overtime_work_max = maxWorkingHour - minWorkingHour
@@ -112,7 +116,7 @@ function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, minW
     SetRemainedWorkingHour("daily_working_hour_overpay_plan", expectWorkingHour / workingDayCntAfterToday)
 }
 
-function GetRemainedWorkingHour(maxWorkingHour, currentDay)
+function GetRemainedWorkingHour(maxWorkingHour, currentDay, remainWorkingDayCnt)
 {
     let select = getSelectBase()
     if(select=="input")
@@ -134,11 +138,11 @@ function GetRemainedWorkingHour(maxWorkingHour, currentDay)
             remainedWorkingHour = parseFloat(remainedWorkingHourStr);
         }
         
-        return remainedWorkingHour// - today_remain_time_minute / 60
+        return [remainedWorkingHour - today_remain_time_minute / 60, remainWorkingDayCnt-1]
     }
     else
     {
-        return GetTotalWorkingHour(maxWorkingHour, currentDay)// - today_remain_time_minute / 60
+        return [GetTotalWorkingHour(maxWorkingHour, currentDay),remainWorkingDayCnt]
     }
 }
 
@@ -225,7 +229,7 @@ function UpdateRemainWorkingHourAndUpdate()
 {
     UpdateRemainWorkingHour()
     updateWorkingOverpayPlan()
-    //UpdateLeaveWorkTime()
+    UpdateLeaveWorkTime()
     UpdateAllViews()
 }
 

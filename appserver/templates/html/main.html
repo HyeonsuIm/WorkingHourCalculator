@@ -95,18 +95,18 @@
                 </div>
                 <div class='side_view_div' id="month_working_input">
                     <table class="table" >
-                        <tr class="input_base_data_row">
+                        <tr class="input_base_data_row only_current_month">
                             <td colspan='2'><input min='0' value="" class='form-control' placeholder='현재 남은 근무 시간(ex. 123:53)' id='working_done' onchange='UpdateRemainWorkingHourAndUpdate()'/></td>
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='현재 남은 근무시간(hh:mm)' style='cursor:help'></i> </td>
                         </tr>
-                        {# <tr>
+                        <tr class="input_base_data_row only_current_month">
                             <td colspan='2'>
                                 <div class="cs-form">
                                     <input type='time' class='form-control' placeholder='퇴근 예정 시간' id='leave_work_time' onchange='UpdateLeaveWorkTimeAndUpdate()'/>
                                 </div>
                             </td>
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='퇴근 예정 시간' style='cursor:help'></i> </td>
-                        </tr> #}
+                        </tr>
                         <tr>
                             <td colspan='2'><input type='number' step='100' min='0' class='form-control' placeholder='야근 시급(ex. 9000)' id='overnight_pay_hour' onchange='UpdateAllViews()'/></td>
                             <td><i class="fa fa-info-circle" data-toggle="tooltip" title='시급' style='cursor:help'></i> </td>
@@ -137,7 +137,7 @@
                                     <td id='daily_working_hour_plan'></td>
                                     <td><i class="fa fa-info-circle" data-toggle="tooltip" title='입력한 근무시간 기준 평균 근로필요 시간' style='cursor:help'></i></td>
                                 </tr>
-                                <tr>
+                                <tr class="only_current_month">
                                     <td><b>현재 야근비</b></td>
                                     <td id='overtime_work_based_current'></td>
                                     <td><i class="fa fa-info-circle" data-toggle="tooltip" title='일일 8시간 근무 기준 금일 퇴근 했을 때 야근비' style='cursor:help'></i></td>

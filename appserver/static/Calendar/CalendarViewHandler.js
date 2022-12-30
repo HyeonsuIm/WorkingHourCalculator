@@ -31,7 +31,7 @@ function UpdateGlobalDateInformation() {
     displayDateMonth = today.getMonth()
     displayDateDay = today.getDate()
 
-    //UpdateLeaveWorkTime()
+    UpdateLeaveWorkTime()
     restoreSelectBase()
     UpdateRemainWorkingHour()
     RequestHolidays(displayDateYear)
@@ -39,13 +39,19 @@ function UpdateGlobalDateInformation() {
 }
 
 function UpdateAllViews() {
+    today = new Date()
+    let isCurrentMonth = false
+    if(displayDateYear == today.getFullYear() && displayDateMonth == today.getMonth())
+        isCurrentMonth = true
+
     updateWorkingPlan()
     UpdateOvernightPayHour()
     updateWorkingOverpayPlan();
 
     render_calendar(displayDateYear, displayDateMonth, displayDateDay)
     render_working_hour(displayDateYear, displayDateMonth, displayDateDay)
-    render_calculated_working_hour(today.getFullYear(), today.getMonth(), today.getDate())
+    render_calculated_working_hour(displayDateYear, displayDateMonth, displayDateDay, isCurrentMonth)
+    setElementVisibility(isCurrentMonth)
     renderOvernightPay()
 }
 
