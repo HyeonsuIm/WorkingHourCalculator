@@ -7,26 +7,13 @@ function displayLoginPopup(string) {
 
 function setBaseSelect()
 {
-    result = getSelectBase()
-    elements = document.getElementsByClassName('input_base_data_row')
-    let display=false
-    if(result=="input")
-    {
-        display=true
-    }
-    else if(result == "calendar")
-    {
-    }
-
-    for(let index=0;index<elements.length;index++)
-    {
-        if(display) elements[index].style.display=""
-        else elements[index].style.display="none"
-    }
+    result = getSelectBaseInput()
+    backupSelectBase(result)
+    updateBaseSelectView(result)
     UpdateAllViews()
 }
 
-function getSelectBase()
+function getSelectBaseInput()
 {
     let elements = document.getElementsByName("select_base")
     result = ""
@@ -41,4 +28,48 @@ function getSelectBase()
     }
 
     return result
+}
+
+function updateBaseSelectView(result)
+{
+    let display=false
+    if(result=="input")
+    {
+        document.getElementById('select_base_input').checked=true
+        display=true
+    }
+    else if(result == "calendar")
+    {
+        document.getElementById('select_base_calendar').checked=true
+    }
+
+    elements = document.getElementsByClassName('input_base_data_row')
+    for(let index=0;index<elements.length;index++)
+    {
+        if(display) elements[index].style.display=""
+        else elements[index].style.display="none"
+    }
+}
+
+function restoreSelectBase()
+{
+    result = getSelectBase()
+    updateBaseSelectView(result)
+}
+
+function getSelectBase()
+{
+    const key = "select_type"
+    result = localStorage.getItem(key)
+    if(result===null)
+    {
+        result = "input"
+    }
+    return result
+}
+
+function backupSelectBase()
+{
+    const key = "select_type"
+    localStorage.setItem(key, result)
 }
