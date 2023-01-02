@@ -43,11 +43,11 @@ def show_main_view():
     member_id = request.cookies.get('member_id')
     if not user_id :
         user_id = request.args.get('userId')
-    print_log(f"user_id {user_id}")
 
     date = datetime.now()
     holidays = get_holiday_lists(date.year)
     log = LogHandler(session_maker, member_id, request.remote_addr, 'Access User')
+    print_log(f"Access User : {request.remote_addr}, {user_id}")
     log.insertLog()
     
     return render_template('html/main.html', data=holidays, userId=user_id)
@@ -82,6 +82,7 @@ def confirm_log_in():
             member_id = user_handler.get_member_id()
             if member_id:
                 log = LogHandler(session_maker, member_id, request.remote_addr, 'Login User')
+                print_log(f"Login User : {member_id}")
                 log.insertLog()
                 flash('로그인이 성공하였습니다.')
 
@@ -123,6 +124,7 @@ def logout():
     member_id = request.cookies.get('member_id')
     if user_id and member_id :
         log = LogHandler(session_maker, member_id, request.remote_addr, 'Logout User')
+        print_log(f"Logout User : {member_id}")
         log.insertLog()
 
     resp = make_response(redirect(url_for('show_main_view', userId=None)))
@@ -182,7 +184,7 @@ def set_working_hours():
     """set working information"""
     member_id = int(request.cookies.get('member_id'))
     working_hours = loads(request.args.get('map'))
-    print(member_id, working_hours)
+    print_log(f"{member_id} : {working_hours}")
     for key in working_hours:
         year, month = key.split('-')
         user_db = UserWorkingHandler(member_id, year, month)

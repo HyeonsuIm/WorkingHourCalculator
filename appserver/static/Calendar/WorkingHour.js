@@ -30,7 +30,7 @@ function render_calculated_working_hour(year,month,day, isCurrentMonth)
     let remainedWorkingDayCnt = remainedWorkingDayCntTemp
     if(isCurrentMonth)
     {
-        remainWorkingHour, remainedWorkingDayCnt = GetRemainedWorkingHour(maxWorkingHour, day, remainedWorkingDayCntTemp)
+        [remainWorkingHour, remainedWorkingDayCnt] = GetRemainedWorkingHour(maxWorkingHour, day, remainedWorkingDayCntTemp)
     }
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, minWorkingHour, remainWorkingHour)
     
