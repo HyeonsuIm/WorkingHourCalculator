@@ -38,3 +38,17 @@ function IsWorkingDay(holidayList, vacationList, year, month, day, dayOfWeek)
         return false
     }
 }
+
+function IsCommonWorkingDay(holidayList, year, month, day, dayOfWeek)
+{
+    if ( false == IsHoliday(holidayList, year, month, day) &&
+         0 != dayOfWeek &&
+         6 != dayOfWeek)
+    {
+        return true
+    }
+    else
+    {
+        return false
+    }
+}

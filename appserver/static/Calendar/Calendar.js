@@ -50,7 +50,7 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
         let onclickStr = ""
         let otherAttr = ""
         let dataId= ""
-        let isNeedPopup = false
+        let isNeedPopup = true
         if( true == IsHoliday(holidayList, currentyear, currentMonth, i) )
         {
             classStr = "class='holiday'"
@@ -65,7 +65,6 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
         }
         else
         {
-            isNeedPopup = true;
             if( true == IsVacation(vacationList, currentyear, currentMonth, i))
             {
                 classStr = "class='vacation'"

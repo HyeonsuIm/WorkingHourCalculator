@@ -7,6 +7,12 @@ function displayLoginPopup(string) {
 
 function setElementVisibility(isCurrentMonth)
 {
+    elements = document.querySelectorAll('.input_base_data_row,.only_current_month')
+    for(let index=0;index<elements.length;index++)
+    {
+        elements[index].style.display=""
+    }
+
     restoreSelectBase()
     let display=false
     if(isCurrentMonth)
@@ -16,8 +22,7 @@ function setElementVisibility(isCurrentMonth)
     elements = document.getElementsByClassName('only_current_month')
     for(let index=0;index<elements.length;index++)
     {
-        if(display) elements[index].style.display=""
-        else elements[index].style.display="none"
+        if(!display) elements[index].style.display="none"
     }
 }
 
@@ -25,7 +30,6 @@ function setBaseSelect()
 {
     result = getSelectBaseInput()
     backupSelectBase(result)
-    updateBaseSelectView(result)
     UpdateAllViews()
 }
 
@@ -62,8 +66,7 @@ function updateBaseSelectView(result)
     elements = document.getElementsByClassName('input_base_data_row')
     for(let index=0;index<elements.length;index++)
     {
-        if(display) elements[index].style.display=""
-        else elements[index].style.display="none"
+        if(!display) elements[index].style.display="none"
     }
 }
 

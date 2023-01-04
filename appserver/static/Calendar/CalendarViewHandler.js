@@ -9,6 +9,25 @@ function displayModal(element) {
     let workingHours = GetWorkingHour(year_month_day[0], year_month_day[1])
     $(".modal-body #keyVal").val(keyVal)
 
+    const date = new Date(year_month_day[0], Number(year_month_day[1])-1, year_month_day[2])
+    display=false
+    if(IsCommonWorkingDay(holidayList, year_month_day[0], year_month_day[1], year_month_day[2], date.getDay())) display=true
+
+    elements = document.getElementsByClassName('only_working_day')
+    for(let index=0;index<elements.length;index++)
+    {
+        if(display)
+        {
+            elements[index].style.display=""
+        }
+        else
+        {
+            elements[index].style.display="none"
+            document.getElementById('working_day').checked=true
+        } 
+    }
+
+
     let working_hour_element = $("#work_hour_day")
     day = Number(year_month_day[2])
     if(workingHours[day]){
