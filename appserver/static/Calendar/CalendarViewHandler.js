@@ -10,22 +10,36 @@ function displayModal(element) {
     $(".modal-body #keyVal").val(keyVal)
 
     const date = new Date(year_month_day[0], Number(year_month_day[1])-1, year_month_day[2])
-    display=false
-    if(IsCommonWorkingDay(holidayList, year_month_day[0], year_month_day[1], year_month_day[2], date.getDay())) display=true
+    is_woring_day=false
+    if(IsCommonWorkingDay(holidayList, year_month_day[0], year_month_day[1], year_month_day[2], date.getDay())) is_woring_day=true
 
-    elements = document.getElementsByClassName('only_working_day')
-    for(let index=0;index<elements.length;index++)
+    working_day_elements = document.getElementsByClassName('only_working_day')
+    for(let index=0;index<working_day_elements.length;index++)
     {
-        if(display)
+        if(is_woring_day)
         {
-            elements[index].style.display=""
+            working_day_elements[index].style.display=""
         }
         else
         {
-            elements[index].style.display="none"
-            document.getElementById('working_day').checked=true
+            working_day_elements[index].style.display="none"
         } 
     }
+
+    holiday_elements = document.getElementsByClassName('only_holiday')
+    for(let index=0;index<holiday_elements.length;index++)
+    {
+        if(is_woring_day)
+        {
+            holiday_elements[index].style.display="none"
+        }
+        else
+        {
+            holiday_elements[index].style.display=""
+        } 
+    }
+    if(is_woring_day) document.getElementById('working_day').checked=true
+    else document.getElementById('holiday').checked=true
 
 
     let working_hour_element = $("#work_hour_day")
@@ -83,7 +97,10 @@ function UpdateDayInformationFromPopup() {
     else if (document.getElementById("half_day").checked) {
         UpdateDayInfo(keyVal, 2)
     }
-    else {
+    else if (document.getElementById("holiday_working_day").checked){
+        UpdateDayInfo(keyVal, 3)
+    }
+    else{
         UpdateDayInfo(keyVal, 0)
     }
     

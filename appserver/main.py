@@ -151,6 +151,10 @@ def get_holiday_lists(year):
         holiday_list.append("2022-08-01")
         holiday_list.append("2022-08-02")
         holiday_list.append("2022-08-03")
+    elif year == 203:
+        holiday_list.append("2023-07-31")
+        holiday_list.append("2023-08-01")
+        holiday_list.append("2023-08-02")
 
     holiday_list = sorted(holiday_list)
     return jsonify({'holidays':holiday_list})

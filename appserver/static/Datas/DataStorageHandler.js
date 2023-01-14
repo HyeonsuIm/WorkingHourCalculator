@@ -2,6 +2,7 @@ holidayList=[]
 working_hours=[]
 vacationList=[]
 half_vacationList = []
+holidayWorkingList = []
 
 var getCookie = function(name) {
     var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
@@ -36,6 +37,12 @@ function UpdateLocalVacation(year_month_day, type)
     {
         half_vacationList.splice(idx, 1)
     }
+
+    idx = holidayWorkingList.indexOf(year_month_day)
+    if( -1 != idx )
+    {
+        holidayWorkingList.splice(idx, 1)
+    }
     
     if( 1 == type )
     {
@@ -44,6 +51,10 @@ function UpdateLocalVacation(year_month_day, type)
     else if( 2 == type)
     {
         half_vacationList.push(year_month_day)
+    }
+    else if( 3== type)
+    {
+        holidayWorkingList.push(year_month_day)
     }
     UpdateAllViews()
 }
@@ -167,21 +178,27 @@ async function RequestWorkingInfos(year_month)
     let [year, month] = year_month.split('-',2)
     vacationList = []
     half_vacationList = []
+    holidayWorkingList = []
     if(member_id==null)
     {
         const vacationKey = "vacation:"+year_month
         if(datas = localStorage.getItem(vacationKey))
         {
-            vacations = JSON.parse(datas)
+            work_types = JSON.parse(datas)
             for(i=0;i<32;i++)
             {
-                if( 1 == vacations[i] )
+                let date = year_month+"-"+String(i).padStart(2,"0")
+                if( 1 == work_types[i] )
                 {
-                    vacationList.push(year_month+"-"+String(i).padStart(2,"0"))
+                    vacationList.push(date)
                 }
-                else if( 2 == vacations[i])
+                else if( 2 == work_types[i])
                 {
-                    half_vacationList.push(year_month+"-"+String(i).padStart(2,"0"))
+                    half_vacationList.push(date)
+                }
+                else if( 3 == work_types[i])
+                {
+                    holidayWorkingList.push(date)
                 }
             }
         }
@@ -215,13 +232,18 @@ async function RequestWorkingInfos(year_month)
             {
                 for(i=0;i<32;i++)
                 {
+                    let date = String(year)+"-"+String(month).padStart(2,"0")+"-"+String(i).padStart(2,"0")
                     if( response.data['working_days'][i] == 1)
                     {
-                        vacationList.push(String(year)+"-"+String(month).padStart(2,"0")+"-"+String(i).padStart(2,"0"))
+                        vacationList.push(date)
                     }
                     else if( response.data['working_days'][i] == 2)
                     {
-                        half_vacationList.push(String(year)+"-"+String(month).padStart(2,"0")+"-"+String(i).padStart(2,"0"))
+                        half_vacationList.push(date)
+                    }
+                    else if( response.data['working_days'][i] == 3)
+                    {
+                        holidayWorkingList.push(date)
                     }
                 }
             }

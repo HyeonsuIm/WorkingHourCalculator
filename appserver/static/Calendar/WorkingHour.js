@@ -28,9 +28,10 @@ function render_calculated_working_hour(year,month,day, isCurrentMonth)
     
     let remainWorkingHour = maxWorkingHour
     let remainedWorkingDayCnt = remainedWorkingDayCntTemp
+    let dayOfWeek = (startDayOfWeek + day -1) % 7
     if(isCurrentMonth)
     {
-        [remainWorkingHour, remainedWorkingDayCnt] = GetRemainedWorkingHour(maxWorkingHour, day, remainedWorkingDayCntTemp)
+        [remainWorkingHour, remainedWorkingDayCnt] = GetRemainedWorkingHour(maxWorkingHour, day, IsWorkingDay(year, month+1, day, dayOfWeek), remainedWorkingDayCntTemp)
     }
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, minWorkingHour, remainWorkingHour)
     
@@ -66,7 +67,7 @@ function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today_date)
     for(i=1;i<=totalDayCnt;i++)
     {
         dayOfWeek = (startDayOfWeek + i -1) % 7
-        if( true == IsWorkingDay(holidayList, vacationList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i, dayOfWeek) )
+        if( true == IsWorkingDay(monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i, dayOfWeek) )
         {
             dayPlusVal = 1
             if( true == IsVacation(half_vacationList, monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i))
@@ -116,7 +117,7 @@ function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, minW
     SetRemainedWorkingHour("daily_working_hour_overpay_plan", expectWorkingHour / workingDayCntAfterToday)
 }
 
-function GetRemainedWorkingHour(maxWorkingHour, currentDay, remainWorkingDayCnt)
+function GetRemainedWorkingHour(maxWorkingHour, currentDay, isCurrentWorkingDay, remainWorkingDayCnt)
 {
     let select = getSelectBase()
     if(select=="input")
@@ -138,23 +139,45 @@ function GetRemainedWorkingHour(maxWorkingHour, currentDay, remainWorkingDayCnt)
             remainedWorkingHour = parseFloat(remainedWorkingHourStr);
         }
         
-        return [remainedWorkingHour - today_remain_time_minute / 60, remainWorkingDayCnt-1]
+        if(isCurrentWorkingDay)
+        {
+            return [remainedWorkingHour - today_remain_time_minute / 60, remainWorkingDayCnt-1]
+        }
+        else
+        {
+            return [remainedWorkingHour - today_remain_time_minute / 60, remainWorkingDayCnt]
+        }
     }
     else
     {
-        return [GetTotalWorkingHour(maxWorkingHour, currentDay),remainWorkingDayCnt]
+        let [hasCurrentDay, totalWorkingHour] = GetTotalWorkingHour(maxWorkingHour, currentDay)
+        if(hasCurrentDay && isCurrentWorkingDay)
+        {
+            return [totalWorkingHour, remainWorkingDayCnt-1]
+        }
+        else
+        {
+            return [totalWorkingHour, remainWorkingDayCnt]
+        }
     }
 }
 
 function GetTotalWorkingHour(maxWorkingHour, currentDay)
 {
+    hasCurrentDay = false
     working_hours = GetWorkingHour()
     total_miniute = 0
     for(i=0;i<currentDay;i++)
     {
         total_miniute += working_hours[i]
     }
-    return maxWorkingHour - (total_miniute / 60)
+
+    if(working_hours[currentDay] != 0)
+    {
+        hasCurrentDay = true
+        total_miniute += working_hours[currentDay]
+    }
+    return [hasCurrentDay,maxWorkingHour - (total_miniute / 60)]
 }
 
 function GetRemainedWorkingStoreTime()

@@ -24,18 +24,38 @@ function IsVacation(vacationList, year, month, date)
     }
 }
 
-function IsWorkingDay(holidayList, vacationList, year, month, day, dayOfWeek)
+function IsHolidayWorking(holidayWorkingList, year, month, day)
 {
-    if ( false == IsHoliday(holidayList, year, month, day) &&
-         false == IsVacation(vacationList, year, month, day) &&
-         0 != dayOfWeek &&
-         6 != dayOfWeek)
+    dateStr = year + '-' + String(month).padStart(2,'0') + '-' + String(day).padStart(2,'0')
+    if( -1 != holidayWorkingList.indexOf(dateStr) )
     {
         return true
     }
     else
     {
         return false
+    }
+}
+
+function IsWorkingDay(year, month, day, dayOfWeek)
+{
+    if(IsHolidayWorking(holidayWorkingList, year, month, day))
+    {
+        return true;
+    }
+    else
+    {
+        if ( false == IsHoliday(holidayList, year, month, day) &&
+         false == IsVacation(vacationList, year, month, day) &&
+         0 != dayOfWeek &&
+         6 != dayOfWeek)
+        {
+            return true
+        }
+        else
+        {
+            return false
+        }
     }
 }
 
