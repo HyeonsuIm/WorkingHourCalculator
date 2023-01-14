@@ -145,16 +145,15 @@ def get_holiday_lists(year):
     holiday_list = ['{0:04d}-{1:02d}-{2:02d}'.format(key.year, key.month, key.day) for key in KR(years=year).keys()]
     if year == 2023:
         holiday_list.append("2023-01-24")
+        holiday_list.append("2023-07-31")
+        holiday_list.append("2023-08-01")
+        holiday_list.append("2023-08-02")
     elif year == 2022:
         holiday_list.append("2022-03-09")
         holiday_list.append("2022-06-01")
         holiday_list.append("2022-08-01")
         holiday_list.append("2022-08-02")
         holiday_list.append("2022-08-03")
-    elif year == 203:
-        holiday_list.append("2023-07-31")
-        holiday_list.append("2023-08-01")
-        holiday_list.append("2023-08-02")
 
     holiday_list = sorted(holiday_list)
     return jsonify({'holidays':holiday_list})
