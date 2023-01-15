@@ -1,0 +1,22 @@
+{
+    // 컴파일 옵션
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "None",
+      "sourceMap": true,
+      "allowSyntheticDefaultImports": true,
+      "moduleResolution": "node",
+      "lib":[
+        "ES2017",
+        "DOM"
+      ]
+    },
+    // 직접 추가
+    //"files": [],
+    // include, exclude를 이용한 추가
+    "include": [
+      "static/*/*",
+      "static/*"
+    ],
+    //"exclude": []
+  }
