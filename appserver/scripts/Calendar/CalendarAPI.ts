@@ -1,9 +1,7 @@
-import * as DataStorageAPI from '../Datas/DataStorageHandler'
-
-export function IsHoliday(year, month, date)
+function IsHoliday(year, month, date)
 {
     let dateStr = year + '-' + String(month).padStart(2,'0') + '-' + String(date).padStart(2,'0')
-    if( -1 != DataStorageAPI.holidayList.indexOf(dateStr) )
+    if( -1 != holidayList.indexOf(dateStr) )
     {
         return true
     }
@@ -13,10 +11,10 @@ export function IsHoliday(year, month, date)
     }
 }
 
-export function IsVacation(year, month, date)
+function IsVacation(year, month, date)
 {
     let dateStr = year + '-' + String(month).padStart(2,'0') + '-' + String(date).padStart(2,'0')
-    if( -1 != DataStorageAPI.vacationList.indexOf(dateStr) )
+    if( -1 != vacationList.indexOf(dateStr) )
     {
         return true
     }
@@ -26,10 +24,10 @@ export function IsVacation(year, month, date)
     }
 }
 
-export function IsHalfVacation(year, month, date)
+function IsHalfVacation(year, month, date)
 {
     let dateStr = year + '-' + String(month).padStart(2,'0') + '-' + String(date).padStart(2,'0')
-    if( -1 != DataStorageAPI.half_vacationList.indexOf(dateStr) )
+    if( -1 != half_vacationList.indexOf(dateStr) )
     {
         return true
     }
@@ -39,10 +37,10 @@ export function IsHalfVacation(year, month, date)
     }
 }
 
-export function IsHolidayWorking(year, month, day)
+function IsHolidayWorking(year, month, day)
 {
     let dateStr = year + '-' + String(month).padStart(2,'0') + '-' + String(day).padStart(2,'0')
-    if( -1 != DataStorageAPI.holidayWorkingList.indexOf(dateStr) )
+    if( -1 != holidayWorkingList.indexOf(dateStr) )
     {
         return true
     }
@@ -52,7 +50,7 @@ export function IsHolidayWorking(year, month, day)
     }
 }
 
-export function IsWorkingDay(year, month, day, dayOfWeek)
+function IsWorkingDay(year, month, day, dayOfWeek)
 {
     if(IsHolidayWorking(year, month, day))
     {
@@ -74,7 +72,7 @@ export function IsWorkingDay(year, month, day, dayOfWeek)
     }
 }
 
-export function IsCommonWorkingDay(year, month, day, dayOfWeek)
+function IsCommonWorkingDay(year, month, day, dayOfWeek)
 {
     if ( false == IsHoliday(year, month, day) &&
          0 != dayOfWeek &&

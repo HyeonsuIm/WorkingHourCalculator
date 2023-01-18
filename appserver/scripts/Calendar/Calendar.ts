@@ -1,9 +1,4 @@
-import * as CalendarAPI from './CalendarAPI'
-import * as CalendarViewAPI from './CalendarViewHandler'
-import * as WorkingHourHandler from './WorkingHour'
-import * as DataStorageAPI from '../Datas/DataStorageHandler'
-
-export function get_calendar_header_elements(currentyear, currentMonth, totalWorkingHour, getPaid)
+function get_calendar_header_elements(currentyear, currentMonth, totalWorkingHour, getPaid)
 {
     let elementStr = "<tr>\
         <td class='calendar_header'><button id='prev_button' class='btn btn-light' onclick='SetMonth(-1)'><</button></td>\
@@ -35,7 +30,7 @@ export function get_calendar_header_elements(currentyear, currentMonth, totalWor
     return elementStr;
 }
 
-export function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, currentMonth, day, workingHours)
+function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, currentMonth, day, workingHours)
 {
     // 앞쪽 빈칸
     let elementStr = "<tr>"
@@ -56,11 +51,11 @@ export function get_calendar_content_elements(startDayOfWeek, lastDay, currentye
         let otherAttr = ""
         let dataId= ""
         let isNeedPopup = true
-        if(true == CalendarAPI.IsHolidayWorking(currentyear, currentMonth, i))
+        if(true == IsHolidayWorking(currentyear, currentMonth, i))
         {
             classStr = "class='working'"
         }
-        else if( true == CalendarAPI.IsHoliday(currentyear, currentMonth, i) )
+        else if( true == IsHoliday(currentyear, currentMonth, i) )
         {
             classStr = "class='holiday'"
         }
@@ -74,11 +69,11 @@ export function get_calendar_content_elements(startDayOfWeek, lastDay, currentye
         }
         else
         {
-            if( true == CalendarAPI.IsVacation(currentyear, currentMonth, i))
+            if( true == IsVacation(currentyear, currentMonth, i))
             {
                 classStr = "class='vacation'"
             }
-            else if( true == CalendarAPI.IsHalfVacation(currentyear, currentMonth, i))
+            else if( true == IsHalfVacation(currentyear, currentMonth, i))
             {
                 classStr = "class='half_vacation'"
             }
@@ -130,7 +125,7 @@ export function get_calendar_content_elements(startDayOfWeek, lastDay, currentye
     return elementStr;
 }
 
-export function render_calendar(year, month, day)
+function render_calendar(year, month, day)
 {
     const currentyear = year
     const currentMonth = month + 1
@@ -141,21 +136,21 @@ export function render_calendar(year, month, day)
 
     let elementStr = "<table class='table' id='calendar-table'>"
 
-    let workingHours = DataStorageAPI.GetWorkingHour()
+    let workingHoursList = GetWorkingHour()
     let totalWorkingHour=0
     for(let i=1;i<=monthLastDay.getDate();i++)
     {
-        totalWorkingHour += workingHours[i]
+        totalWorkingHour += workingHoursList[i]
     }
 
     //날짜 생성
-    let [totalWorkingDayCnt, remainedWorkingDayCnt] = WorkingHourHandler.GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
-    let [maxWorkingHour, avgWorkingHour, minWorkingHour] = WorkingHourHandler.GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
+    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
+    let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
     
-    let totalOvertimePay = parseFloat((((totalWorkingHour/60-minWorkingHour) * WorkingHourHandler.GetPayPerHour()) / 10000).toFixed(1))
+    let totalOvertimePay = parseFloat((((totalWorkingHour/60-minWorkingHour) * GetPayPerHour()) / 10000).toFixed(1))
     if (totalOvertimePay <= 0) totalOvertimePay = 0
     elementStr += get_calendar_header_elements(currentyear, currentMonth, (totalWorkingHour/60).toFixed(1), totalOvertimePay)
-    elementStr += get_calendar_content_elements(startDayOfWeek, monthLastDay.getDate(), currentyear, currentMonth, day, workingHours)
+    elementStr += get_calendar_content_elements(startDayOfWeek, monthLastDay.getDate(), currentyear, currentMonth, day, workingHoursList)
 
     let element = document.getElementById("calendarArea")
     if(element)
@@ -164,20 +159,20 @@ export function render_calendar(year, month, day)
     }
 }
 
-export function SetMonth(diff)
+function SetMonth(diff)
 {
-    let [displayDateYear, displayDateMonth, _] = CalendarViewAPI.GetDisplayDate()
+    let [displayDateYear, displayDateMonth, _] = GetDisplayDate()
     if( diff < 0 &&  displayDateMonth + diff < 0)
     {
         displayDateYear = displayDateYear - 1
         displayDateMonth = displayDateMonth + 12 + diff
-        DataStorageAPI.RequestHolidays(displayDateYear)
+        RequestHolidays(displayDateYear)
     }
     else if( diff > 0 && displayDateMonth + diff >= 12)
     {
         displayDateYear = displayDateYear + 1
         displayDateMonth = displayDateMonth - 12 + diff
-        DataStorageAPI.RequestHolidays(displayDateYear)
+        RequestHolidays(displayDateYear)
     }
     else
     {
@@ -191,10 +186,10 @@ export function SetMonth(diff)
         displayDateDay = today.getDate()
     }
     
-    DataStorageAPI.RequestWorkingInfos(String(displayDateYear)+"-"+String(displayDateMonth+1).padStart(2,"0"))
+    RequestWorkingInfos(String(displayDateYear)+"-"+String(displayDateMonth+1).padStart(2,"0"))
 }
 
-export function UpdateDayInfo(keyVal, type)
+function UpdateDayInfo(keyVal, type)
 {
-    DataStorageAPI.UpdateVacations(keyVal, type)
+    UpdateVacations(keyVal, type)
 }

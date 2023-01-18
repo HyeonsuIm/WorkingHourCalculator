@@ -1,6 +1,3 @@
-import * as CalendarViewAPI from '../Calendar/CalendarViewHandler'
-import * as $ from 'jquery'
-
 function displayLoginPopup(string) {
     let bodyElement = document.getElementById("signin_result_body")
     if(bodyElement) bodyElement.innerHTML = '<p>' + string + '</p>'
@@ -8,7 +5,7 @@ function displayLoginPopup(string) {
     $('#signin_result_modal').modal('show')
 }
 
-export function setElementVisibility(isCurrentMonth)
+function setElementVisibility(isCurrentMonth)
 {
     let displayElements = document.querySelectorAll('.input_base_data_row,.only_current_month')
     for(let index=0;index<displayElements.length;index++)
@@ -38,7 +35,7 @@ function setBaseSelect()
 {
     let result = getSelectBaseInput()
     backupSelectBase(result)
-    CalendarViewAPI.UpdateAllViews()
+    UpdateAllViews()
 }
 
 function getSelectBaseInput()
@@ -85,13 +82,13 @@ function updateBaseSelectView(result)
     }
 }
 
-export function restoreSelectBase()
+function restoreSelectBase()
 {
     let result = getSelectBase()
     updateBaseSelectView(result)
 }
 
-export function getSelectBase()
+function getSelectBase()
 {
     const key = "select_type"
     let result = localStorage.getItem(key)

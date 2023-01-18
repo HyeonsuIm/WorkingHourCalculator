@@ -1,23 +1,14 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetDisplayDate = exports.UpdateDayInformationFromPopup = exports.UpdateAllViews = exports.UpdateGlobalDateInformation = void 0;
-const DataStorageHandler = require("../Datas/DataStorageHandler.js");
-const WorkingHourHandler = require("./WorkingHour.js");
-const MainPageHandler = require("../Layout/MainPageHandler.js");
-const CalendarAPI = require("./CalendarAPI.js");
-const Calendar = require("./Calendar.js");
-const $ = require("jquery");
 let displayDateYear = 2022;
 let displayDateMonth = 1;
 let displayDateDay = 1;
 function displayModal(element) {
     var keyVal = element.getAttribute('data-id');
     let year_month_day = keyVal.split('-');
-    let workingHours = DataStorageHandler.GetWorkingHour();
+    let workingHours = GetWorkingHour();
     $(".modal-body #keyVal").val(keyVal);
     const date = new Date(year_month_day[0], Number(year_month_day[1]) - 1, year_month_day[2]);
     let is_woring_day = false;
-    if (CalendarAPI.IsCommonWorkingDay(year_month_day[0], year_month_day[1], year_month_day[2], date.getDay()))
+    if (IsCommonWorkingDay(year_month_day[0], year_month_day[1], year_month_day[2], date.getDay()))
         is_woring_day = true;
     let working_day_elements = document.getElementsByClassName('only_working_day');
     for (let index = 0; index < working_day_elements.length; index++) {
@@ -60,28 +51,26 @@ function UpdateGlobalDateInformation() {
     displayDateYear = today.getFullYear();
     displayDateMonth = today.getMonth();
     displayDateDay = today.getDate();
-    WorkingHourHandler.UpdateLeaveWorkTime();
-    MainPageHandler.restoreSelectBase();
-    WorkingHourHandler.UpdateRemainWorkingHour();
-    DataStorageHandler.RequestHolidays(displayDateYear);
-    DataStorageHandler.RequestWorkingInfos(String(displayDateYear) + "-" + String(displayDateMonth + 1).padStart(2, "0"));
+    UpdateLeaveWorkTime();
+    restoreSelectBase();
+    UpdateRemainWorkingHour();
+    RequestHolidays(displayDateYear);
+    RequestWorkingInfos(String(displayDateYear) + "-" + String(displayDateMonth + 1).padStart(2, "0"));
 }
-exports.UpdateGlobalDateInformation = UpdateGlobalDateInformation;
 function UpdateAllViews() {
     let today = new Date();
     let isCurrentMonth = false;
     if (displayDateYear == today.getFullYear() && displayDateMonth == today.getMonth())
         isCurrentMonth = true;
-    WorkingHourHandler.updateWorkingPlan();
-    WorkingHourHandler.UpdateOvernightPayHour();
-    WorkingHourHandler.updateWorkingOverpayPlan();
-    Calendar.render_calendar(displayDateYear, displayDateMonth, displayDateDay);
-    WorkingHourHandler.render_working_hour(displayDateYear, displayDateMonth, displayDateDay);
-    WorkingHourHandler.render_calculated_working_hour(displayDateYear, displayDateMonth, displayDateDay, isCurrentMonth);
-    MainPageHandler.setElementVisibility(isCurrentMonth);
-    WorkingHourHandler.renderOvernightPay();
+    updateWorkingPlan();
+    UpdateOvernightPayHour();
+    updateWorkingOverpayPlan();
+    render_calendar(displayDateYear, displayDateMonth, displayDateDay);
+    render_working_hour(displayDateYear, displayDateMonth, displayDateDay);
+    render_calculated_working_hour(displayDateYear, displayDateMonth, displayDateDay, isCurrentMonth);
+    setElementVisibility(isCurrentMonth);
+    renderOvernightPay();
 }
-exports.UpdateAllViews = UpdateAllViews;
 function UpdateDayInformationFromPopup() {
     let keyValElement = document.getElementById("keyVal");
     let keyVal = keyValElement.value;
@@ -89,16 +78,16 @@ function UpdateDayInformationFromPopup() {
     let halfDayElement = document.getElementById("half_day");
     let holidayElement = document.getElementById("holiday_working_day");
     if (fullDayElement.checked) {
-        Calendar.UpdateDayInfo(keyVal, 1);
+        UpdateDayInfo(keyVal, 1);
     }
     else if (halfDayElement.checked) {
-        Calendar.UpdateDayInfo(keyVal, 2);
+        UpdateDayInfo(keyVal, 2);
     }
     else if (holidayElement.checked) {
-        Calendar.UpdateDayInfo(keyVal, 3);
+        UpdateDayInfo(keyVal, 3);
     }
     else {
-        Calendar.UpdateDayInfo(keyVal, 0);
+        UpdateDayInfo(keyVal, 0);
     }
     let workingHourElement = document.getElementById('work_hour_day');
     let working_hour = workingHourElement.value;
@@ -112,12 +101,9 @@ function UpdateDayInformationFromPopup() {
         let key = year_month_day[0] + "-" + year_month_day[1].padStart(2, "0");
         let working_hour_dict = {};
         working_hour_dict[key] = [[Number(year_month_day[2]), minute]];
-        DataStorageHandler.UpdateWorkingHours(working_hour_dict, key);
+        UpdateWorkingHours(working_hour_dict, key);
     }
 }
-exports.UpdateDayInformationFromPopup = UpdateDayInformationFromPopup;
 function GetDisplayDate() {
     return [displayDateYear, displayDateMonth, displayDateDay];
 }
-exports.GetDisplayDate = GetDisplayDate;
-//# sourceMappingURL=CalendarViewHandler.js.map

@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const DataSorageAPI = require("./Datas/DataStorageHandler.js");
 function MakeSplitStr(str) {
     let result = "";
     for (let i = 1; i < str.length; i++) {
@@ -44,7 +41,7 @@ function inputWorkingHours() {
             working_hour_map[key].push([date.getDate(), minute]);
         }
     }
-    DataSorageAPI.UpdateWorkingHours(working_hour_map, null);
+    UpdateWorkingHours(working_hour_map, null);
     // var toastTrigger = document.getElementById('enter_working_hours')
     // if (toastTrigger) 
     // {
@@ -54,4 +51,3 @@ function inputWorkingHours() {
     // }
     //location.href='/'
 }
-//# sourceMappingURL=WorkingHourInput.js.map

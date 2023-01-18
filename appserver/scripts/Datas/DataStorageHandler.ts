@@ -1,18 +1,15 @@
-import axios from 'axios'
-import * as CalendarView from '../Calendar/CalendarViewHandler.js'
-
-export let working_hours: number[]=[];
-export let holidayList: string[]=[];
-export let vacationList: string[]=[];
-export let half_vacationList: string[]=[];
-export let holidayWorkingList: string[]=[];
+let working_hours: number[]=[];
+let holidayList: string[]=[];
+let vacationList: string[]=[];
+let half_vacationList: string[]=[];
+let holidayWorkingList: string[]=[];
 
 var getCookie = function(name) {
     var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
     return value? value[2] : null;
 };
 
-export async function RequestHolidays(year)
+async function RequestHolidays(year)
 {
     try{
         const response = await axios.get('/api/request/holidays',{
@@ -22,13 +19,13 @@ export async function RequestHolidays(year)
         });
         console.log(response);
         holidayList = response.data['holidays']
-        CalendarView.UpdateAllViews()
+        UpdateAllViews()
     }catch(error){
         console.log(error);
     }
 }
 
-export function UpdateLocalVacation(year_month_day, type)
+function UpdateLocalVacation(year_month_day, type)
 {
     let idx = vacationList.indexOf(year_month_day)
     if( -1 != idx )
@@ -59,10 +56,10 @@ export function UpdateLocalVacation(year_month_day, type)
     {
         holidayWorkingList.push(year_month_day)
     }
-    CalendarView.UpdateAllViews()
+    UpdateAllViews()
 }
 
-export async function UpdateVacations(year_month_day, type)
+async function UpdateVacations(year_month_day, type)
 {
     let member_id = getCookie('member_id')
     let [year, month, day] = year_month_day.split('-',3)
@@ -106,7 +103,7 @@ export async function UpdateVacations(year_month_day, type)
     }
 }
 
-export function UpdateLocalWorkingHour(working_hour_map, year_month)
+function UpdateLocalWorkingHour(working_hour_map, year_month)
 {
     if(year_month in working_hour_map)
     {
@@ -115,10 +112,10 @@ export function UpdateLocalWorkingHour(working_hour_map, year_month)
             working_hours[working_hour_map[year_month][i][0]] = working_hour_map[year_month][i][1];
         }
     }
-    CalendarView.UpdateAllViews()
+    UpdateAllViews()
 }
 
-export async function UpdateWorkingHours(working_hour_map, year_month)
+async function UpdateWorkingHours(working_hour_map, year_month)
 {
     let member_id = getCookie('member_id')
     if(member_id==null)
@@ -177,7 +174,7 @@ export async function UpdateWorkingHours(working_hour_map, year_month)
     }
 }
 
-export async function RequestWorkingInfos(year_month)
+async function RequestWorkingInfos(year_month)
 {
     let member_id = getCookie('member_id')
     let [year, month] = year_month.split('-',2)
@@ -219,7 +216,7 @@ export async function RequestWorkingInfos(year_month)
         {
             working_hours = JSON.parse(datas)
         }
-        CalendarView.UpdateAllViews()
+        UpdateAllViews()
     }
     else
     {
@@ -262,17 +259,17 @@ export async function RequestWorkingInfos(year_month)
             {
                 working_hours = Array.from({length:32},()=>0)
             }
-            CalendarView.UpdateAllViews()
+            UpdateAllViews()
         }catch(error){
             console.log(error);
         }
     }
 }
 
-export function UpdateAllLocalStorage()
+function UpdateAllLocalStorage()
 {
     const oldKeyReg = /\d{4}-\d{2}-\d{2}/
-    let removeKeyList:string[]=[]
+    let removeKeyList=[]
     for( let key in localStorage )
     {
         if(oldKeyReg.test(key))
@@ -289,7 +286,7 @@ export function UpdateAllLocalStorage()
     }
 }
 
-export function GetWorkingHour()
+function GetWorkingHour()
 {
     return working_hours;
 }

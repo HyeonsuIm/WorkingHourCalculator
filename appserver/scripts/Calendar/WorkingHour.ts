@@ -1,10 +1,4 @@
-import * as CalendarViewAPI from './CalendarViewHandler.js'
-import * as DataStorageAPI from '../Datas/DataStorageHandler.js'
-import * as CalendarAPI from './CalendarAPI.js'
-import * as MainPageHandlerAPI from '../Layout/MainPageHandler.js'
-import * as $ from 'jquery'
-
-let  overtime_work = 0
+let overtime_work:number = 0
 let working_hour_plan:number = 0
 let working_overpay_plan:number = 0;
 let today_remain_time_minute:number = 0
@@ -13,7 +7,7 @@ let overtime_work_based_current:number = 0
 let overtime_work_max:number = 0
 let overtime_work_plan:number = 0
 
-export function render_working_hour(year, month, day)
+function render_working_hour(year, month, day)
 {
     const viewYear = year
     const viewMonth = month
@@ -29,7 +23,7 @@ export function render_working_hour(year, month, day)
     MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
 }
 
-export function render_calculated_working_hour(year,month,day, isCurrentMonth)
+function render_calculated_working_hour(year,month,day, isCurrentMonth)
 {
     const viewYear = year
     const viewMonth = month
@@ -46,7 +40,7 @@ export function render_calculated_working_hour(year,month,day, isCurrentMonth)
     let dayOfWeek = (startDayOfWeek + day -1) % 7
     if(isCurrentMonth)
     {
-        [remainWorkingHour, remainedWorkingDayCnt] = GetRemainedWorkingHour(maxWorkingHour, day, CalendarAPI.IsWorkingDay(year, month+1, day, dayOfWeek), remainedWorkingDayCntTemp)
+        [remainWorkingHour, remainedWorkingDayCnt] = GetRemainedWorkingHour(maxWorkingHour, day, IsWorkingDay(year, month+1, day, dayOfWeek), remainedWorkingDayCntTemp)
     }
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, minWorkingHour, remainWorkingHour)
     
@@ -74,7 +68,7 @@ export function render_calculated_working_hour(year,month,day, isCurrentMonth)
     }
 }
 
-export function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today_date)
+function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today_date)
 {
     let totalDayCnt = monthLastDay.getDate()
     let workingDayCnt = 0
@@ -82,10 +76,10 @@ export function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today
     for(let i=1;i<=totalDayCnt;i++)
     {
         let dayOfWeek = (startDayOfWeek + i -1) % 7
-        if( true == CalendarAPI.IsWorkingDay(monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i, dayOfWeek) )
+        if( true == IsWorkingDay(monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i, dayOfWeek) )
         {
             let dayPlusVal = 1
-            if( true == CalendarAPI.IsVacation(monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i))
+            if( true == IsVacation(monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i))
             {
                 dayPlusVal = 0.5
             }
@@ -99,7 +93,7 @@ export function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today
     return [workingDayCnt, workingDayCntAfterToday]
 }
 
-export function GetWorkingHours(totalDayCnt, totalWorkingDayCnt)
+function GetWorkingHours(totalDayCnt, totalWorkingDayCnt)
 {
     let maxWorkingHour = totalDayCnt / 7 * 52;
     let minWorkingHour = totalWorkingDayCnt * 8 < totalDayCnt / 7 * 40 ? totalWorkingDayCnt * 8 : totalDayCnt / 7 * 40;
@@ -134,7 +128,7 @@ function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, minW
 
 function GetRemainedWorkingHour(maxWorkingHour, currentDay, isCurrentWorkingDay, remainWorkingDayCnt) : [number, number]
 {
-    let select = MainPageHandlerAPI.getSelectBase()
+    let select = getSelectBase()
     if(select=="input")
     {
         const remainedWorkingHourKey = "remainWorkingHour"
@@ -185,7 +179,7 @@ function GetRemainedWorkingHour(maxWorkingHour, currentDay, isCurrentWorkingDay,
 function GetTotalWorkingHour(maxWorkingHour, currentDay) : [ boolean, number ]
 {
     let hasCurrentDay = false
-    let working_hours = DataStorageAPI.GetWorkingHour()
+    let working_hours = GetWorkingHour()
     let total_miniute = 0
     for(let i=0;i<currentDay;i++)
     {
@@ -235,7 +229,7 @@ function SetRemainedWorkingHour(elementId, value)
     }
 }
 
-export function updateWorkingPlan()
+function updateWorkingPlan()
 {
     let workingPlanElement = document.getElementById('working_plan') as HTMLInputElement
     if(workingPlanElement)
@@ -260,7 +254,7 @@ export function updateWorkingPlan()
     }
 }
 
-export function updateWorkingOverpayPlan()
+function updateWorkingOverpayPlan()
 {
     let overpayElement = <HTMLInputElement>document.getElementById('working_overpay')
     if(overpayElement)
@@ -289,15 +283,15 @@ export function updateWorkingOverpayPlan()
     }
 }
 
-export function UpdateRemainWorkingHourAndUpdate()
+function UpdateRemainWorkingHourAndUpdate()
 {
     UpdateRemainWorkingHour()
     updateWorkingOverpayPlan()
     UpdateLeaveWorkTime()
-    CalendarViewAPI.UpdateAllViews()
+    UpdateAllViews()
 }
 
-export function UpdateRemainWorkingHour()
+function UpdateRemainWorkingHour()
 {
     const remainedWorkingHourKey = "remainWorkingHour"
     let workingDoneElement = <HTMLInputElement>document.getElementById("working_done")
@@ -359,7 +353,7 @@ export function UpdateRemainWorkingHour()
     }
 }
 
-export function UpdateOvernightPayHour()
+function UpdateOvernightPayHour()
 {
     let payPerHourElement = document.getElementById("overnight_pay_hour") as HTMLInputElement
     let payPerHourStr = payPerHourElement.value
@@ -380,7 +374,7 @@ export function UpdateOvernightPayHour()
     payPerHour = parseInt(payPerHourStr)
 }
 
-export function renderOvernightPay()
+function renderOvernightPay()
 {
     let element = document.getElementById('overtime_work_based_current') as HTMLElement
     if( overtime_work_based_current > 0)
@@ -413,13 +407,13 @@ export function renderOvernightPay()
     }
 }
 
-export function UpdateLeaveWorkTimeAndUpdate()
+function UpdateLeaveWorkTimeAndUpdate()
 {
     UpdateLeaveWorkTime()
-    CalendarViewAPI.UpdateAllViews()
+    UpdateAllViews()
 }
 
-export function UpdateLeaveWorkTime()
+function UpdateLeaveWorkTime()
 {
     let leaveWorkTimeElement = document.getElementById("leave_work_time") as HTMLInputElement
     let leave_time = leaveWorkTimeElement.value
@@ -473,12 +467,12 @@ export function UpdateLeaveWorkTime()
     }
 }
 
-export function DisplayWorkingHoursModal()
+function DisplayWorkingHoursModal()
 {
     $('.working_hour_modal').modal('show');
 }
 
-export function GetPayPerHour() : number
+function GetPayPerHour() : number
 {
     return payPerHour
 }

@@ -1,10 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateDayInfo = exports.SetMonth = exports.render_calendar = exports.get_calendar_content_elements = exports.get_calendar_header_elements = void 0;
-const CalendarAPI = require("./CalendarAPI");
-const CalendarViewAPI = require("./CalendarViewHandler");
-const WorkingHourHandler = require("./WorkingHour");
-const DataStorageAPI = require("../Datas/DataStorageHandler");
 function get_calendar_header_elements(currentyear, currentMonth, totalWorkingHour, getPaid) {
     let elementStr = "<tr>\
         <td class='calendar_header'><button id='prev_button' class='btn btn-light' onclick='SetMonth(-1)'><</button></td>\
@@ -31,7 +24,6 @@ function get_calendar_header_elements(currentyear, currentMonth, totalWorkingHou
     elementStr += "<td class='saturday' id='month-weekday'>토</td></tr>";
     return elementStr;
 }
-exports.get_calendar_header_elements = get_calendar_header_elements;
 function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, currentMonth, day, workingHours) {
     // 앞쪽 빈칸
     let elementStr = "<tr>";
@@ -48,10 +40,10 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
         let otherAttr = "";
         let dataId = "";
         let isNeedPopup = true;
-        if (true == CalendarAPI.IsHolidayWorking(currentyear, currentMonth, i)) {
+        if (true == IsHolidayWorking(currentyear, currentMonth, i)) {
             classStr = "class='working'";
         }
-        else if (true == CalendarAPI.IsHoliday(currentyear, currentMonth, i)) {
+        else if (true == IsHoliday(currentyear, currentMonth, i)) {
             classStr = "class='holiday'";
         }
         else if (dayOfWeek == 6) {
@@ -61,10 +53,10 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
             classStr = "class='sunday'";
         }
         else {
-            if (true == CalendarAPI.IsVacation(currentyear, currentMonth, i)) {
+            if (true == IsVacation(currentyear, currentMonth, i)) {
                 classStr = "class='vacation'";
             }
-            else if (true == CalendarAPI.IsHalfVacation(currentyear, currentMonth, i)) {
+            else if (true == IsHalfVacation(currentyear, currentMonth, i)) {
                 classStr = "class='half_vacation'";
             }
             else {
@@ -99,7 +91,6 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
     elementStr += "</tr></table>";
     return elementStr;
 }
-exports.get_calendar_content_elements = get_calendar_content_elements;
 function render_calendar(year, month, day) {
     const currentyear = year;
     const currentMonth = month + 1;
@@ -107,36 +98,35 @@ function render_calendar(year, month, day) {
     const monthLastDay = new Date(currentyear, currentMonth, 0);
     const startDayOfWeek = monthStartDay.getDay();
     let elementStr = "<table class='table' id='calendar-table'>";
-    let workingHours = DataStorageAPI.GetWorkingHour();
+    let workingHoursList = GetWorkingHour();
     let totalWorkingHour = 0;
     for (let i = 1; i <= monthLastDay.getDate(); i++) {
-        totalWorkingHour += workingHours[i];
+        totalWorkingHour += workingHoursList[i];
     }
     //날짜 생성
-    let [totalWorkingDayCnt, remainedWorkingDayCnt] = WorkingHourHandler.GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day);
-    let [maxWorkingHour, avgWorkingHour, minWorkingHour] = WorkingHourHandler.GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt);
-    let totalOvertimePay = parseFloat((((totalWorkingHour / 60 - minWorkingHour) * WorkingHourHandler.GetPayPerHour()) / 10000).toFixed(1));
+    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day);
+    let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt);
+    let totalOvertimePay = parseFloat((((totalWorkingHour / 60 - minWorkingHour) * GetPayPerHour()) / 10000).toFixed(1));
     if (totalOvertimePay <= 0)
         totalOvertimePay = 0;
     elementStr += get_calendar_header_elements(currentyear, currentMonth, (totalWorkingHour / 60).toFixed(1), totalOvertimePay);
-    elementStr += get_calendar_content_elements(startDayOfWeek, monthLastDay.getDate(), currentyear, currentMonth, day, workingHours);
+    elementStr += get_calendar_content_elements(startDayOfWeek, monthLastDay.getDate(), currentyear, currentMonth, day, workingHoursList);
     let element = document.getElementById("calendarArea");
     if (element) {
         element.innerHTML = elementStr;
     }
 }
-exports.render_calendar = render_calendar;
 function SetMonth(diff) {
-    let [displayDateYear, displayDateMonth, _] = CalendarViewAPI.GetDisplayDate();
+    let [displayDateYear, displayDateMonth, _] = GetDisplayDate();
     if (diff < 0 && displayDateMonth + diff < 0) {
         displayDateYear = displayDateYear - 1;
         displayDateMonth = displayDateMonth + 12 + diff;
-        DataStorageAPI.RequestHolidays(displayDateYear);
+        RequestHolidays(displayDateYear);
     }
     else if (diff > 0 && displayDateMonth + diff >= 12) {
         displayDateYear = displayDateYear + 1;
         displayDateMonth = displayDateMonth - 12 + diff;
-        DataStorageAPI.RequestHolidays(displayDateYear);
+        RequestHolidays(displayDateYear);
     }
     else {
         displayDateMonth += diff;
@@ -147,11 +137,8 @@ function SetMonth(diff) {
         displayDateMonth == today.getMonth()) {
         displayDateDay = today.getDate();
     }
-    DataStorageAPI.RequestWorkingInfos(String(displayDateYear) + "-" + String(displayDateMonth + 1).padStart(2, "0"));
+    RequestWorkingInfos(String(displayDateYear) + "-" + String(displayDateMonth + 1).padStart(2, "0"));
 }
-exports.SetMonth = SetMonth;
 function UpdateDayInfo(keyVal, type) {
-    DataStorageAPI.UpdateVacations(keyVal, type);
+    UpdateVacations(keyVal, type);
 }
-exports.UpdateDayInfo = UpdateDayInfo;
-//# sourceMappingURL=Calendar.js.map

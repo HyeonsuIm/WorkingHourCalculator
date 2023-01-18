@@ -23,4 +23,3 @@ function validateForm() {
     }
     return true;
 }
-//# sourceMappingURL=UserInfoHandler.js.map

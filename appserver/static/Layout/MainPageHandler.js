@@ -1,8 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSelectBase = exports.restoreSelectBase = exports.setElementVisibility = void 0;
-const CalendarViewAPI = require("../Calendar/CalendarViewHandler");
-const $ = require("jquery");
 function displayLoginPopup(string) {
     let bodyElement = document.getElementById("signin_result_body");
     if (bodyElement)
@@ -28,11 +23,10 @@ function setElementVisibility(isCurrentMonth) {
         }
     }
 }
-exports.setElementVisibility = setElementVisibility;
 function setBaseSelect() {
     let result = getSelectBaseInput();
     backupSelectBase(result);
-    CalendarViewAPI.UpdateAllViews();
+    UpdateAllViews();
 }
 function getSelectBaseInput() {
     let elements = document.getElementsByName("select_base");
@@ -69,7 +63,6 @@ function restoreSelectBase() {
     let result = getSelectBase();
     updateBaseSelectView(result);
 }
-exports.restoreSelectBase = restoreSelectBase;
 function getSelectBase() {
     const key = "select_type";
     let result = localStorage.getItem(key);
@@ -78,9 +71,7 @@ function getSelectBase() {
     }
     return result;
 }
-exports.getSelectBase = getSelectBase;
 function backupSelectBase(result) {
     const key = "select_type";
     localStorage.setItem(key, result);
 }
-//# sourceMappingURL=MainPageHandler.js.map

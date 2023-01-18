@@ -11,32 +11,32 @@ services:
         # secrets:
         #     - mysql_server_id
         #     - mysql_server_passwd
-        network_mode: host
+        #network_mode: host
         # comments for dev task on the mac
-        #ports:
-        #    - "3306:3306"
+        ports:
+            - "3306:3306"
 
     flask:
         build: ./appserver
         container_name: flask
         restart: always
-        network_mode: host
         depends_on:
             - mysql
+        #network_mode: host
         # comments for dev task on the mac
-        #links:
-        #    - mysql:dbserver
-        #ports:
-        #    - "19999:19999"
+        links:
+            - mysql:dbserver
+        ports:
+            - "19999:19999"
 
     nginx:
         build: ./nginx
         container_name: nginx
         restart: always
-        network_mode: host
+        #network_mode: host
         # comments for dev task on the mac
-        #ports:
-        #    - "20000:20000"
+        ports:
+            - "20000:20000"
 
 volumes:
     workcalendar_dist:

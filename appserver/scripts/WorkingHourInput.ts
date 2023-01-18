@@ -1,5 +1,3 @@
-import * as DataSorageAPI from './Datas/DataStorageHandler.js'
-
 function MakeSplitStr(str)
 {
     let result = ""
@@ -57,7 +55,7 @@ function inputWorkingHours()
             working_hour_map[key].push([date.getDate(), minute])
         }
     }
-    DataSorageAPI.UpdateWorkingHours(working_hour_map, null)
+    UpdateWorkingHours(working_hour_map, null)
     // var toastTrigger = document.getElementById('enter_working_hours')
     // if (toastTrigger) 
     // {

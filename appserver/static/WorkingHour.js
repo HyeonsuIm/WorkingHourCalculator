@@ -345,3 +345,4 @@ function DisplayWorkingHoursModal() {
 function GetPayPerHour() {
     return payPerHour;
 }
+//# sourceMappingURL=../scripts/Calendar/scripts/map/WorkingHour.js.map
