@@ -178,6 +178,7 @@ function SetMonth(diff)
     {
         displayDateMonth += diff
     }
+
     let displayDateDay = 0
     let today = new Date()
     if( displayDateYear == today.getFullYear() &&
@@ -185,6 +186,7 @@ function SetMonth(diff)
     {
         displayDateDay = today.getDate()
     }
+    SetDisplayDate(displayDateYear, displayDateMonth, displayDateDay)
     
     RequestWorkingInfos(String(displayDateYear)+"-"+String(displayDateMonth+1).padStart(2,"0"))
 }

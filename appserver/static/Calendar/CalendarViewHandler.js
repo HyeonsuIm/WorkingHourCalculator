@@ -107,3 +107,8 @@ function UpdateDayInformationFromPopup() {
 function GetDisplayDate() {
     return [displayDateYear, displayDateMonth, displayDateDay];
 }
+function SetDisplayDate(year, month, day) {
+    displayDateYear = year;
+    displayDateMonth = month;
+    displayDateDay = day;
+}

@@ -126,3 +126,10 @@ function GetDisplayDate() : [number, number, number]
 {
     return [displayDateYear, displayDateMonth, displayDateDay]
 }
+
+function SetDisplayDate(year:number, month:number, day:number)
+{
+    displayDateYear = year
+    displayDateMonth = month
+    displayDateDay = day
+}

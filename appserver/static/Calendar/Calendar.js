@@ -137,6 +137,7 @@ function SetMonth(diff) {
         displayDateMonth == today.getMonth()) {
         displayDateDay = today.getDate();
     }
+    SetDisplayDate(displayDateYear, displayDateMonth, displayDateDay);
     RequestWorkingInfos(String(displayDateYear) + "-" + String(displayDateMonth + 1).padStart(2, "0"));
 }
 function UpdateDayInfo(keyVal, type) {
