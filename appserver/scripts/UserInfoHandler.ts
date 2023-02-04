@@ -10,11 +10,11 @@ function GetUserName()
 
 function validateForm()
 {
-    let userId = <HTMLInputElement>document.getElementById('userid')
-    let passwd = <HTMLInputElement>document.getElementById('password')
-    let re_passwd = <HTMLInputElement>document.getElementById('re_password')
+    let userId = document.getElementById('userid') as HTMLInputElement
+    let passwd = document.getElementById('password') as HTMLInputElement
+    let re_passwd = document.getElementById('re_password') as HTMLInputElement
 
-    if(userId && passwd && re_passwd)
+    if(userId !== null && passwd !== null && re_passwd !== null)
     {
         if( userId.value == "" || passwd.value == "" || re_passwd.value == "" )
         {

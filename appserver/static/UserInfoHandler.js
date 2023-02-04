@@ -8,7 +8,7 @@ function validateForm() {
     let userId = document.getElementById('userid');
     let passwd = document.getElementById('password');
     let re_passwd = document.getElementById('re_password');
-    if (userId && passwd && re_passwd) {
+    if (userId !== null && passwd !== null && re_passwd !== null) {
         if (userId.value == "" || passwd.value == "" || re_passwd.value == "") {
             alert("Name must be filled out");
             return false;
