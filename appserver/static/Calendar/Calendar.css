@@ -22,6 +22,11 @@
     border-color:lightgray;
 }
 
+#month-day, #month-weekday, #month-day-today
+{
+    font-size:large;
+}
+
 #month-day-today
 {
     background-color:lightgray
@@ -37,8 +42,10 @@ td.saturday{
     color:blue;
 }
 td.vacation{
-    color:red;
+    color: #3CB371;
+    /* background-color: pink; */
 }
 td.half_vacation{
-    color:pink;
+    color: #98FB98;
+    /* background-color: rgba(255, 192, 203, 0.638); */
 }

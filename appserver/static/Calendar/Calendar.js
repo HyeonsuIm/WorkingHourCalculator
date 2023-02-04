@@ -3,7 +3,7 @@ function get_calendar_header_elements(currentyear, currentMonth, totalWorkingHou
         <td class='calendar_header'><button id='prev_button' class='btn btn-light' onclick='SetMonth(-1)'><</button></td>\
         <td class='calendar_header' id='year-month' colspan='5'>\
             <div style='position:relative;display:block;'>\
-                " + currentyear + "년 " + (currentMonth) + "월\
+                " + currentyear + "." + (currentMonth) + "\
                 <div style='line-height:15px;display:block;position:absolute;top:-5px;right:0px;bottom:auto'>";
     if (totalWorkingHour > 0) {
         elementStr += "<div style='float:left;text-align:left'><font size='2' color='#1c1c1c'>근무<br>야근</font></div>";
@@ -79,7 +79,7 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
         if (workingHours[i] != 0) {
             workingHour += Math.floor((workingHours[i] / 60)) + ":" + String(workingHours[i] % 60).padStart(2, '0');
         }
-        elementStr += "<td " + idStr + " " + classStr + " " + onclickStr + " " + otherAttr + " " + dataId + " >" + i + "<br>" + workingHour + "</td>";
+        elementStr += "<td " + idStr + " " + classStr + " " + onclickStr + " " + otherAttr + " " + dataId + " >" + i + "<br><h6>" + workingHour + "</h6></td>";
         if (dayOfWeek == 6) {
             elementStr += "</tr><tr>";
         }

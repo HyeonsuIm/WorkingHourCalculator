@@ -4,7 +4,6 @@ let displayDateDay = 1;
 function displayModal(element) {
     var keyVal = element.getAttribute('data-id');
     let year_month_day = keyVal.split('-');
-    let workingHours = GetWorkingHour();
     $(".modal-body #keyVal").val(keyVal);
     const date = new Date(year_month_day[0], Number(year_month_day[1]) - 1, year_month_day[2]);
     let is_woring_day = false;
@@ -28,12 +27,29 @@ function displayModal(element) {
     }
     if (is_woring_day) {
         let workingDayElement = document.getElementById('working_day');
-        workingDayElement.checked = true;
+        let fullDayElement = document.getElementById("full_day");
+        let halfDayElement = document.getElementById("half_day");
+        if (IsHalfVacation(year_month_day[0], year_month_day[1], year_month_day[2])) {
+            halfDayElement.checked = true;
+        }
+        else if (IsVacation(year_month_day[0], year_month_day[1], year_month_day[2])) {
+            fullDayElement.checked = true;
+        }
+        else {
+            workingDayElement.checked = true;
+        }
     }
     else {
+        let holidayWorkingElement = document.getElementById("holiday_working_day");
         let holidayElement = document.getElementById('holiday');
-        holidayElement.checked = true;
+        if (IsHolidayWorking(year_month_day[0], year_month_day[1], year_month_day[2])) {
+            holidayWorkingElement.checked = true;
+        }
+        else {
+            holidayElement.checked = true;
+        }
     }
+    let workingHours = GetWorkingHour();
     let working_hour_element = $("#work_hour_day");
     let day = Number(year_month_day[2]);
     if (workingHours[day]) {

@@ -6,7 +6,6 @@ function displayModal(element) {
     var keyVal = element.getAttribute('data-id');
 
     let year_month_day = keyVal.split('-')
-    let workingHours = GetWorkingHour()
     $(".modal-body #keyVal").val(keyVal)
 
     const date = new Date(year_month_day[0], Number(year_month_day[1])-1, year_month_day[2])
@@ -21,6 +20,7 @@ function displayModal(element) {
         else htmlElement.style.display="none"
     }
 
+    
     let holiday_elements = document.getElementsByClassName('only_holiday')
     for(let index=0;index<holiday_elements.length;index++)
     {
@@ -28,18 +28,41 @@ function displayModal(element) {
         if(is_woring_day) htmlElement.style.display="none"
         else htmlElement.style.display=""
     }
+
     if(is_woring_day)
     {
         let workingDayElement = document.getElementById('working_day') as HTMLInputElement
-        workingDayElement.checked=true
+        let fullDayElement = document.getElementById("full_day") as HTMLInputElement
+        let halfDayElement = document.getElementById("half_day") as HTMLInputElement
+        if(IsHalfVacation(year_month_day[0], year_month_day[1], year_month_day[2]))
+        {
+            halfDayElement.checked=true
+        }
+        else if(IsVacation(year_month_day[0], year_month_day[1], year_month_day[2]))
+        {
+            fullDayElement.checked=true
+        }
+        else
+        {
+            workingDayElement.checked=true
+        }
     }
     else
     {
+        let holidayWorkingElement = document.getElementById("holiday_working_day") as HTMLInputElement
         let holidayElement = document.getElementById('holiday') as HTMLInputElement 
-        holidayElement.checked=true
+        if(IsHolidayWorking(year_month_day[0], year_month_day[1], year_month_day[2]))
+        {
+            holidayWorkingElement.checked=true
+        }
+        else
+        {
+            holidayElement.checked=true
+        }
+        
     } 
 
-
+    let workingHours = GetWorkingHour()
     let working_hour_element = $("#work_hour_day")
     let day = Number(year_month_day[2])
     if(workingHours[day]){
