@@ -259,7 +259,7 @@ function UpdateRemainWorkingHour() {
 function UpdateOvernightPayHour() {
     let payPerHourElement = document.getElementById("overnight_pay_hour");
     let payPerHourStr = payPerHourElement.value;
-    if ("0" == payPerHourStr) {
+    if ("" == payPerHourStr) {
         let payLocal = localStorage.getItem('overtime_pay');
         if (payLocal) {
             payPerHourElement.value = payLocal;
