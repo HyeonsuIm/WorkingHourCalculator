@@ -79,7 +79,7 @@ function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today_date)
         if( true == IsWorkingDay(monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i, dayOfWeek) )
         {
             let dayPlusVal = 1
-            if( true == IsVacation(monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i))
+            if( true == IsHalfVacation(monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i))
             {
                 dayPlusVal = 0.5
             }
