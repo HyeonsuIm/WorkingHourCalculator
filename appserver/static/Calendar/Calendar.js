@@ -109,7 +109,7 @@ function render_calendar(year, month, day) {
     let totalOvertimePay = parseFloat((((totalWorkingHour / 60 - minWorkingHour) * GetPayPerHour()) / 10000).toFixed(1));
     if (totalOvertimePay <= 0)
         totalOvertimePay = 0;
-    elementStr += get_calendar_header_elements(currentyear, currentMonth, (totalWorkingHour / 60).toFixed(1), totalOvertimePay);
+    elementStr += get_calendar_header_elements(currentyear, currentMonth, Number((totalWorkingHour / 60).toFixed(1)), totalOvertimePay);
     elementStr += get_calendar_content_elements(startDayOfWeek, monthLastDay.getDate(), currentyear, currentMonth, day, workingHoursList);
     let element = document.getElementById("calendarArea");
     if (element) {

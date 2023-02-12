@@ -4,12 +4,12 @@ let vacationList: string[]=[];
 let half_vacationList: string[]=[];
 let holidayWorkingList: string[]=[];
 
-var getCookie = function(name) {
+var getCookie = function(name:string) {
     var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
     return value? value[2] : null;
 };
 
-async function RequestHolidays(year)
+async function RequestHolidays(year:number)
 {
     try{
         const response = await axios.get('/api/request/holidays',{
@@ -25,7 +25,7 @@ async function RequestHolidays(year)
     }
 }
 
-function UpdateLocalVacation(year_month_day, type)
+function UpdateLocalVacation(year_month_day:string, type:number)
 {
     let idx = vacationList.indexOf(year_month_day)
     if( -1 != idx )
@@ -59,7 +59,7 @@ function UpdateLocalVacation(year_month_day, type)
     UpdateAllViews()
 }
 
-async function UpdateVacations(year_month_day, type)
+async function UpdateVacations(year_month_day:string, type:number)
 {
     let member_id = getCookie('member_id')
     let [year, month, day] = year_month_day.split('-',3)
@@ -103,7 +103,7 @@ async function UpdateVacations(year_month_day, type)
     }
 }
 
-function UpdateLocalWorkingHour(working_hour_map, year_month)
+function UpdateLocalWorkingHour(working_hour_map:string[], year_month:string)
 {
     if(year_month in working_hour_map)
     {
@@ -115,7 +115,7 @@ function UpdateLocalWorkingHour(working_hour_map, year_month)
     UpdateAllViews()
 }
 
-async function UpdateWorkingHours(working_hour_map, year_month)
+async function UpdateWorkingHours(working_hour_map, year_month:string)
 {
     let member_id = getCookie('member_id')
     if(member_id==null)
@@ -174,7 +174,7 @@ async function UpdateWorkingHours(working_hour_map, year_month)
     }
 }
 
-async function RequestWorkingInfos(year_month)
+async function RequestWorkingInfos(year_month:string)
 {
     let member_id = getCookie('member_id')
     let [year, month] = year_month.split('-',2)
@@ -286,7 +286,7 @@ function UpdateAllLocalStorage()
     }
 }
 
-function GetWorkingHour()
+function GetWorkingHour() : number[]
 {
     return working_hours;
 }

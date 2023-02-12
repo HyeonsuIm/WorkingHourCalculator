@@ -1,4 +1,4 @@
-function IsHoliday(year, month, date)
+function IsHoliday(year:number, month:number, date:number):boolean
 {
     let dateStr = year + '-' + String(month).padStart(2,'0') + '-' + String(date).padStart(2,'0')
     if( -1 != holidayList.indexOf(dateStr) )
@@ -11,7 +11,7 @@ function IsHoliday(year, month, date)
     }
 }
 
-function IsVacation(year, month, date)
+function IsVacation(year:number, month:number, date:number):boolean
 {
     let dateStr = year + '-' + String(month).padStart(2,'0') + '-' + String(date).padStart(2,'0')
     if( -1 != vacationList.indexOf(dateStr) )
@@ -24,7 +24,7 @@ function IsVacation(year, month, date)
     }
 }
 
-function IsHalfVacation(year, month, date)
+function IsHalfVacation(year:number, month:number, date:number):boolean
 {
     let dateStr = year + '-' + String(month).padStart(2,'0') + '-' + String(date).padStart(2,'0')
     if( -1 != half_vacationList.indexOf(dateStr) )
@@ -37,7 +37,7 @@ function IsHalfVacation(year, month, date)
     }
 }
 
-function IsHolidayWorking(year, month, day)
+function IsHolidayWorking(year:number, month:number, day:number):boolean
 {
     let dateStr = year + '-' + String(month).padStart(2,'0') + '-' + String(day).padStart(2,'0')
     if( -1 != holidayWorkingList.indexOf(dateStr) )
@@ -50,7 +50,7 @@ function IsHolidayWorking(year, month, day)
     }
 }
 
-function GetWorkingDayVal(year, month, day, dayOfWeek)
+function GetWorkingDayVal(year:number, month:number, day:number, dayOfWeek:number):number
 {
     if(IsHolidayWorking(year, month, day))
     {
@@ -76,7 +76,7 @@ function GetWorkingDayVal(year, month, day, dayOfWeek)
     }
 }
 
-function IsCommonWorkingDay(year, month, day, dayOfWeek)
+function IsCommonWorkingDay(year:number, month:number, day:number, dayOfWeek:number):boolean
 {
     if ( false == IsHoliday(year, month, day) &&
          0 != dayOfWeek &&

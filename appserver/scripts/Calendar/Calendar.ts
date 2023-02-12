@@ -1,4 +1,4 @@
-function get_calendar_header_elements(currentyear, currentMonth, totalWorkingHour, getPaid)
+function get_calendar_header_elements(currentyear:number, currentMonth:number, totalWorkingHour:number, getPaid:number):string
 {
     let elementStr = "<tr>\
         <td class='calendar_header'><button id='prev_button' class='btn btn-light' onclick='SetMonth(-1)'><</button></td>\
@@ -30,7 +30,7 @@ function get_calendar_header_elements(currentyear, currentMonth, totalWorkingHou
     return elementStr;
 }
 
-function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, currentMonth, day, workingHours)
+function get_calendar_content_elements(startDayOfWeek:number, lastDay:number, currentyear:number , currentMonth:number, day:number, workingHours:number[]):string
 {
     // 앞쪽 빈칸
     let elementStr = "<tr>"
@@ -125,7 +125,7 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
     return elementStr;
 }
 
-function render_calendar(year, month, day)
+function render_calendar(year:number, month:number, day:number)
 {
     const currentyear = year
     const currentMonth = month + 1
@@ -149,7 +149,7 @@ function render_calendar(year, month, day)
     
     let totalOvertimePay = parseFloat((((totalWorkingHour/60-minWorkingHour) * GetPayPerHour()) / 10000).toFixed(1))
     if (totalOvertimePay <= 0) totalOvertimePay = 0
-    elementStr += get_calendar_header_elements(currentyear, currentMonth, (totalWorkingHour/60).toFixed(1), totalOvertimePay)
+    elementStr += get_calendar_header_elements(currentyear, currentMonth, Number((totalWorkingHour/60).toFixed(1)), totalOvertimePay)
     elementStr += get_calendar_content_elements(startDayOfWeek, monthLastDay.getDate(), currentyear, currentMonth, day, workingHoursList)
 
     let element = document.getElementById("calendarArea")
@@ -159,7 +159,7 @@ function render_calendar(year, month, day)
     }
 }
 
-function SetMonth(diff)
+function SetMonth(diff:number)
 {
     let [displayDateYear, displayDateMonth, _] = GetDisplayDate()
     if( diff < 0 &&  displayDateMonth + diff < 0)
@@ -191,7 +191,7 @@ function SetMonth(diff)
     RequestWorkingInfos(String(displayDateYear)+"-"+String(displayDateMonth+1).padStart(2,"0"))
 }
 
-function UpdateDayInfo(keyVal, type)
+function UpdateDayInfo(keyVal:string, type:number)
 {
     UpdateVacations(keyVal, type)
 }

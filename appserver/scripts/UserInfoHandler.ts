@@ -1,14 +1,14 @@
-function IsLogedin()
+function IsLogedin():boolean
 {
     return false
 }
 
-function GetUserName()
+function GetUserName():string
 {
     return ""
 }
 
-function validateForm()
+function validateForm():boolean
 {
     let userId = document.getElementById('userid') as HTMLInputElement
     let passwd = document.getElementById('password') as HTMLInputElement

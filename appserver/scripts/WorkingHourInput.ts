@@ -1,4 +1,4 @@
-function MakeSplitStr(str)
+function MakeSplitStr(str:string):string
 {
     let result = ""
     for(let i=1;i<str.length;i++)

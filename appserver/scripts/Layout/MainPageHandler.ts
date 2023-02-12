@@ -1,11 +1,11 @@
-function displayLoginPopup(string) {
+function displayLoginPopup(string:string) {
     let bodyElement = document.getElementById("signin_result_body")
     if(bodyElement) bodyElement.innerHTML = '<p>' + string + '</p>'
 
     $('#signin_result_modal').modal('show')
 }
 
-function setElementVisibility(isCurrentMonth)
+function setElementVisibility(isCurrentMonth:boolean)
 {
     let displayElements = document.querySelectorAll('.input_base_data_row,.only_current_month')
     for(let index=0;index<displayElements.length;index++)
@@ -38,7 +38,7 @@ function setBaseSelect()
     UpdateAllViews()
 }
 
-function getSelectBaseInput()
+function getSelectBaseInput():string
 {
     let elements = document.getElementsByName("select_base")
     let result = ""
@@ -56,7 +56,7 @@ function getSelectBaseInput()
     return result
 }
 
-function updateBaseSelectView(result)
+function updateBaseSelectView(result:string)
 {
     let display=false
     if(result=="input")
@@ -88,7 +88,7 @@ function restoreSelectBase()
     updateBaseSelectView(result)
 }
 
-function getSelectBase()
+function getSelectBase():string
 {
     const key = "select_type"
     let result = localStorage.getItem(key)
@@ -99,7 +99,7 @@ function getSelectBase()
     return result
 }
 
-function backupSelectBase(result)
+function backupSelectBase(result:string)
 {
     const key = "select_type"
     localStorage.setItem(key, result)
