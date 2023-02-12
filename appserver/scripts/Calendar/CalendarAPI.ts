@@ -50,24 +50,28 @@ function IsHolidayWorking(year, month, day)
     }
 }
 
-function IsWorkingDay(year, month, day, dayOfWeek)
+function GetWorkingDayVal(year, month, day, dayOfWeek)
 {
     if(IsHolidayWorking(year, month, day))
     {
-        return true;
+        return 1;
     }
     else
     {
-        if ( false == IsHoliday(year, month, day) &&
-         false == IsVacation(year, month, day) &&
-         0 != dayOfWeek &&
-         6 != dayOfWeek)
+        if ( true == IsHoliday(year, month, day) ||
+             true == IsVacation(year, month, day) ||
+             0 == dayOfWeek ||
+             6 == dayOfWeek )
         {
-            return true
+            return 0
+        }
+        else if( true == IsHalfVacation(year, month, day))
+        {
+            return 0.5
         }
         else
         {
-            return false
+            return 1
         }
     }
 }
