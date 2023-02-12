@@ -12,6 +12,7 @@ var getCookie = function(name:string) {
 async function RequestHolidays(year:number)
 {
     try{
+        // @ts-expect-error
         const response = await axios.get('/api/request/holidays',{
             params:{
                 year:year
@@ -85,6 +86,7 @@ async function UpdateVacations(year_month_day:string, type:number)
     else
     {
         try{
+            // @ts-expect-error
             const response = await axios.post('/api/request/update_vacation',
             {
             },
@@ -152,6 +154,7 @@ async function UpdateWorkingHours(working_hour_map, year_month:string)
     else
     {
         try{
+            // @ts-expect-error
             const response = await axios.post('/api/request/set_working_hours',
             {
             },
@@ -221,6 +224,7 @@ async function RequestWorkingInfos(year_month:string)
     else
     {
         try{
+            // @ts-expect-error
             const response = await axios.post('/api/request/get_working_info',
             {
             },

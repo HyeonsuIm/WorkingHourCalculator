@@ -19,6 +19,7 @@ var getCookie = function (name) {
 function RequestHolidays(year) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            // @ts-expect-error
             const response = yield axios.get('/api/request/holidays', {
                 params: {
                     year: year
@@ -79,6 +80,7 @@ function UpdateVacations(year_month_day, type) {
         }
         else {
             try {
+                // @ts-expect-error
                 const response = yield axios.post('/api/request/update_vacation', {}, {
                     params: {
                         year: year,
@@ -132,6 +134,7 @@ function UpdateWorkingHours(working_hour_map, year_month) {
         }
         else {
             try {
+                // @ts-expect-error
                 const response = yield axios.post('/api/request/set_working_hours', {}, {
                     params: {
                         map: JSON.stringify(working_hour_map)
@@ -187,6 +190,7 @@ function RequestWorkingInfos(year_month) {
         }
         else {
             try {
+                // @ts-expect-error
                 const response = yield axios.post('/api/request/get_working_info', {}, {
                     params: {
                         year: year,
