@@ -145,6 +145,7 @@ def get_holiday_lists(year):
     holiday_list = ['{0:04d}-{1:02d}-{2:02d}'.format(key.year, key.month, key.day) for key in KR(years=year).keys()]
     if year == 2023:
         holiday_list.append("2023-01-24")
+        holiday_list.append("2023-05-29")
         holiday_list.append("2023-07-31")
         holiday_list.append("2023-08-01")
         holiday_list.append("2023-08-02")
