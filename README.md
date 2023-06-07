@@ -10,6 +10,7 @@ Working hours calculator according to the self commuting system.
 
 <br>
 < Server Diagram >
+<img width="649" alt="image" src="https://github.com/HyeonsuIm/WorkingHourCalculator/assets/32991938/e17e5f27-4571-47c6-a4c8-d10a01307d49">
 
 * Docker
   * nginx node
