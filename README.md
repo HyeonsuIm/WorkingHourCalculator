@@ -9,13 +9,8 @@ Working hours calculator according to the self commuting system.
 * overtime fee for each month
 
 <br>
-< Server Diagram >
-<img width="649" alt="image" src="https://github.com/HyeonsuIm/WorkingHourCalculator/assets/32991938/e17e5f27-4571-47c6-a4c8-d10a01307d49">
-
-* Docker
-  * nginx node
-  * flask + uwsgi node
-  * mysql node
+< Server Diagram > <br>
+<img width="400" alt="image" src="https://github.com/HyeonsuIm/WorkingHourCalculator/assets/32991938/e17e5f27-4571-47c6-a4c8-d10a01307d49">
 
 <br>
 < Server >
