@@ -22,6 +22,10 @@
     border-color:lightgray;
 }
 
+#year-month{
+    font-size:30px;
+}
+
 #month-day, #month-weekday, #month-day-today
 {
     font-size:large;

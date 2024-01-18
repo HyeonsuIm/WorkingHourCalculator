@@ -1,3 +1,9 @@
+function MakeWorkingHourMiniuteString(miniute:number):string
+{
+    if(miniute) {return Math.floor((miniute / 60)) + ":" + String(miniute % 60).padStart(2,'0')}
+    else {return ""}
+}
+
 function IsHoliday(year:number, month:number, date:number):boolean
 {
     let dateStr = year + '-' + String(month).padStart(2,'0') + '-' + String(date).padStart(2,'0')

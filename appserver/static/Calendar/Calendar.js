@@ -1,7 +1,7 @@
 function get_calendar_header_elements(currentyear, currentMonth, totalWorkingHour, getPaid) {
     let elementStr = "<tr>\
         <td class='calendar_header'><button id='prev_button' class='btn btn-light' onclick='SetMonth(-1)'><</button></td>\
-        <td class='calendar_header' id='year-month' colspan='5'>\
+        <td class='calendar_header' id='year-month' colspan='6'>\
             <div style='position:relative;display:block;'>\
                 " + currentyear + "." + (currentMonth) + "\
                 <div style='line-height:15px;display:block;position:absolute;top:-5px;right:0px;bottom:auto'>";
@@ -15,23 +15,29 @@ function get_calendar_header_elements(currentyear, currentMonth, totalWorkingHou
         </td>\
         <td class='calendar_header'><button id='next_button' class='btn btn-light' onclick='SetMonth(1)'>></button></td></tr>";
     // 요일 생성
-    elementStr += "<tr><td class='sunday' id='month-weekday'>일</td>";
+    elementStr += "<tr>";
+    //elementStr += "<td id='month-weekday'>CW</td>"
+    elementStr += "<td class='sunday' id='month-weekday'>일</td>";
     elementStr += "<td id='month-weekday'>월</td>";
     elementStr += "<td id='month-weekday'>화</td>";
     elementStr += "<td id='month-weekday'>수</td>";
     elementStr += "<td id='month-weekday'>목</td>";
     elementStr += "<td id='month-weekday'>금</td>";
-    elementStr += "<td class='saturday' id='month-weekday'>토</td></tr>";
+    elementStr += "<td class='saturday' id='month-weekday'>토</td>";
+    elementStr += "<td class='month-weekday' id='month-weekday'>합계</td>";
+    elementStr += "</tr>";
     return elementStr;
 }
 function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, currentMonth, day, workingHours) {
     // 앞쪽 빈칸
     let elementStr = "<tr>";
+    //elementStr += "<td></td>"
     for (let i = 0; i < startDayOfWeek; i++) {
         elementStr += "<td id='month-day-empty'> </td>";
     }
     let displayDay = day;
     let dayOfWeek = 0;
+    let weekWorkingHour = 0;
     //날짜 및 근무시간 생성
     for (let i = 1; i <= lastDay; i++) {
         dayOfWeek = (startDayOfWeek + i - 1) % 7;
@@ -75,20 +81,20 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
         else {
             idStr += "'month-day'";
         }
-        let workingHour = "";
-        if (workingHours[i] != 0) {
-            workingHour += Math.floor((workingHours[i] / 60)) + ":" + String(workingHours[i] % 60).padStart(2, '0');
-        }
-        elementStr += "<td " + idStr + " " + classStr + " " + onclickStr + " " + otherAttr + " " + dataId + " >" + i + "<br><h6>" + workingHour + "</h6></td>";
+        weekWorkingHour += workingHours[i];
+        elementStr += "<td " + idStr + " " + classStr + " " + onclickStr + " " + otherAttr + " " + dataId + " >" + i + "<br><h6>" + MakeWorkingHourMiniuteString(workingHours[i]) + "</h6></td>";
         if (dayOfWeek == 6) {
+            elementStr += "<td><br><h6>" + MakeWorkingHourMiniuteString(weekWorkingHour) + "</h6></td>";
             elementStr += "</tr><tr>";
+            //elementStr += "<td></td>"
+            weekWorkingHour = 0;
         }
     }
     // 뒤쪽 빈칸
     for (; dayOfWeek < 6; dayOfWeek++) {
         elementStr += "<td id='month-day-empty'></td>";
     }
-    elementStr += "</tr></table>";
+    elementStr += "<td></td></tr></table>";
     return elementStr;
 }
 function render_calendar(year, month, day) {
