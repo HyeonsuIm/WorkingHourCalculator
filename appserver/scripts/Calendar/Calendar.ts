@@ -147,8 +147,9 @@ function render_calendar(year:number, month:number, day:number)
     }
 
     //날짜 생성
-    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
-    let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
+    let [totalWorkingDayCnt, ] = GetCommonWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
+    let [totalVacationDayCnt, ] = GetVacations(monthStartDay, monthLastDay, day)
+    let [, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt, totalVacationDayCnt)
     
     let totalOvertimePay = parseFloat((((totalWorkingHour/60-minWorkingHour) * GetPayPerHour()) / 10000).toFixed(1))
     if (totalOvertimePay <= 0) totalOvertimePay = 0

@@ -61,6 +61,25 @@ function GetWorkingDayVal(year, month, day, dayOfWeek) {
         }
     }
 }
+function GetCommonWorkingDayVal(year, month, day, dayOfWeek) {
+    if (IsCommonWorkingDay(year, month, day, dayOfWeek)) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+function GetVacationDayVal(year, month, day) {
+    if (true == IsVacation(year, month, day)) {
+        return 1;
+    }
+    else if (true == IsHalfVacation(year, month, day)) {
+        return 0.5;
+    }
+    else {
+        return 0;
+    }
+}
 function IsCommonWorkingDay(year, month, day, dayOfWeek) {
     if (false == IsHoliday(year, month, day) &&
         0 != dayOfWeek &&

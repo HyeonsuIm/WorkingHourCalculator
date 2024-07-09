@@ -17,10 +17,11 @@ function render_working_hour(year:number, month:number, day:number)
     const startDayOfWeek = monthStartDay.getDay();
 
     //날짜 생성
-    let [totalWorkingDayCnt, remainedWorkingDayCnt] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
-    let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
+    let [totalWorkingDayCnt, ] = GetCommonWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
+    let [totalVacationDayCnt, ] = GetVacations(monthStartDay, monthLastDay, day)
+    let [maxWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt, totalVacationDayCnt)
 
-    MakeWorkingHourTable(maxWorkingHour, avgWorkingHour, minWorkingHour)
+    MakeWorkingHourTable(maxWorkingHour, minWorkingHour)
 }
 
 function render_calculated_working_hour(year:number, month:number, day:number, isCurrentMonth:boolean)
@@ -32,15 +33,17 @@ function render_calculated_working_hour(year:number, month:number, day:number, i
     const monthLastDay = new Date(viewYear, viewMonth+1, 0)
     const startDayOfWeek = monthStartDay.getDay();
     
-    let [totalWorkingDayCnt, remainedWorkingDayCntTemp] = GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
-    let [maxWorkingHour, avgWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalWorkingDayCnt)
+    let [totalCommonWorkingDayCnt, remainedCommonWorkingDayCnt] = GetCommonWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, day)
+    let [totalVacationDayCnt, totalRemainedVacationDayCnt] = GetVacations(monthStartDay, monthLastDay, day)
+    let [maxWorkingHour, minWorkingHour] = GetWorkingHours(monthLastDay.getDate(), totalCommonWorkingDayCnt, totalVacationDayCnt)
     
+    let totalWorkingDayCnt = totalCommonWorkingDayCnt - totalVacationDayCnt
+    let remainedWorkingDayCnt = remainedCommonWorkingDayCnt - totalRemainedVacationDayCnt
     let remainWorkingHour = maxWorkingHour
-    let remainedWorkingDayCnt = remainedWorkingDayCntTemp
     let dayOfWeek = (startDayOfWeek + day -1) % 7
     if(isCurrentMonth)
     {
-        [remainWorkingHour, remainedWorkingDayCnt] = GetRemainedWorkingHour(maxWorkingHour, day, GetWorkingDayVal(year, month+1, day, dayOfWeek), remainedWorkingDayCntTemp)
+        [remainWorkingHour, remainedWorkingDayCnt] = GetRemainedWorkingHour(maxWorkingHour, day, GetWorkingDayVal(year, month+1, day, dayOfWeek), remainedWorkingDayCnt)
     }
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, minWorkingHour, remainWorkingHour)
     
@@ -86,15 +89,50 @@ function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek:number, today
     return [workingDayCnt, workingDayCntAfterToday]
 }
 
-function GetWorkingHours(totalDayCnt:number, totalWorkingDayCnt:number):[number, number, number]
+function GetCommonWorkingDay(monthStartDay, monthLastDay, startDayOfWeek:number, today_date:number) : [number, number]
+{
+    let totalDayCnt = monthLastDay.getDate()
+    let workingDayCnt = 0
+    let workingDayCntAfterToday = 0
+    for(let i=1;i<=totalDayCnt;i++)
+    {
+        let dayOfWeek = (startDayOfWeek + i -1) % 7
+        let dayPlusVal = GetCommonWorkingDayVal(monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i, dayOfWeek)
+        workingDayCnt += dayPlusVal;
+        if(today_date <= i)
+        {
+            workingDayCntAfterToday += dayPlusVal;
+        }
+    }
+    return [workingDayCnt, workingDayCntAfterToday]
+}
+
+function GetVacations(monthStartDay, monthLastDay, today_date:number) : [number, number]
+{
+    let totalDayCnt = monthLastDay.getDate()
+    let vacationDayCnt = 0
+    let vacationDayCntAfterToday = 0
+    for(let i=1;i<=totalDayCnt;i++)
+    {
+        let dayPlusVal = GetVacationDayVal(monthStartDay.getFullYear(), monthStartDay.getMonth() + 1, i)
+        vacationDayCnt += dayPlusVal;
+        if(today_date <= i)
+        {
+            vacationDayCntAfterToday += dayPlusVal;
+        }
+    }
+    return [vacationDayCnt, vacationDayCntAfterToday]
+}
+
+function GetWorkingHours(totalDayCnt:number, totalWorkingDayCnt:number, vacationDayCnt:number):[number, number]
 {
     let maxWorkingHour = totalDayCnt / 7 * 52;
     let minWorkingHour = totalWorkingDayCnt * 8 < totalDayCnt / 7 * 40 ? totalWorkingDayCnt * 8 : totalDayCnt / 7 * 40;
-    let avgWorkingHour = maxWorkingHour * 0.9
-    return [maxWorkingHour, avgWorkingHour, minWorkingHour]
+    minWorkingHour -= vacationDayCnt * 8;
+    return [maxWorkingHour, minWorkingHour]
 }
 
-function MakeWorkingHourTable(maxWorkingHour:number, avgWorkingHour:number, minWorkingHour:number)
+function MakeWorkingHourTable(maxWorkingHour:number, minWorkingHour:number)
 {
     SetRemainedWorkingHour("month_max_working_hour", maxWorkingHour)
     SetRemainedWorkingHour("month_min_working_hour", minWorkingHour)

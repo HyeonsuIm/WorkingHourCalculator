@@ -82,6 +82,34 @@ function GetWorkingDayVal(year:number, month:number, day:number, dayOfWeek:numbe
     }
 }
 
+function GetCommonWorkingDayVal(year:number, month:number, day:number, dayOfWeek:number):number
+{
+    if(IsCommonWorkingDay(year, month, day, dayOfWeek))
+    {
+        return 1;
+    }
+    else
+    {
+        return 0
+    }
+}
+
+function GetVacationDayVal(year:number, month:number, day:number):number
+{
+    if(true == IsVacation(year, month, day))
+    {
+        return 1;
+    }
+    else if(true == IsHalfVacation(year,month,day))
+    {
+        return 0.5;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 function IsCommonWorkingDay(year:number, month:number, day:number, dayOfWeek:number):boolean
 {
     if ( false == IsHoliday(year, month, day) &&
