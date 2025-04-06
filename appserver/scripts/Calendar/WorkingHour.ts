@@ -127,8 +127,7 @@ function GetVacations(monthStartDay, monthLastDay, today_date:number) : [number,
 function GetWorkingHours(totalDayCnt:number, totalWorkingDayCnt:number, vacationDayCnt:number):[number, number]
 {
     let maxWorkingHour = totalDayCnt / 7 * 52;
-    let minWorkingHour = totalWorkingDayCnt * 8 < totalDayCnt / 7 * 40 ? totalWorkingDayCnt * 8 : totalDayCnt / 7 * 40;
-    minWorkingHour -= vacationDayCnt * 8;
+    let minWorkingHour = Math.min((totalWorkingDayCnt - vacationDayCnt) * 8, totalDayCnt / 7 * 40);
     return [maxWorkingHour, minWorkingHour]
 }
 
@@ -402,7 +401,7 @@ function renderOvernightPay()
     let element = document.getElementById('overtime_work_based_current') as HTMLElement
     if( overtime_work_based_current > 0)
     {
-        element.innerText = (Math.floor( overtime_work_based_current * 60 ) * (payPerHour / 60 )).toLocaleString()
+        element.innerText = Math.floor(( overtime_work_based_current * 60 ) * (payPerHour / 60 )).toLocaleString()
     }
     else
     {
@@ -412,7 +411,7 @@ function renderOvernightPay()
     element = document.getElementById('overnight_pay_max') as HTMLElement
     if( overtime_work_max > 0)
     {
-        element.innerText = (Math.floor( overtime_work_max * 60 ) * (payPerHour / 60 )).toLocaleString()
+        element.innerText = Math.floor(( overtime_work_max * 60 ) * (payPerHour / 60 )).toLocaleString()
     }
     else
     {
@@ -422,7 +421,7 @@ function renderOvernightPay()
     element = document.getElementById('overnight_pay_plan') as HTMLElement
     if( overtime_work_plan > 0)
     {
-        element.innerText = (Math.floor( overtime_work_plan * 60 ) * (payPerHour / 60 )).toLocaleString()
+        element.innerText = Math.floor(( overtime_work_plan * 60 ) * (payPerHour / 60 )).toLocaleString()
     }
     else
     {
