@@ -6,6 +6,8 @@ let payPerHour:number = 0
 let overtime_work_based_current:number = 0
 let overtime_work_max:number = 0
 let overtime_work_plan:number = 0
+let overtime_work_month:number = 0
+let total_work_hour_month:number = 0
 
 function render_working_hour(year:number, month:number, day:number)
 {
@@ -43,7 +45,8 @@ function render_calculated_working_hour(year:number, month:number, day:number, i
     let dayOfWeek = (startDayOfWeek + day -1) % 7
     if(isCurrentMonth)
     {
-        [remainWorkingHour, remainedWorkingDayCnt] = GetRemainedWorkingHour(maxWorkingHour, day, GetWorkingDayVal(year, month+1, day, dayOfWeek), remainedWorkingDayCnt)
+        [remainWorkingHour, remainedWorkingDayCnt] = GetRemainedWorkingHour(maxWorkingHour, day, GetWorkingDayVal(year, month+1, day, dayOfWeek), remainedWorkingDayCnt);
+        total_work_hour_month = GetTotalWorkingHour(monthLastDay.getDate());
     }
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, minWorkingHour, remainWorkingHour)
     
@@ -68,6 +71,12 @@ function render_calculated_working_hour(year:number, month:number, day:number, i
     if( overtime_work_plan < 0 )
     {
         overtime_work_plan = 0
+    }
+
+    overtime_work_month = total_work_hour_month - minWorkingHour
+    if( overtime_work_month < 0)
+    {
+        overtime_work_month = 0
     }
 }
 
@@ -153,6 +162,9 @@ function SetAllRemainedWorkingHour(workingDayCntAfterToday:number, maxWorkingHou
     SetRemainedWorkingHour("daily_working_hour_max", remainedMaxWorkingHour / workingDayCntAfterToday)
     SetRemainedWorkingHour("daily_working_hour_min", remainedMinWorkingHour / workingDayCntAfterToday)
     SetRemainedWorkingHour("daily_working_hour_overpay_plan", expectWorkingHour / workingDayCntAfterToday)
+
+    SetRemainedWorkingHour("remain_min_working_hour", remainedMinWorkingHour)
+    SetRemainedWorkingHour("remain_max_working_hour", remainedMaxWorkingHour)
 }
 
 function GetRemainedWorkingHour(maxWorkingHour:number, currentDay:number, currentWorkingDayVal:number, remainWorkingDayCnt:number) : [number, number]
@@ -185,7 +197,7 @@ function GetRemainedWorkingHour(maxWorkingHour:number, currentDay:number, curren
     }
     else
     {
-        let [hasCurrentDay, totalWorkingHour] = GetTotalWorkingHour(maxWorkingHour, currentDay)
+        let [hasCurrentDay, totalWorkingHour] = GetRemainWorkingHour(maxWorkingHour, currentDay)
         if(hasCurrentDay)
         {
             return [totalWorkingHour, remainWorkingDayCnt-currentWorkingDayVal]
@@ -198,7 +210,7 @@ function GetRemainedWorkingHour(maxWorkingHour:number, currentDay:number, curren
     return [0,0]
 }
 
-function GetTotalWorkingHour(maxWorkingHour:number, currentDay:number) : [ boolean, number ]
+function GetRemainWorkingHour(maxWorkingHour:number, currentDay:number) : [ boolean, number ]
 {
     let hasCurrentDay = false
     let working_hours = GetWorkingHour()
@@ -214,6 +226,17 @@ function GetTotalWorkingHour(maxWorkingHour:number, currentDay:number) : [ boole
         total_miniute += working_hours[currentDay]
     }
     return [hasCurrentDay,maxWorkingHour - (total_miniute / 60)]
+}
+
+function GetTotalWorkingHour(currentDay:number) : number
+{
+    let working_hours = GetWorkingHour()
+    let total_miniute = 0
+    for(let i=0;i<=currentDay;i++)
+    {
+        total_miniute += working_hours[i]
+    }
+    return total_miniute / 60
 }
 
 function GetRemainedWorkingStoreTime()
@@ -422,6 +445,16 @@ function renderOvernightPay()
     if( overtime_work_plan > 0)
     {
         element.innerText = Math.floor(( overtime_work_plan * 60 ) * (payPerHour / 60 )).toLocaleString()
+    }
+    else
+    {
+        element.innerText = "0"
+    }
+
+    element = document.getElementById('overtime_work_based_month') as HTMLElement
+    if( overtime_work_month > 0)
+    {
+        element.innerText = Math.floor(( overtime_work_month * 60 ) * (payPerHour / 60 )).toLocaleString()
     }
     else
     {

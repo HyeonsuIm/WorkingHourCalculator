@@ -120,6 +120,7 @@
                         <button class="nav-link active" id="nav-current-tab" type="button" data-bs-toggle="tab" data-bs-target="#nav-current" aria-controls="nav-current" role="tab" aria-selected="true">현재</button>
                         <button class="nav-link" id="nav-maxmin-tab" type="button" data-bs-toggle="tab" data-bs-target="#nav-maxmin" aria-controls="nav-maxmin"role="tab" aria-selected="false">최대/최소</button>
                         <button class="nav-link" id="nav-overtime-tab" type="button" data-bs-toggle="tab" data-bs-target="#nav-overtime" aria-controls="nav-overtime" role="tab" aria-selected="false">야근비</button>
+                        <button class="nav-link" id="nav-month-last-tab" type="button" data-bs-toggle="tab" data-bs-target="#nav-month-last" aria-controls="nav-month-last" role="tab" aria-selected="false">월말</button>
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent">
@@ -184,6 +185,27 @@
                                     <td><b>일일 근무 시간</b></td>
                                     <td id='daily_working_hour_overpay_plan'></td>
                                     <td><i class="fa fa-info-circle" data-toggle="tooltip" title='예상 야근비 달성을 위한 일일 야근 시간' style='cursor:help'></i></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="nav-month-last" role="tabpanel" aria-labelledby="nav-month-last-tab">
+                        <div class='side_view_div' id="month_working_plan">
+                            <table class="table">
+                                <tr>
+                                    <td><b>근무 필요 시간(최소)</b></td>
+                                    <td id='remain_min_working_hour'></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='남은 최소 근무 시간' style='cursor:help'></i></td>
+                                </tr>
+                                <tr>
+                                    <td><b>근무 필요 시간(최대)</b></td>
+                                    <td id='remain_max_working_hour'></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='남은 최대 근무 시간' style='cursor:help'></i></td>
+                                </tr>
+                                <tr class="only_current_month">
+                                    <td><b>야근비</b></td>
+                                    <td id='overtime_work_based_month'></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='야근비' style='cursor:help'></i></td>
                                 </tr>
                             </table>
                         </div>

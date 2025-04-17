@@ -6,6 +6,8 @@ let payPerHour = 0;
 let overtime_work_based_current = 0;
 let overtime_work_max = 0;
 let overtime_work_plan = 0;
+let overtime_work_month = 0;
+let total_work_hour_month = 0;
 function render_working_hour(year, month, day) {
     const viewYear = year;
     const viewMonth = month;
@@ -33,6 +35,7 @@ function render_calculated_working_hour(year, month, day, isCurrentMonth) {
     let dayOfWeek = (startDayOfWeek + day - 1) % 7;
     if (isCurrentMonth) {
         [remainWorkingHour, remainedWorkingDayCnt] = GetRemainedWorkingHour(maxWorkingHour, day, GetWorkingDayVal(year, month + 1, day, dayOfWeek), remainedWorkingDayCnt);
+        total_work_hour_month = GetTotalWorkingHour(monthLastDay.getDate());
     }
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, minWorkingHour, remainWorkingHour);
     overtime_work_max = maxWorkingHour - minWorkingHour;
@@ -52,6 +55,10 @@ function render_calculated_working_hour(year, month, day, isCurrentMonth) {
     overtime_work_plan = (maxWorkingHour - working_hour_plan) - minWorkingHour;
     if (overtime_work_plan < 0) {
         overtime_work_plan = 0;
+    }
+    overtime_work_month = total_work_hour_month - minWorkingHour;
+    if (overtime_work_month < 0) {
+        overtime_work_month = 0;
     }
 }
 function GetWorkingDay(monthStartDay, monthLastDay, startDayOfWeek, today_date) {
@@ -116,6 +123,8 @@ function SetAllRemainedWorkingHour(workingDayCntAfterToday, maxWorkingHour, minW
     SetRemainedWorkingHour("daily_working_hour_max", remainedMaxWorkingHour / workingDayCntAfterToday);
     SetRemainedWorkingHour("daily_working_hour_min", remainedMinWorkingHour / workingDayCntAfterToday);
     SetRemainedWorkingHour("daily_working_hour_overpay_plan", expectWorkingHour / workingDayCntAfterToday);
+    SetRemainedWorkingHour("remain_min_working_hour", remainedMinWorkingHour);
+    SetRemainedWorkingHour("remain_max_working_hour", remainedMaxWorkingHour);
 }
 function GetRemainedWorkingHour(maxWorkingHour, currentDay, currentWorkingDayVal, remainWorkingDayCnt) {
     let select = getSelectBase();
@@ -139,7 +148,7 @@ function GetRemainedWorkingHour(maxWorkingHour, currentDay, currentWorkingDayVal
         }
     }
     else {
-        let [hasCurrentDay, totalWorkingHour] = GetTotalWorkingHour(maxWorkingHour, currentDay);
+        let [hasCurrentDay, totalWorkingHour] = GetRemainWorkingHour(maxWorkingHour, currentDay);
         if (hasCurrentDay) {
             return [totalWorkingHour, remainWorkingDayCnt - currentWorkingDayVal];
         }
@@ -149,7 +158,7 @@ function GetRemainedWorkingHour(maxWorkingHour, currentDay, currentWorkingDayVal
     }
     return [0, 0];
 }
-function GetTotalWorkingHour(maxWorkingHour, currentDay) {
+function GetRemainWorkingHour(maxWorkingHour, currentDay) {
     let hasCurrentDay = false;
     let working_hours = GetWorkingHour();
     let total_miniute = 0;
@@ -161,6 +170,14 @@ function GetTotalWorkingHour(maxWorkingHour, currentDay) {
         total_miniute += working_hours[currentDay];
     }
     return [hasCurrentDay, maxWorkingHour - (total_miniute / 60)];
+}
+function GetTotalWorkingHour(currentDay) {
+    let working_hours = GetWorkingHour();
+    let total_miniute = 0;
+    for (let i = 0; i <= currentDay; i++) {
+        total_miniute += working_hours[i];
+    }
+    return total_miniute / 60;
 }
 function GetRemainedWorkingStoreTime() {
     const remainedWorkingHourKey = "remainWorkingHour";
@@ -311,6 +328,13 @@ function renderOvernightPay() {
     element = document.getElementById('overnight_pay_plan');
     if (overtime_work_plan > 0) {
         element.innerText = Math.floor((overtime_work_plan * 60) * (payPerHour / 60)).toLocaleString();
+    }
+    else {
+        element.innerText = "0";
+    }
+    element = document.getElementById('overtime_work_based_month');
+    if (overtime_work_month > 0) {
+        element.innerText = Math.floor((overtime_work_month * 60) * (payPerHour / 60)).toLocaleString();
     }
     else {
         element.innerText = "0";
