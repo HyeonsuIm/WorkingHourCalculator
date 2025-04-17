@@ -44,9 +44,10 @@ function render_calculated_working_hour(year, month, day, isCurrentMonth) {
         overtime_work_based_current = overtime_work_max;
     }
     else {
-        if (overtime_work_based_current < 0) {
-            overtime_work_based_current = 0;
-        }
+        // if( overtime_work_based_current < 0 )
+        // {
+        //     overtime_work_based_current = 0
+        // }
     }
     overtime_work_plan = (maxWorkingHour - working_hour_plan) - minWorkingHour;
     if (overtime_work_plan < 0) {
@@ -292,12 +293,14 @@ function UpdateOvernightPayHour() {
 }
 function renderOvernightPay() {
     let element = document.getElementById('overtime_work_based_current');
-    if (overtime_work_based_current > 0) {
+    // if( overtime_work_based_current > 0)
+    {
         element.innerText = Math.floor((overtime_work_based_current * 60) * (payPerHour / 60)).toLocaleString();
     }
-    else {
-        element.innerText = "0";
-    }
+    // else
+    // {
+    //     element.innerText = "0"
+    // }
     element = document.getElementById('overnight_pay_max');
     if (overtime_work_max > 0) {
         element.innerText = Math.floor((overtime_work_max * 60) * (payPerHour / 60)).toLocaleString();
