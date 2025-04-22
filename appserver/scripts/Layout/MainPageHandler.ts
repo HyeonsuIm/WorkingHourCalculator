@@ -94,7 +94,7 @@ function getSelectBase():string
     let result = localStorage.getItem(key)
     if(result===null)
     {
-        result = "input"
+        result = "calendar"
     }
     return result
 }

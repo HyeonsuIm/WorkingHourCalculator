@@ -67,7 +67,7 @@ function getSelectBase() {
     const key = "select_type";
     let result = localStorage.getItem(key);
     if (result === null) {
-        result = "input";
+        result = "calendar";
     }
     return result;
 }
