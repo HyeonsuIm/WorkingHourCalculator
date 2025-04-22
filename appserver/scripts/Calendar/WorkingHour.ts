@@ -163,8 +163,8 @@ function SetAllRemainedWorkingHour(workingDayCntAfterToday:number, maxWorkingHou
     SetRemainedWorkingHour("daily_working_hour_min", remainedMinWorkingHour / workingDayCntAfterToday)
     SetRemainedWorkingHour("daily_working_hour_overpay_plan", expectWorkingHour / workingDayCntAfterToday)
 
-    SetRemainedWorkingHour("remain_min_working_hour", remainedMinWorkingHour)
-    SetRemainedWorkingHour("remain_max_working_hour", remainedMaxWorkingHour)
+    SetRemainedWorkingHour("remain_min_working_hour", minWorkingHour - total_work_hour_month)
+    SetRemainedWorkingHour("remain_max_working_hour", maxWorkingHour - total_work_hour_month)
 }
 
 function GetRemainedWorkingHour(maxWorkingHour:number, currentDay:number, currentWorkingDayVal:number, remainWorkingDayCnt:number) : [number, number]
