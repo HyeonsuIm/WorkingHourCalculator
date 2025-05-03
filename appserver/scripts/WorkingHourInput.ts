@@ -46,13 +46,19 @@ function inputWorkingHours()
                 working_hour_map[key] = []
             }
             
-            let times = contents[contentIdx+WORKING_HOUR_START_IDX].split(':')
-            let minute = 0;
-            if( times.length == 2 )
+            let timeStr =  contents[contentIdx+WORKING_HOUR_START_IDX]
+            let minute = 0
+            if(timeStr.includes(':'))
             {
-                minute = parseInt(times[0])*60 + parseInt(times[1])
+                let times = timeStr.split(':')
+                minute = parseInt(times[0]) * 60 + parseInt(times[1])
+            }
+            else
+            {
+                minute = parseInt(timeStr) * 60
             }
             working_hour_map[key].push([date.getDate(), minute])
+            
         }
     }
     UpdateWorkingHours(working_hour_map, null)

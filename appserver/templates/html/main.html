@@ -262,7 +262,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="UpdateDayInformationFromPopup()" data-bs-dismiss ='modal'>Save changes</button>
+                        <button type="button" class="btn btn-primary" onclick="UpdateDayInformationFromPopup()" data-bs-dismiss ='modal' id="save_working_change">Save changes</button>
                     </div>
                 </div>
             </div>
@@ -286,13 +286,21 @@
     </body>
     <script>
         $(document).ready(function(){
+            document.getElementById("work_hour_day").addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault(); // 폼 제출 방지 (있을 경우)
+                    document.getElementById("save_working_change").click(); // 버튼 클릭 시뮬레이션
+                }
+            });
+            $('#day_modal').on('shown.bs.modal', function () {
+                $('#work_hour_day').trigger('focus');
+            });
             $('dt').click(function()
             {
                 $('dd').addClass('hidden');
                 $(this).next().removeClass('hidden');
             });
             $('[data-toggle="tooltip"]').tooltip();
-            //$('work_input').onclick=
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     {% for message in messages %}

@@ -108,10 +108,14 @@ function UpdateDayInformationFromPopup() {
     let workingHourElement = document.getElementById('work_hour_day');
     let working_hour = workingHourElement.value;
     if (working_hour != '') {
-        let times = working_hour.split(':');
+        let timeStr = working_hour;
         let minute = 0;
-        if (times.length == 2) {
+        if (timeStr.includes(':')) {
+            let times = timeStr.split(':');
             minute = parseInt(times[0]) * 60 + parseInt(times[1]);
+        }
+        else {
+            minute = parseInt(timeStr) * 60;
         }
         let year_month_day = keyVal.split('-');
         let key = year_month_day[0] + "-" + year_month_day[1].padStart(2, "0");

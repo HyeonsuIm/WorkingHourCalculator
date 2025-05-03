@@ -90,11 +90,14 @@ function get_calendar_content_elements(startDayOfWeek, lastDay, currentyear, cur
             weekWorkingHour = 0;
         }
     }
-    // 뒤쪽 빈칸
-    for (; dayOfWeek < 6; dayOfWeek++) {
-        elementStr += "<td id='month-day-empty'></td>";
+    // 뒤쪽 빈칸이 있는 경우
+    if (dayOfWeek < 6) {
+        for (; dayOfWeek < 6; dayOfWeek++) {
+            elementStr += "<td id='month-day-empty'></td>";
+        }
+        elementStr += "<td><br><h6>" + MakeWorkingHourMiniuteString(weekWorkingHour) + "</h6></td>";
     }
-    elementStr += "<td></td></tr></table>";
+    elementStr += "</tr></table>";
     return elementStr;
 }
 function render_calendar(year, month, day) {

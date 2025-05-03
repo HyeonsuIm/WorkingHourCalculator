@@ -59,11 +59,10 @@ function displayModal(element) {
         {
             holidayElement.checked=true
         }
-        
     } 
 
     let workingHours = GetWorkingHour()
-    let working_hour_element = $("#work_hour_day")
+    let working_hour_element = $("#work_hour_day") as JQuery<HTMLInputElement>
     let day = Number(year_month_day[2])
     if(workingHours[day]){
         let str = String(Math.floor(workingHours[day] / 60)) + ":" + String(workingHours[day] % 60).padStart(2,'0')
@@ -130,11 +129,16 @@ function UpdateDayInformationFromPopup() {
     let working_hour = workingHourElement.value
     if(working_hour != '')
     {
-        let times = working_hour.split(':')
+        let timeStr =  working_hour;
         let minute = 0;
-        if( times.length == 2 )
+        if(timeStr.includes(':'))
         {
-            minute = parseInt(times[0])*60 + parseInt(times[1])
+            let times = timeStr.split(':')
+            minute = parseInt(times[0]) * 60 + parseInt(times[1])
+        }
+        else
+        {
+            minute = parseInt(timeStr) * 60
         }
         let year_month_day = keyVal.split('-')
 

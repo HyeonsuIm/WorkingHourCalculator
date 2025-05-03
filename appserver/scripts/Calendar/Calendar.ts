@@ -118,12 +118,16 @@ function get_calendar_content_elements(startDayOfWeek:number, lastDay:number, cu
         }
     }
 
-    // 뒤쪽 빈칸
-    for(;dayOfWeek < 6;dayOfWeek++)
+    // 뒤쪽 빈칸이 있는 경우
+    if( dayOfWeek < 6)
     {
-        elementStr += "<td id='month-day-empty'></td>"
+        for(;dayOfWeek < 6;dayOfWeek++)
+        {
+            elementStr += "<td id='month-day-empty'></td>"
+        }
+        elementStr += "<td><br><h6>" + MakeWorkingHourMiniuteString(weekWorkingHour) + "</h6></td>"
     }
-    elementStr += "<td></td></tr></table>"
+    elementStr += "</tr></table>"
 
     return elementStr;
 }

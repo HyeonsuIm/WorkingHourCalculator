@@ -33,10 +33,14 @@ function inputWorkingHours() {
             if (false == working_hour_map.hasOwnProperty(key)) {
                 working_hour_map[key] = [];
             }
-            let times = contents[contentIdx + WORKING_HOUR_START_IDX].split(':');
+            let timeStr = contents[contentIdx + WORKING_HOUR_START_IDX];
             let minute = 0;
-            if (times.length == 2) {
+            if (timeStr.includes(':')) {
+                let times = timeStr.split(':');
                 minute = parseInt(times[0]) * 60 + parseInt(times[1]);
+            }
+            else {
+                minute = parseInt(timeStr) * 60;
             }
             working_hour_map[key].push([date.getDate(), minute]);
         }
