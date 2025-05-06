@@ -48,7 +48,7 @@ def show_main_view():
     holidays = get_holiday_lists(date.year)
     log = LogHandler(session_maker, member_id, request.remote_addr, 'Access User')
     print_log(f"Access User : {request.remote_addr}, {user_id}")
-    log.insertLog()
+    #log.insertLog()
     
     return render_template('html/main.html', data=holidays, userId=user_id)
 
@@ -87,8 +87,8 @@ def confirm_log_in():
                 flash('로그인이 성공하였습니다.')
 
                 resp = make_response(redirect(url_for('show_main_view')))
-                resp.set_cookie('member_id', str(member_id), max_age=3600*12)
-                resp.set_cookie('user_id', userid, max_age=3600*12)
+                resp.set_cookie('member_id', str(member_id), max_age=3600*24*30)
+                resp.set_cookie('user_id', userid, max_age=3600*24*30)
 
                 return resp
             else:
@@ -143,7 +143,20 @@ def get_holidays():
 def get_holiday_lists(year):
     """ Get holidays"""
     holiday_list = ['{0:04d}-{1:02d}-{2:02d}'.format(key.year, key.month, key.day) for key in KR(years=year).keys()]
-    if year == 2023:
+    if year == 2025:
+        holiday_list.append("2025-01-27")
+        holiday_list.append("2025-03-03")
+        holiday_list.append("2025-05-06")
+        holiday_list.append("2025-06-03")
+        holiday_list.append("2025-10-08")
+    elif year == 2024:
+        holiday_list.append("2024-02-13")
+        holiday_list.append("2024-04-10")
+        holiday_list.append("2024-05-06")
+        holiday_list.append("2024-07-31")
+        holiday_list.append("2024-08-01")
+        holiday_list.append("2024-08-02")
+    elif year == 2023:
         holiday_list.append("2023-01-24")
         holiday_list.append("2023-05-29")
         holiday_list.append("2023-07-31")
