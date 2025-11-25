@@ -281,13 +281,12 @@ function updateWorkingPlan()
     {
         let workingPlan = workingPlanElement.value
 
-        if( "-1" == workingPlan )
+        if( "" == workingPlan )
         {
             let workingPlan = localStorage.getItem('working_plan')
             if(workingPlan)
             {
                 workingPlanElement.value = workingPlan
-                workingPlan = workingPlanElement.value
             }
         }
         else
@@ -306,13 +305,12 @@ function updateWorkingOverpayPlan()
     {
         let overpayPlan = overpayElement.value
 
-        if( "-1" == overpayPlan )
+        if( "" == overpayPlan )
         {
             let overpay = localStorage.getItem('working_overpay')
             if(overpay)
             {
                 overpayElement.value = overpay
-                overpayPlan = overpayElement.value
             }
         }
         else

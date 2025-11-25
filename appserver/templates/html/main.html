@@ -128,27 +128,27 @@
                         <div class='side_view_div' id="month_working_input">
                             <table class="table" >
                                 <tr>
-                                    <td colspan='2'><input type='number' step='any' min='0' value="-1" class='form-control' placeholder='목표 시간(ex. 20)' id='working_plan' onchange='UpdateAllViews()'/></td>
-                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='남길 목표시간 입력' style='cursor:help'></i> </td>
+                                    <td colspan='2'><input type='number' step='any' min='0' value="" class='form-control' placeholder='목표 시간(ex. 20)' id='working_plan' onchange='UpdateAllViews()'/></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='목표시간 입력(남길 시간)' style='cursor:help'></i> </td>
                                 </tr>
                             </table>
                         </div>
                         <div class='side_view_div' id="month_working_plan">
                             <table class="table">
                                 <tr>
-                                    <td><b>근무 필요 시간</b></td>
+                                    <td><b>일일 근무 시간</b></td>
                                     <td id='daily_working_hour_plan'></td>
-                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='입력한 근무시간 기준 평균 근로필요 시간' style='cursor:help'></i></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='목표 달성을 위해 매일 근무해야 하는 시간' style='cursor:help'></i></td>
                                 </tr>
                                 <tr class="only_current_month">
-                                    <td><b>현재 야근비</b></td>
+                                    <td><b>현재 달성 야근비</b></td>
                                     <td id='overtime_work_based_current'></td>
-                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='일일 8시간 근무 기준 금일 퇴근 했을 때 야근비' style='cursor:help'></i></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" data-html="true" title="현재까지 근무한 야근비<br>( 총 근무시간 / 지난 working day ) * 시급" style='cursor:help'></i></td>
                                 </tr>
                                 <tr>
-                                    <td><b>목표시간 야근비</b></td>
+                                    <td><b>목표시간 달성 시 야근비</b></td>
                                     <td id='overnight_pay_plan'></td>
-                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='계획 근무시간 기준 야근비' style='cursor:help'></i></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='목표 시간의 야근비' style='cursor:help'></i></td>
                                 </tr>
                             </table>
                         </div>
@@ -159,17 +159,17 @@
                                 <tr>
                                     <td><b>최소 일일 근무 시간</b></td>
                                     <td id='daily_working_hour_min'></td>
-                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='최소 근무시간 기준 평균 근로필요 시간' style='cursor:help'></i></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='최소 시간 달성을 위해 매일 근무해야 하는 시간' style='cursor:help'></i></td>
                                 </tr>
                                 <tr>
                                     <td><b>최대 일일 근무 시간</b></td>
                                     <td id='daily_working_hour_max'></td>
-                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='최대 근무시간 기준 평균 근로필요 시간' style='cursor:help'></i></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='최대 시간 달성을 위해 매일 근무해야 하는 시간' style='cursor:help'></i></td>
                                 </tr>
                                 <tr>
                                     <td><b>최대근무 야근비</b></td>
                                     <td id='overnight_pay_max'></td>
-                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='계획 근무시간 기준 야근비' style='cursor:help'></i></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='최대 시간 달성 시 야근비' style='cursor:help'></i></td>
                                 </tr>
                             </table>
                         </div>
@@ -178,13 +178,13 @@
                         <div class='side_view_div' id="month_working_overtime">
                             <table class="table">
                                 <tr>
-                                    <td colspan='2'><input type='number' step='any' min='0' value="-1" class='form-control' placeholder='예상 야근비' id='working_overpay' onchange='UpdateAllViews()'/></td>
+                                    <td colspan='2'><input type='number' step='any' min='0' value="" class='form-control' placeholder='예상 야근비' id='working_overpay' onchange='UpdateAllViews()'/></td>
                                     <td><i class="fa fa-info-circle" data-toggle="tooltip" title='예상 야근비' style='cursor:help'></i> </td>
                                 </tr>
                                 <tr>
                                     <td><b>일일 근무 시간</b></td>
                                     <td id='daily_working_hour_overpay_plan'></td>
-                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='예상 야근비 달성을 위한 일일 야근 시간' style='cursor:help'></i></td>
+                                    <td><i class="fa fa-info-circle" data-toggle="tooltip" title='목표 달성을 위한 매일 근무해야 하는 시간' style='cursor:help'></i></td>
                                 </tr>
                             </table>
                         </div>
@@ -193,12 +193,12 @@
                         <div class='side_view_div' id="month_working_plan">
                             <table class="table">
                                 <tr>
-                                    <td><b>근무 필요 시간(최소)</b></td>
+                                    <td><b>남은 근무 시간(최소)</b></td>
                                     <td id='remain_min_working_hour'></td>
                                     <td><i class="fa fa-info-circle" data-toggle="tooltip" title='남은 최소 근무 시간' style='cursor:help'></i></td>
                                 </tr>
                                 <tr>
-                                    <td><b>근무 필요 시간(최대)</b></td>
+                                    <td><b>남은 근무 시간(최대)</b></td>
                                     <td id='remain_max_working_hour'></td>
                                     <td><i class="fa fa-info-circle" data-toggle="tooltip" title='남은 최대 근무 시간' style='cursor:help'></i></td>
                                 </tr>
