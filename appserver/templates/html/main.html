@@ -297,7 +297,7 @@
                     UpdateDayInformationFromPopup();
 
                     const targetIdValue = document.getElementById("keyVal").value;
-                    const elements = document.querySelectorAll('#month-day');
+                    const elements = document.querySelectorAll('#month-day, #month-day-today');
 
                     // 2. data-id 가 targetIdValue 인 element 찾기
                     let targetIndex = -1;
@@ -310,10 +310,7 @@
                     if (targetIndex !== -1)
                     {
                         const nextElement = elements[targetIndex + 1] || null;
-                        document.getElementById("keyVal").value = nextElement.dataset.id;
-                        // 저장 후 모달 다시 열기 (Bootstrap 기준)
-                        // setTimeout(function () {
-                        // }, 200);
+                        UpdateModalDatas(nextElement.getAttribute('data-id'))
                     }
                 }
             });

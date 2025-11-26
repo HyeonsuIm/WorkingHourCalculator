@@ -4,11 +4,16 @@ let displayDateDay = 1
 
 function displayModal(element) {
     var keyVal = element.getAttribute('data-id');
-
-    let year_month_day = keyVal.split('-')
+    UpdateModalDatas(keyVal);
     $(".modal-body #keyVal").val(keyVal)
+    $('#day_modal').modal('show')
+}
 
-    const date = new Date(year_month_day[0], Number(year_month_day[1])-1, year_month_day[2])
+function UpdateModalDatas(keyVal : string)
+{
+    let year_month_day = keyVal.split('-').map(Number)
+
+    const date = new Date(year_month_day[0], year_month_day[1]-1, year_month_day[2])
     let is_woring_day=false
     if(IsCommonWorkingDay(year_month_day[0], year_month_day[1], year_month_day[2], date.getDay())) is_woring_day=true
 
@@ -72,7 +77,6 @@ function displayModal(element) {
         working_hour_element.val("")
         working_hour_element.attr('placeholder', '10:00 or 10')
     }
-    $('#day_modal').modal('show')
 }
 
 function UpdateGlobalDateInformation() {
