@@ -3,14 +3,13 @@ let displayDateMonth = 1
 let displayDateDay = 1
 
 function displayModal(element) {
-    var keyVal = element.getAttribute('data-id');
-    UpdateModalDatas(keyVal);
-    $(".modal-body #keyVal").val(keyVal)
+    UpdateModalDatas(element.getAttribute('data-id'));
     $('#day_modal').modal('show')
 }
 
 function UpdateModalDatas(keyVal : string)
 {
+    $(".modal-body #keyVal").val(keyVal)
     let year_month_day = keyVal.split('-').map(Number)
 
     const date = new Date(year_month_day[0], year_month_day[1]-1, year_month_day[2])
