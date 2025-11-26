@@ -35,8 +35,8 @@ function render_calculated_working_hour(year, month, day, isCurrentMonth) {
     let dayOfWeek = (startDayOfWeek + day - 1) % 7;
     if (isCurrentMonth) {
         [remainWorkingHour, remainedWorkingDayCnt] = GetRemainedWorkingHour(maxWorkingHour, day, GetWorkingDayVal(year, month + 1, day, dayOfWeek), remainedWorkingDayCnt);
-        total_work_hour_month = GetTotalWorkingHour(monthLastDay.getDate());
     }
+    total_work_hour_month = GetTotalWorkingHour(monthLastDay.getDate());
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, minWorkingHour, remainWorkingHour);
     overtime_work_max = maxWorkingHour - minWorkingHour;
     let normal_work_hour = (totalWorkingDayCnt - remainedWorkingDayCnt) * 8;

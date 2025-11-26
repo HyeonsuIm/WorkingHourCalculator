@@ -46,8 +46,8 @@ function render_calculated_working_hour(year:number, month:number, day:number, i
     if(isCurrentMonth)
     {
         [remainWorkingHour, remainedWorkingDayCnt] = GetRemainedWorkingHour(maxWorkingHour, day, GetWorkingDayVal(year, month+1, day, dayOfWeek), remainedWorkingDayCnt);
-        total_work_hour_month = GetTotalWorkingHour(monthLastDay.getDate());
     }
+    total_work_hour_month = GetTotalWorkingHour(monthLastDay.getDate());
     SetAllRemainedWorkingHour(remainedWorkingDayCnt, maxWorkingHour, minWorkingHour, remainWorkingHour)
     
     overtime_work_max = maxWorkingHour - minWorkingHour

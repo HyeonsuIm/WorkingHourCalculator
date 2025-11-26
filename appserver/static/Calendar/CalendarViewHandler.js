@@ -58,7 +58,7 @@ function displayModal(element) {
     }
     else {
         working_hour_element.val("");
-        working_hour_element.attr('placeholder', '10:00');
+        working_hour_element.attr('placeholder', '10:00 or 10');
     }
     $('#day_modal').modal('show');
 }
