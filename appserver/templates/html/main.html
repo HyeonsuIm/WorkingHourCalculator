@@ -307,10 +307,23 @@
                         }
                     });
 
+
                     if (targetIndex !== -1)
                     {
-                        const nextElement = elements[targetIndex + 1] || null;
-                        UpdateModalDatas(nextElement.getAttribute('data-id'))
+
+                        if(event.shiftKey)
+                        {
+                            targetIndex -= 1;
+                        }
+                        else
+                        {
+                            targetIndex += 1
+                        }
+                        const nextElement = elements[targetIndex] || null;
+                        if(nextElement)
+                        {
+                            UpdateModalDatas(nextElement.getAttribute('data-id'))
+                        }
                     }
                 }
             });
