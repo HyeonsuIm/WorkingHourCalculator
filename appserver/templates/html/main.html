@@ -296,7 +296,7 @@
                     event.preventDefault(); // 폼 제출 방지 (있을 경우)
                     UpdateDayInformationFromPopup();
 
-                    const targetIdValue = document.getElementById("keyVal").val();
+                    const targetIdValue = document.getElementById("keyVal").value;
                     const elements = document.querySelectorAll('#month-day');
 
                     // 2. data-id 가 targetIdValue 인 element 찾기
@@ -310,7 +310,7 @@
                     if (targetIndex !== -1)
                     {
                         const nextElement = elements[targetIndex + 1] || null;
-                        document.getElementById("keyVal").val("value", nextElement.dataset.id);
+                        document.getElementById("keyVal").value = nextElement.dataset.id;
                         // 저장 후 모달 다시 열기 (Bootstrap 기준)
                         // setTimeout(function () {
                         // }, 200);
