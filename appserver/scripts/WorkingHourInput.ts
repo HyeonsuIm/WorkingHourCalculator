@@ -11,6 +11,14 @@ function MakeSplitStr(str:string):string
         {
             result+= str[i] + ';'
         }
+        else if( str[i-1] != ' ' && str[i] == ' ')
+        {
+            result += ';'
+        }
+        else if(str[i-1] == ' ' && str[i] == ' ')
+        {
+            result+= str[i] + ';'
+        }
         else
         {
             result += str[i]

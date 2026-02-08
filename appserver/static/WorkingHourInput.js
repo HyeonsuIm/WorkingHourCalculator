@@ -7,6 +7,12 @@ function MakeSplitStr(str) {
         else if (str[i - 1] == '\t' && str[i] == '\t') {
             result += str[i] + ';';
         }
+        else if (str[i - 1] != ' ' && str[i] == ' ') {
+            result += ';';
+        }
+        else if (str[i - 1] == ' ' && str[i] == ' ') {
+            result += str[i] + ';';
+        }
         else {
             result += str[i];
         }
