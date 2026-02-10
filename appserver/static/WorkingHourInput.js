@@ -1,24 +1,3 @@
-function MakeSplitStr(str) {
-    let result = "";
-    for (let i = 1; i < str.length; i++) {
-        if (str[i - 1] != '\t' && str[i] == '\t') {
-            result += ';';
-        }
-        else if (str[i - 1] == '\t' && str[i] == '\t') {
-            result += str[i] + ';';
-        }
-        else if (str[i - 1] != ' ' && str[i] == ' ') {
-            result += ';';
-        }
-        else if (str[i - 1] == ' ' && str[i] == ' ') {
-            result += str[i] + ';';
-        }
-        else {
-            result += str[i];
-        }
-    }
-    return result;
-}
 function inputWorkingHours() {
     let workingHourInputElement = document.getElementById("working_hour_input");
     let multiStr = workingHourInputElement.value;
@@ -29,7 +8,7 @@ function inputWorkingHours() {
     let headers = strs[0].split("\t");
     let working_hour_map = {};
     for (let strIdx = 1; strIdx < strs.length; strIdx++) {
-        let contents = MakeSplitStr(strs[strIdx]).split(";");
+        let contents = strs[strIdx].split('/\t+/');
         let startDate = contents[19];
         let yearMonthDay = startDate.split('-');
         const WORKING_HOUR_START_IDX = 20;
