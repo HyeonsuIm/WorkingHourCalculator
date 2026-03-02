@@ -8,7 +8,7 @@ function inputWorkingHours() {
     let headers = strs[0].split("\t");
     let working_hour_map = {};
     for (let strIdx = 1; strIdx < strs.length; strIdx++) {
-        let contents = strs[strIdx].split('/\t+');
+        let contents = strs[strIdx].split(/\s+/);
         let startDate = contents[19];
         let yearMonthDay = startDate.split('-');
         const WORKING_HOUR_START_IDX = 20;
