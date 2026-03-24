@@ -5,13 +5,15 @@ function inputWorkingHours() {
     if (strs.length < 2) {
         return;
     }
-    let headers = strs[0].split("\t");
+    let headers = strs[0].split('\t');
     let working_hour_map = {};
     for (let strIdx = 1; strIdx < strs.length; strIdx++) {
         let contents = strs[strIdx].split('\t');
-        let startDate = contents[19];
+        const dateRegex = /^\d{2}-\d{2}-\d{2}$/;
+        const dateIndex = contents.findIndex(item => dateRegex.test(item));
+        let startDate = contents[dateIndex];
         let yearMonthDay = startDate.split('-');
-        const WORKING_HOUR_START_IDX = 20;
+        let WORKING_HOUR_START_IDX = dateIndex + 1;
         for (let contentIdx = 0; contentIdx < 7; contentIdx++) {
             let date = new Date(2000 + Number(yearMonthDay[0]), Number(yearMonthDay[1]) - 1, Number(yearMonthDay[2]) + contentIdx);
             let key = String(date.getFullYear()) + "-" + String(date.getMonth() + 1).padStart(2, "0");
