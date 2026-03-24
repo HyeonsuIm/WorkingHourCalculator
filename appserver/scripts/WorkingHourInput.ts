@@ -14,10 +14,16 @@ function inputWorkingHours()
     {
         let contents = strs[strIdx].split('\t')
         const dateRegex = /^\d{2}-\d{2}-\d{2}$/;
+        const dateIndices = contents.reduce((acc: number[], cur, idx) => {
+            if (dateRegex.test(cur)) acc.push(idx);
+                return acc;
+            }, []);
+
+        const secondDateIdx = dateIndices.length >= 2 ? dateIndices[1] : 19;
         const dateIndex = contents.findIndex(item => dateRegex.test(item));
-        let startDate = contents[dateIndex]
+        let startDate = contents[secondDateIdx]
         let yearMonthDay = startDate.split('-')
-        let WORKING_HOUR_START_IDX = dateIndex+1
+        let WORKING_HOUR_START_IDX = secondDateIdx+1
         for(let contentIdx=0;contentIdx<7;contentIdx++)
         {
             let date = new Date(2000+Number(yearMonthDay[0]), Number(yearMonthDay[1])-1, Number(yearMonthDay[2]) + contentIdx)
