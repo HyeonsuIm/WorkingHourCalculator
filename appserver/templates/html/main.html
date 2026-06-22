@@ -295,13 +295,7 @@
         </div>
     <script type="module" src="/static/dist/main.js"></script>
     <script>
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-        window.displayLoginPopup("{{message}}")
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+        window._flashMessages = [{% with messages = get_flashed_messages() %}{% if messages %}{% for message in messages %}"{{message}}"{% if not loop.last %},{% endif %}{% endfor %}{% endif %}{% endwith %}];
     </script>
     </body>
 </html>

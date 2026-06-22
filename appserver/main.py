@@ -123,9 +123,12 @@ def logout():
     user_id = request.cookies.get('user_id')
     member_id = request.cookies.get('member_id')
     if user_id and member_id :
-        log = LogHandler(session_maker, member_id, request.remote_addr, 'Logout User')
-        print_log(f"Logout User : {member_id}")
-        log.insertLog()
+        try:
+            log = LogHandler(session_maker, member_id, request.remote_addr, 'Logout User')
+            print_log(f"Logout User : {member_id}")
+            log.insertLog()
+        except Exception as e:
+            print_log(f"Logout log error (ignored): {e}")
 
     resp = make_response(redirect(url_for('show_main_view', userId=None)))
     resp.delete_cookie('member_id')

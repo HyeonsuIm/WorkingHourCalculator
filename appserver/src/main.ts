@@ -22,6 +22,7 @@ declare global {
         UpdateModalDatas: (keyVal: string) => void
         UpdateGlobalDateInformation: () => void
         UpdateAllLocalStorage: () => void
+        _flashMessages?: string[]
     }
 }
 
@@ -100,3 +101,9 @@ document.addEventListener('DOMContentLoaded', function() {
 UpdateAllLocalStorage()
 UpdateGlobalDateInformation()
 UpdateAllViews()
+
+// Process flash messages stored before module loaded
+if (window._flashMessages) {
+    window._flashMessages.forEach(msg => displayLoginPopup(msg))
+    window._flashMessages = []
+}
