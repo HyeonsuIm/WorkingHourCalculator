@@ -1,4 +1,4 @@
-import { holidayList, vacationList, half_vacationList, holidayWorkingList } from '../Datas/DataStorageHandler'
+import { holidayMap, vacationList, half_vacationList, holidayWorkingList } from '../Datas/DataStorageHandler'
 
 export function MakeWorkingHourMiniuteString(miniute: number): string {
     if (miniute) { return Math.floor((miniute / 60)) + ":" + String(miniute % 60).padStart(2, '0') }
@@ -7,7 +7,12 @@ export function MakeWorkingHourMiniuteString(miniute: number): string {
 
 export function IsHoliday(year: number, month: number, date: number): boolean {
     let dateStr = year + '-' + String(month).padStart(2, '0') + '-' + String(date).padStart(2, '0')
-    return -1 != holidayList.indexOf(dateStr)
+    return dateStr in holidayMap
+}
+
+export function GetHolidayName(year: number, month: number, date: number): string {
+    let dateStr = year + '-' + String(month).padStart(2, '0') + '-' + String(date).padStart(2, '0')
+    return holidayMap[dateStr] ?? ''
 }
 
 export function IsVacation(year: number, month: number, date: number): boolean {

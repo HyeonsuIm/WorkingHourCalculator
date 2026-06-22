@@ -236,6 +236,20 @@
     border-color: #99f6e4;
 }
 
+/* 공휴일 이름 뱃지 */
+.holiday-name {
+    display: block;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--holiday);
+    line-height: 1.2;
+    margin-top: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
 /* 주간 합계 열 h6 */
 #calendar-table tr td:not([id]) h6 {
     color: var(--primary);

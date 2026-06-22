@@ -134,3 +134,6 @@ dbdata/
 # Node
 node_modules/
 static/dist/
+
+# Holiday cache
+.holiday_cache.json

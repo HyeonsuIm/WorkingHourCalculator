@@ -1,6 +1,9 @@
 """Web server main"""
 from logging import basicConfig, info, INFO
 from json import loads
+import json
+import os
+import requests as ext_requests
 
 from datetime import datetime, timezone, timedelta
 from flask import Flask, render_template, request, flash, url_for, redirect, make_response, jsonify
@@ -9,6 +12,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 from holidays import KR
+
+HOLIDAY_CACHE_FILE = os.path.join(os.path.dirname(__file__), '.holiday_cache.json')
 
 from flaskServer.Database.LogHandler import LogHandler
 from flaskServer.Database.UserHandler import UserHandler
@@ -136,44 +141,97 @@ def logout():
 
     return resp
 
-@app.route("/api/request/holidays", methods=['GET'])
+@app.route("/api/request/public-days", methods=['GET'])
 def get_holidays():
     """Get holiday lists"""
     year = int(request.args.get('year'))
     return get_holiday_lists(year)
 
 
-def get_holiday_lists(year):
-    """ Get holidays"""
-    holiday_list = ['{0:04d}-{1:02d}-{2:02d}'.format(key.year, key.month, key.day) for key in KR(years=year).keys()]
-    if year == 2025:
-        holiday_list.append("2025-01-27")
-        holiday_list.append("2025-03-03")
-        holiday_list.append("2025-05-06")
-        holiday_list.append("2025-06-03")
-        holiday_list.append("2025-10-08")
-    elif year == 2024:
-        holiday_list.append("2024-02-13")
-        holiday_list.append("2024-04-10")
-        holiday_list.append("2024-05-06")
-        holiday_list.append("2024-07-31")
-        holiday_list.append("2024-08-01")
-        holiday_list.append("2024-08-02")
-    elif year == 2023:
-        holiday_list.append("2023-01-24")
-        holiday_list.append("2023-05-29")
-        holiday_list.append("2023-07-31")
-        holiday_list.append("2023-08-01")
-        holiday_list.append("2023-08-02")
-    elif year == 2022:
-        holiday_list.append("2022-03-09")
-        holiday_list.append("2022-06-01")
-        holiday_list.append("2022-08-01")
-        holiday_list.append("2022-08-02")
-        holiday_list.append("2022-08-03")
+def _load_cache():
+    try:
+        with open(HOLIDAY_CACHE_FILE, 'r') as f:
+            return json.load(f)
+    except Exception:
+        return {}
 
-    holiday_list = sorted(holiday_list)
-    return jsonify({'holidays':holiday_list})
+def _save_cache(cache):
+    try:
+        with open(HOLIDAY_CACHE_FILE, 'w') as f:
+            json.dump(cache, f)
+    except Exception as e:
+        print_log(f"Holiday cache write error: {e}")
+
+def _is_cache_valid(cache, year):
+    entry = cache.get(str(year))
+    if not entry:
+        return False
+    cached_at = datetime.fromisoformat(entry['cached_at'])
+    ttl = timedelta(days=app.config.get('HOLIDAY_CACHE_TTL_DAYS', 7))
+    return datetime.now() - cached_at < ttl
+
+def _fetch_from_api(year):
+    """공공데이터포털 특일정보 API로 공휴일 조회. {날짜: 이름} dict 반환"""
+    url = "http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo"
+    api_key = app.config.get('HOLIDAY_API_KEY', '')
+    holiday_map = {}
+
+    for month in range(1, 13):
+        params = {
+            'serviceKey': api_key,
+            'solYear': year,
+            'solMonth': f'{month:02d}',
+            'numOfRows': 20,
+            '_type': 'json',
+        }
+        try:
+            res = ext_requests.get(url, params=params, timeout=5)
+            items = res.json().get('response', {}).get('body', {}).get('items', '') or {}
+            item_list = items.get('item', [])
+            if isinstance(item_list, dict):
+                item_list = [item_list]
+            for item in item_list:
+                if item.get('isHoliday') == 'Y':
+                    d = str(item['locdate'])
+                    date_str = f"{d[:4]}-{d[4:6]}-{d[6:]}"
+                    holiday_map[date_str] = item.get('dateName', '')
+        except Exception as e:
+            print_log(f"Holiday API error (month={month}): {e}")
+            return None  # API 실패 시 None 반환 → fallback
+
+    return holiday_map
+
+def _fetch_fallback(year):
+    """holidays 라이브러리 기반 fallback. {날짜: 이름} dict 반환"""
+    return {
+        '{:04d}-{:02d}-{:02d}'.format(k.year, k.month, k.day): v
+        for k, v in KR(years=year).items()
+    }
+
+def get_holiday_lists(year):
+    cache = _load_cache()
+
+    if not _is_cache_valid(cache, year):
+        api_key = app.config.get('HOLIDAY_API_KEY', '')
+        if api_key:
+            print_log(f"Fetching holidays from API for {year}")
+            holiday_map = _fetch_from_api(year)
+            if holiday_map is None:
+                print_log(f"API failed, using fallback for {year}")
+                holiday_map = _fetch_fallback(year)
+        else:
+            holiday_map = _fetch_fallback(year)
+
+        cache[str(year)] = {
+            'holidays': holiday_map,
+            'cached_at': datetime.now().isoformat(),
+        }
+        _save_cache(cache)
+        print_log(f"Holiday cache updated for {year} ({len(holiday_map)} days)")
+    else:
+        holiday_map = cache[str(year)]['holidays']
+
+    return jsonify({'holidays': holiday_map})
 
 @app.route("/api/request/update_vacation", methods=['POST'])
 def update_vacation():

@@ -2,7 +2,7 @@ import axios from 'axios'
 import { UpdateAllViews } from '../Calendar/CalendarViewHandler'
 
 export let working_hours: number[] = [];
-export let holidayList: string[] = [];
+export let holidayMap: Record<string, string> = {};
 export let vacationList: string[] = [];
 export let half_vacationList: string[] = [];
 export let holidayWorkingList: string[] = [];
@@ -14,8 +14,8 @@ export const getCookie = function(name: string) {
 
 export async function RequestHolidays(year: number) {
     try {
-        const response = await axios.get('/api/request/holidays', { params: { year: year } });
-        holidayList = response.data['holidays']
+        const response = await axios.get('/api/request/public-days', { params: { year: year } });
+        holidayMap = response.data['holidays']
         UpdateAllViews()
     } catch(error) { console.log(error); }
 }

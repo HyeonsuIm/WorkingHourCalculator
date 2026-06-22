@@ -14,3 +14,6 @@ db = {
 }
 
 DB_URL = f"mysql+mysqlconnector://{db['user']}:{db['password']}@{db['host']}:{db['port']}/{db['database']}?charset=utf8"
+
+HOLIDAY_API_KEY = "8e6b8f9cbd1238c89bba74a738188991a92966613816ed0bef033ce40ce2a468"  # data.go.kr API key
+HOLIDAY_CACHE_TTL_DAYS = 7

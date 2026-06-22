@@ -1,4 +1,4 @@
-import { MakeWorkingHourMiniuteString, IsHolidayWorking, IsHoliday, IsVacation, IsHalfVacation } from './CalendarAPI'
+import { MakeWorkingHourMiniuteString, IsHolidayWorking, IsHoliday, IsVacation, IsHalfVacation, GetHolidayName } from './CalendarAPI'
 import { GetCommonWorkingDay, GetVacations, GetWorkingHours, GetPayPerHour } from './WorkingHour'
 import { GetWorkingHour, RequestHolidays, RequestWorkingInfos } from '../Datas/DataStorageHandler'
 import { GetDisplayDate, SetDisplayDate } from './CalendarViewHandler'
@@ -52,7 +52,10 @@ function get_calendar_content_elements(startDayOfWeek: number, lastDay: number, 
         if (displayDay == i) idStr += "'month-day-today'"
         else idStr += "'month-day'"
         weekWorkingHour += workingHours[i]
-        elementStr += "<td " + idStr + " " + classStr + " " + onclickStr + " " + otherAttr + " " + dataId + " >" + i + "<br><h6>" + MakeWorkingHourMiniuteString(workingHours[i]) + "</h6></td>"
+        const holidayName = (IsHoliday(currentyear, currentMonth, i) || IsHolidayWorking(currentyear, currentMonth, i))
+            ? GetHolidayName(currentyear, currentMonth, i) : ''
+        const holidayLabel = holidayName ? `<span class="holiday-name">${holidayName}</span>` : ''
+        elementStr += "<td " + idStr + " " + classStr + " " + onclickStr + " " + otherAttr + " " + dataId + " >" + i + holidayLabel + "<br><h6>" + MakeWorkingHourMiniuteString(workingHours[i]) + "</h6></td>"
         if (dayOfWeek == 6) {
             elementStr += "<td><br><h6>" + MakeWorkingHourMiniuteString(weekWorkingHour) + "</h6></td>"
             elementStr += "</tr><tr>"
