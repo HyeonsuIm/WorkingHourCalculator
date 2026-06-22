@@ -17,6 +17,9 @@ services:
             - mysql
         ports:
             - "19999:19999"
+        links:
+            - mysql:dbserver
+
 
     nginx:
         build: ./nginx
