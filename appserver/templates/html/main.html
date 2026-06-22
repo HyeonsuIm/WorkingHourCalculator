@@ -22,31 +22,50 @@
         <link rel="stylesheet" href="/static/Layout/PageHeader.css">
         <link rel="stylesheet" href="/static/Layout/ContentLayout.css">
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --primary: #4361ee;
+                --primary-light: #e8ebff;
+                --primary-dark: #3451d1;
+                --surface: #ffffff;
+                --surface-alt: #f8f9fc;
+                --border: #e4e7f0;
+                --text: #1e2340;
+                --text-muted: #6b7280;
+                --sunday: #e53e3e;
+                --saturday: #3b82f6;
+                --vacation: #059669;
+                --half-vacation: #34d399;
+                --today-bg: #eef0fd;
+                --today-border: #4361ee;
+                --radius: 8px;
+                --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            }
+        </style>
     </head>
     <body>
         <div class='title'>
             <div class='title_text'>
-                <a href="/" ><h3>Work Hour</h3></a>
+                <a href="/"><h3 style="margin:0;font-size:20px;font-weight:700;">Work Hour</h3></a>
             </div>
             <div class='title_nav'>
-                <div style="float:top;height:50%"></div>
-                <div style="float:top;height:50%">
-                 
-                    {% if userId %}
-                    <div class="nav_content" id="user_info">
-                        <p>사용자 : {{userId}}</p>
-                    </div>
-                    <div class="nav_content" id="user_logout">
-                        <a id="logout_btn" href="LogoutRequest">로그아웃</a>
-                    </div>
-                    {% else %}
-                    <div class="nav_content" id="user_info">
-                        <a id="login_btn" href="Login.html">로그인</a>
-                    </div>
-                    {% endif %}
-                    <div class="nav_content"><a href="https://jeweled-march-908.notion.site/Work-Hour-2b6015031d6a801cbcf3c74ff17c773e?pvs=149" target="_blank" rel="noopener noreferrer">사용법</a></div> 
-                    <div class="nav_content"><a id="work_input" href="WorkingHourInput.html">근무 입력</a></div>
+                <div class="nav_content"><a id="work_input" href="WorkingHourInput.html">근무 입력</a></div>
+                <div class="nav_content"><a href="https://jeweled-march-908.notion.site/Work-Hour-2b6015031d6a801cbcf3c74ff17c773e?pvs=149" target="_blank" rel="noopener noreferrer">사용법</a></div>
+                {% if userId %}
+                <div class="nav_content" id="user_info">
+                    <p>{{userId}}</p>
                 </div>
+                <div class="nav_content" id="user_logout">
+                    <a id="logout_btn" href="LogoutRequest">로그아웃</a>
+                </div>
+                {% else %}
+                <div class="nav_content" id="user_info">
+                    <a id="login_btn" href="Login.html">로그인</a>
+                </div>
+                {% endif %}
             </div>
         </div>
         <div class='content'>
@@ -229,12 +248,15 @@
                         <h5 class="modal-title">근태</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
                     </div>
-                    <div class="modal-body" style="display:flex;flex-direction:column;">
-                        날짜 : <br>
-                        <input class='form-control' id='keyVal' value=''/>
-                        근무시간 : <br>
-                        <input class='form-control' id="work_hour_day" value=''/>
-                        <br>
+                    <div class="modal-body" style="display:flex;flex-direction:column;gap:12px;">
+                        <div>
+                            <label>날짜</label>
+                            <input class='form-control' id='keyVal' value='' readonly/>
+                        </div>
+                        <div>
+                            <label>근무시간</label>
+                            <input class='form-control' id="work_hour_day" value=''/>
+                        </div>
                         <div class='only_working_day'>
                             <div>
                                 <input type='radio' class="form-check-input" name="radAnswer" id='working_day' value=3 checked/>
@@ -322,7 +344,7 @@
                         const nextElement = elements[targetIndex] || null;
                         if(nextElement)
                         {
-                            UpdateModalDatas(nextElement.getAttribute('data-id'))
+                            UpdateModalDatas(nextElement.getAttribute('data-id'));
                         }
                     }
                 }

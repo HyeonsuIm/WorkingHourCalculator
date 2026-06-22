@@ -1,55 +1,244 @@
-#calendar-table
-{
-    margin:auto;
-    text-align:center;
+:root {
+    --primary: #4361ee;
+    --primary-light: #e8ebff;
+    --primary-dark: #3451d1;
+    --surface: #ffffff;
+    --surface-alt: #f8f9fc;
+    --border: #e4e7f0;
+    --text: #1e2340;
+    --text-muted: #6b7280;
+    --sunday: #e53e3e;
+    --saturday: #3b82f6;
+    --vacation: #059669;
+    --half-vacation: #34d399;
+    --today-bg: #eef0fd;
+    --today-border: #4361ee;
+    --radius: 8px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
 }
 
-.calendar_header{
-    height:20px !important;
+#calendar-table {
+    margin: auto;
+    text-align: center;
+    border-collapse: separate;
+    border-spacing: 2px;
+    background: transparent;
 }
 
-/* 요일 높이 */
-#month-weekday{
-    height:20px !important;
+.calendar_header {
+    height: 20px !important;
+    border: none !important;
+    background: transparent !important;
 }
 
-#calendar-table tr td
-{
-    width:80px;
-    height:80px;
-    border:1px solid; 
-    border-spacing: 0px;
-    border-color:lightgray;
+#month-weekday {
+    height: 32px !important;
+    font-size: 13px !important;
+    font-weight: 600;
+    color: var(--text-muted);
+    border: none !important;
+    background: transparent !important;
+    padding: 4px 0 !important;
 }
 
-#year-month{
-    font-size:30px;
+#calendar-table tr td {
+    width: 88px;
+    height: 88px;
+    border: 1px solid var(--border);
+    border-spacing: 0;
+    border-radius: 6px;
+    vertical-align: top;
+    padding: 8px 6px 6px 8px !important;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--surface);
+    transition: background 0.15s, box-shadow 0.15s, border-color 0.15s, transform 0.12s;
+    position: relative;
 }
 
-#month-day, #month-weekday, #month-day-today
-{
-    font-size:large;
+#calendar-table tr td[id]:hover:not([id='month-weekday']):not([id='month-day-empty']):not(.calendar_header) {
+    background: var(--primary-light);
+    border-color: #a5b4fc;
+    box-shadow: 0 2px 8px rgba(67, 97, 238, 0.15);
+    transform: translateY(-1px);
+    z-index: 1;
 }
 
-#month-day-today
-{
-    background-color:lightgray
+/* 주간 합계 열 (id 없는 td) */
+#calendar-table tr td:not([id]):not(.calendar_header) {
+    background: #fafbff;
+    border-color: #e0e4f5;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    vertical-align: top;
 }
 
-#month-day-empty{
+#year-month {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
 }
 
-td.sunday, td.holiday{
-    color:red;
+#month-day, #month-day-today {
+    font-size: 16px !important;
 }
-td.saturday{
-    color:blue;
+
+#calendar-table tr #month-day-today,
+#month-day-today {
+    background: var(--today-bg) !important;
+    border: 2px solid var(--today-border) !important;
+    font-weight: 700;
 }
-td.vacation{
-    color: #3CB371;
-    /* background-color: pink; */
+
+/* 오늘이 일요일/공휴일인 경우 */
+#calendar-table tr #month-day-today.sunday,
+#calendar-table tr #month-day-today.holiday {
+    background: #fff0f0 !important;
+    border: 2px solid var(--sunday) !important;
 }
-td.half_vacation{
-    color: #98FB98;
-    /* background-color: rgba(255, 192, 203, 0.638); */
+
+/* 오늘이 토요일인 경우 */
+#calendar-table tr #month-day-today.saturday {
+    background: #eff4ff !important;
+    border: 2px solid var(--saturday) !important;
+}
+
+#month-day-empty {
+    background: var(--surface-alt) !important;
+    border-color: var(--border) !important;
+    border-style: dashed !important;
+}
+
+/* 일요일 / 공휴일 */
+#calendar-table tr td.sunday,
+#calendar-table tr td.holiday {
+    color: var(--sunday);
+    background: #fff5f5;
+    border-color: #fed7d7;
+}
+
+/* 토요일 */
+#calendar-table tr td.saturday {
+    color: var(--saturday);
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+/* 휴가 */
+#calendar-table tr td.vacation {
+    color: var(--vacation);
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+/* 반차 */
+#calendar-table tr td.half_vacation {
+    color: #0d9488;
+    background: #f0fdfa;
+    border-color: #99f6e4;
+}
+
+/* hover: 각 타입별 색상 유지 + 공통 lift 효과 */
+#calendar-table tr td.sunday:hover,
+#calendar-table tr td.holiday:hover {
+    background: #fed7d7 !important;
+    border-color: #f87171 !important;
+    box-shadow: 0 2px 8px rgba(229, 62, 62, 0.2) !important;
+    transform: translateY(-1px);
+}
+#calendar-table tr td.saturday:hover {
+    background: #dbeafe !important;
+    border-color: #60a5fa !important;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2) !important;
+    transform: translateY(-1px);
+}
+#calendar-table tr td.vacation:hover {
+    background: #dcfce7 !important;
+    border-color: #4ade80 !important;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2) !important;
+    transform: translateY(-1px);
+}
+#calendar-table tr td.half_vacation:hover {
+    background: #ccfbf1 !important;
+    border-color: #2dd4bf !important;
+    box-shadow: 0 2px 8px rgba(13, 148, 136, 0.2) !important;
+    transform: translateY(-1px);
+}
+
+#prev_button, #next_button {
+    border: none !important;
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    font-size: 18px !important;
+    font-weight: 700;
+    padding: 4px 12px !important;
+    border-radius: var(--radius) !important;
+    transition: background 0.15s, color 0.15s;
+}
+
+#prev_button:hover, #next_button:hover {
+    background: var(--primary-light) !important;
+    color: var(--primary) !important;
+}
+
+/* 날짜 셀 내부 <br> 숨김 (h6가 absolute로 배치되므로 불필요) */
+#calendar-table tr td[id] > br {
+    display: none;
+}
+
+/* 근무시간 배지: 셀 하단 중앙 배치 */
+#calendar-table tr td h6 {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: var(--surface-alt);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1px 7px;
+    margin: 0;
+    line-height: 1.6;
+    white-space: nowrap;
+    letter-spacing: -0.2px;
+}
+
+/* 근무시간이 없는 경우(0:00) 숨김 */
+#calendar-table tr td h6:empty {
+    display: none;
+}
+
+/* 색상 있는 셀의 h6 배지 */
+#calendar-table tr td.sunday h6,
+#calendar-table tr td.holiday h6 {
+    color: var(--sunday);
+    background: #fff5f5;
+    border-color: #fed7d7;
+}
+#calendar-table tr td.saturday h6 {
+    color: var(--saturday);
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+#calendar-table tr td.vacation h6 {
+    color: var(--vacation);
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+#calendar-table tr td.half_vacation h6 {
+    color: #0d9488;
+    background: #f0fdfa;
+    border-color: #99f6e4;
+}
+
+/* 주간 합계 열 h6 */
+#calendar-table tr td:not([id]) h6 {
+    color: var(--primary);
+    background: var(--primary-light);
+    border-color: #c7d2fe;
 }
