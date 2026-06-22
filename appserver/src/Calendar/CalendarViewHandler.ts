@@ -1,0 +1,160 @@
+import { Modal } from 'bootstrap'
+import { IsCommonWorkingDay, IsHalfVacation, IsVacation, IsHolidayWorking } from './CalendarAPI'
+import { GetWorkingHour } from '../Datas/DataStorageHandler'
+import { setElementVisibility, restoreSelectBase } from '../Layout/MainPageHandler'
+import {
+    updateWorkingPlan,
+    UpdateOvernightPayHour,
+    updateWorkingOverpayPlan,
+    renderOvernightPay,
+    UpdateLeaveWorkTime,
+    UpdateRemainWorkingHour
+} from './WorkingHour'
+import { render_calendar } from './Calendar'
+import { render_working_hour, render_calculated_working_hour } from './WorkingHour'
+import { RequestHolidays, RequestWorkingInfos } from '../Datas/DataStorageHandler'
+import { UpdateDayInfo } from './Calendar'
+import { UpdateWorkingHours } from '../Datas/DataStorageHandler'
+
+let displayDateYear = 2022
+let displayDateMonth = 1
+let displayDateDay = 1
+
+export function displayModal(element: HTMLElement) {
+    UpdateModalDatas(element.getAttribute('data-id')!)
+    const modalEl = document.getElementById('day_modal')!
+    Modal.getOrCreateInstance(modalEl).show()
+}
+
+export function UpdateModalDatas(keyVal: string) {
+    const keyValInput = document.querySelector('.modal-body #keyVal') as HTMLInputElement
+    if (keyValInput) keyValInput.value = keyVal
+    let year_month_day = keyVal.split('-').map(Number)
+
+    const date = new Date(year_month_day[0], year_month_day[1] - 1, year_month_day[2])
+    let is_working_day = false
+    if (IsCommonWorkingDay(year_month_day[0], year_month_day[1], year_month_day[2], date.getDay())) is_working_day = true
+
+    let working_day_elements = document.getElementsByClassName('only_working_day')
+    for (let index = 0; index < working_day_elements.length; index++) {
+        let htmlElement = working_day_elements[index] as HTMLElement
+        if (is_working_day) htmlElement.style.display = ""
+        else htmlElement.style.display = "none"
+    }
+
+    let holiday_elements = document.getElementsByClassName('only_holiday')
+    for (let index = 0; index < holiday_elements.length; index++) {
+        let htmlElement = holiday_elements[index] as HTMLElement
+        if (is_working_day) htmlElement.style.display = "none"
+        else htmlElement.style.display = ""
+    }
+
+    if (is_working_day) {
+        let workingDayElement = document.getElementById('working_day') as HTMLInputElement
+        let fullDayElement = document.getElementById("full_day") as HTMLInputElement
+        let halfDayElement = document.getElementById("half_day") as HTMLInputElement
+        if (IsHalfVacation(year_month_day[0], year_month_day[1], year_month_day[2])) {
+            halfDayElement.checked = true
+        } else if (IsVacation(year_month_day[0], year_month_day[1], year_month_day[2])) {
+            fullDayElement.checked = true
+        } else {
+            workingDayElement.checked = true
+        }
+    } else {
+        let holidayWorkingElement = document.getElementById("holiday_working_day") as HTMLInputElement
+        let holidayElement = document.getElementById('holiday') as HTMLInputElement
+        if (IsHolidayWorking(year_month_day[0], year_month_day[1], year_month_day[2])) {
+            holidayWorkingElement.checked = true
+        } else {
+            holidayElement.checked = true
+        }
+    }
+
+    let workingHours = GetWorkingHour()
+    let working_hour_element = document.getElementById("work_hour_day") as HTMLInputElement
+    let day = Number(year_month_day[2])
+    if (workingHours[day]) {
+        let str = String(Math.floor(workingHours[day] / 60)) + ":" + String(workingHours[day] % 60).padStart(2, '0')
+        working_hour_element.value = str
+    } else {
+        working_hour_element.value = ""
+        working_hour_element.placeholder = '10:00 or 10'
+    }
+}
+
+export function UpdateGlobalDateInformation() {
+    var today = new Date()
+
+    displayDateYear = today.getFullYear()
+    displayDateMonth = today.getMonth()
+    displayDateDay = today.getDate()
+
+    UpdateLeaveWorkTime()
+    restoreSelectBase()
+    UpdateRemainWorkingHour()
+    RequestHolidays(displayDateYear)
+    RequestWorkingInfos(String(displayDateYear) + "-" + String(displayDateMonth + 1).padStart(2, "0"))
+}
+
+export function UpdateAllViews() {
+    let today = new Date()
+    let isCurrentMonth = false
+    if (displayDateYear == today.getFullYear() && displayDateMonth == today.getMonth())
+        isCurrentMonth = true
+
+    updateWorkingPlan()
+    UpdateOvernightPayHour()
+    updateWorkingOverpayPlan()
+
+    render_calendar(displayDateYear, displayDateMonth, displayDateDay)
+    render_working_hour(displayDateYear, displayDateMonth, displayDateDay)
+    render_calculated_working_hour(displayDateYear, displayDateMonth, displayDateDay, isCurrentMonth)
+    setElementVisibility(isCurrentMonth)
+    renderOvernightPay()
+}
+
+export function UpdateDayInformationFromPopup() {
+    let keyValElement = document.getElementById("keyVal") as HTMLInputElement
+    let keyVal = keyValElement.value
+    let fullDayElement = document.getElementById("full_day") as HTMLInputElement
+    let halfDayElement = document.getElementById("half_day") as HTMLInputElement
+    let holidayElement = document.getElementById("holiday_working_day") as HTMLInputElement
+    if (fullDayElement.checked) {
+        UpdateDayInfo(keyVal, 1)
+    } else if (halfDayElement.checked) {
+        UpdateDayInfo(keyVal, 2)
+    } else if (holidayElement.checked) {
+        UpdateDayInfo(keyVal, 3)
+    } else {
+        UpdateDayInfo(keyVal, 0)
+    }
+
+    let workingHourElement = document.getElementById('work_hour_day') as HTMLInputElement
+    let working_hour = workingHourElement.value
+    if (working_hour != '') {
+        let timeStr = working_hour;
+        let minute = 0;
+        if (timeStr.includes(':')) {
+            let times = timeStr.split(':')
+            minute = parseInt(times[0]) * 60 + parseInt(times[1])
+        } else {
+            minute = parseInt(timeStr) * 60
+        }
+        let year_month_day = keyVal.split('-')
+
+        let key = year_month_day[0] + "-" + year_month_day[1].padStart(2, "0")
+        let working_hour_dict: any = {}
+        working_hour_dict[key] = [[Number(year_month_day[2]), minute]]
+        UpdateWorkingHours(working_hour_dict, key)
+    }
+}
+
+export function GetDisplayDate(): [number, number, number] {
+    return [displayDateYear, displayDateMonth, displayDateDay]
+}
+
+export function SetDisplayDate(year: number, month: number, day: number) {
+    displayDateYear = year
+    displayDateMonth = month
+    displayDateDay = day
+}

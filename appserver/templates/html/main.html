@@ -4,19 +4,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>NVS month time</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <script src="https://requirejs.org/docs/release/2.3.6/comments/require.js"></script>
-        <script src="/static/Calendar/CalendarAPI.js"></script>
-        <script src="/static/Calendar/Calendar.js"></script>
-        <script src="/static/Calendar/WorkingHour.js"></script>
-        <script src="/static/Calendar/CalendarViewHandler.js"></script>
-        <script src="/static/Layout/MainPageHandler.js"></script>
-        <script src="/static/Datas/DataStorageHandler.js"></script>
-        <script src="/static/UserInfoHandler.js"></script>
-        <script src="/static/WorkingHourInput.js"></script>
         
         <link rel="stylesheet" href="/static/Calendar/Calendar.css">
         <link rel="stylesheet" href="/static/Layout/PageHeader.css">
@@ -305,69 +293,15 @@
                 </div>
             </div>
         </div>
-    </body>
+    <script type="module" src="/static/dist/main.js"></script>
     <script>
-        $(document).ready(function(){
-            document.getElementById("work_hour_day").addEventListener("keydown", function(event) {
-                if (event.key === "Enter") {
-                    event.preventDefault(); // 폼 제출 방지 (있을 경우)
-                    document.getElementById("save_working_change").click(); // 버튼 클릭 시뮬레이션
-                }
-                if(event.key === "Tab")
-                {
-                    event.preventDefault(); // 폼 제출 방지 (있을 경우)
-                    UpdateDayInformationFromPopup();
-
-                    const targetIdValue = document.getElementById("keyVal").value;
-                    const elements = document.querySelectorAll('#month-day, #month-day-today');
-
-                    // 2. data-id 가 targetIdValue 인 element 찾기
-                    let targetIndex = -1;
-                    elements.forEach((el, index) => {
-                        if (el.dataset.id == targetIdValue) {
-                            targetIndex = index;
-                        }
-                    });
-
-
-                    if (targetIndex !== -1)
-                    {
-
-                        if(event.shiftKey)
-                        {
-                            targetIndex -= 1;
-                        }
-                        else
-                        {
-                            targetIndex += 1
-                        }
-                        const nextElement = elements[targetIndex] || null;
-                        if(nextElement)
-                        {
-                            UpdateModalDatas(nextElement.getAttribute('data-id'));
-                        }
-                    }
-                }
-            });
-            $('#day_modal').on('shown.bs.modal', function () {
-                $('#work_hour_day').trigger('focus');
-            });
-            $('dt').click(function()
-            {
-                $('dd').addClass('hidden');
-                $(this).next().removeClass('hidden');
-            });
-            $('[data-toggle="tooltip"]').tooltip();
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-            displayLoginPopup( "{{message}}" )
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        });
-        UpdateAllLocalStorage()
-        UpdateGlobalDateInformation()
-        UpdateAllViews()
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+        window.displayLoginPopup("{{message}}")
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
     </script>
+    </body>
 </html>

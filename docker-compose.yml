@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
     mysql:
         image: mysql
@@ -8,11 +6,6 @@ services:
             - workcalendar_dist:/var/lib/mysql
         environment:
             - MYSQL_ROOT_PASSWORD=1
-        # secrets:
-        #     - mysql_server_id
-        #     - mysql_server_passwd
-        #network_mode: host
-        # comments for dev task on the mac
         ports:
             - "3306:3306"
 
@@ -22,10 +15,6 @@ services:
         restart: always
         depends_on:
             - mysql
-        #network_mode: host
-        # comments for dev task on the mac
-        links:
-            - mysql:dbserver
         ports:
             - "19999:19999"
 
@@ -33,8 +22,6 @@ services:
         build: ./nginx
         container_name: nginx
         restart: always
-        #network_mode: host
-        # comments for dev task on the mac
         ports:
             - "20000:20000"
 

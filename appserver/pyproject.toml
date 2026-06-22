@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "working-hour-calculator"
+version = "0.1.0"
+description = "Working hour calendar web application"
+authors = ["hslim"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+Flask = "^2.3.3"
+SQLAlchemy = "^1.4.52"
+Werkzeug = "^2.3.7"
+holidays = "^0.46"
+mysql-connector-python = "^8.3.0"
+uWSGI = "^2.0.23"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

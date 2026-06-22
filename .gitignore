@@ -130,3 +130,7 @@ dmypy.json
 
 # Projects
 dbdata/
+
+# Node
+node_modules/
+static/dist/
