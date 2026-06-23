@@ -5,12 +5,14 @@ import { GetDisplayDate, SetDisplayDate } from './CalendarViewHandler'
 import { UpdateVacations } from '../Datas/DataStorageHandler'
 
 function get_calendar_header_elements(currentyear: number, currentMonth: number, totalWorkingHour: number, getPaid: number): string {
-    let elementStr = "<tr><td class='calendar_header'><button id='prev_button' class='btn btn-light' onclick='SetMonth(-1)'><</button></td><td class='calendar_header' id='year-month' colspan='6'><div style='position:relative;display:block;'>" + currentyear + "." + (currentMonth) + "<div style='line-height:15px;display:block;position:absolute;top:-5px;right:0px;bottom:auto'>"
-    if (totalWorkingHour > 0) {
-        elementStr += "<div style='float:left;text-align:left'><font size='2' color='#1c1c1c'>근무<br>야근</font></div>"
-        elementStr += "<div style='float:right;text-align:left'><font size='2' color='#1c1c1c'>" + totalWorkingHour + "시간<br>" + getPaid + "만원</font></div>"
-    }
-    elementStr += "</div></div></td><td class='calendar_header'><button id='next_button' class='btn btn-light' onclick='SetMonth(1)'>></button></td></tr>"
+    const statsHtml = totalWorkingHour > 0
+        ? `<div class='cal-stats'><span class='cal-stat-item'><span class='cal-stat-label'>근무</span><span class='cal-stat-value'>${totalWorkingHour}시간</span></span><span class='cal-stat-item'><span class='cal-stat-label'>야근</span><span class='cal-stat-value'>${getPaid}만원</span></span></div>`
+        : ''
+
+    let elementStr = `<tr><td class='calendar_header'><button id='prev_button' class='btn' onclick='SetMonth(-1)'>&#8249;</button></td>`
+    elementStr += `<td class='calendar_header' id='year-month' colspan='6'><div class='cal-title-wrap'><span class='cal-year'>${currentyear}</span><span class='cal-month'>${currentMonth}월</span>${statsHtml}</div></td>`
+    elementStr += `<td class='calendar_header'><button id='next_button' class='btn' onclick='SetMonth(1)'>&#8250;</button></td></tr>`
+
     elementStr += "<tr>"
     elementStr += "<td class='sunday' id='month-weekday'>일</td>"
     elementStr += "<td id='month-weekday'>월</td>"
@@ -19,7 +21,7 @@ function get_calendar_header_elements(currentyear: number, currentMonth: number,
     elementStr += "<td id='month-weekday'>목</td>"
     elementStr += "<td id='month-weekday'>금</td>"
     elementStr += "<td class='saturday' id='month-weekday'>토</td>"
-    elementStr += "<td class='month-weekday' id='month-weekday'>합계</td>"
+    elementStr += "<td id='month-weekday'>합계</td>"
     elementStr += "</tr>"
     return elementStr;
 }

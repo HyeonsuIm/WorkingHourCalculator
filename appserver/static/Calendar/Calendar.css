@@ -25,20 +25,92 @@
     background: transparent;
 }
 
+/* ── 헤더 행 ── */
 .calendar_header {
-    height: 20px !important;
     border: none !important;
     background: transparent !important;
+    padding: 0 2px !important;
+    vertical-align: middle !important;
 }
 
-#month-weekday {
-    height: 32px !important;
-    font-size: 13px !important;
-    font-weight: 600;
+/* 년월 타이틀 영역 */
+.cal-title-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 10px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.cal-year {
+    font-size: 15px;
+    font-weight: 500;
     color: var(--text-muted);
-    border: none !important;
-    background: transparent !important;
-    padding: 4px 0 !important;
+    letter-spacing: 0.3px;
+}
+
+.cal-month {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.5px;
+}
+
+.cal-stats {
+    margin-left: auto;
+    display: flex;
+    gap: 12px;
+}
+
+.cal-stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.cal-stat-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    line-height: 1.2;
+}
+
+.cal-stat-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    line-height: 1.3;
+}
+
+/* ── 요일 행 ── */
+#month-weekday {
+    height: 36px !important;
+    font-size: 12px !important;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: var(--surface-alt) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 6px !important;
+    padding: 0 !important;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* 일요일 요일 셀 */
+#calendar-table tr td.sunday#month-weekday {
+    color: var(--sunday) !important;
+    background: #fff5f5 !important;
+    border-color: #fed7d7 !important;
+}
+
+/* 토요일 요일 셀 */
+#calendar-table tr td.saturday#month-weekday {
+    color: var(--saturday) !important;
+    background: #eff6ff !important;
+    border-color: #bfdbfe !important;
 }
 
 #calendar-table tr td {
@@ -76,10 +148,7 @@
 }
 
 #year-month {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.3px;
+    padding: 4px 6px !important;
 }
 
 #month-day, #month-day-today {
@@ -142,17 +211,10 @@
 }
 
 /* hover: 각 타입별 색상 유지 + 공통 lift 효과 */
-#calendar-table tr td.sunday:hover,
 #calendar-table tr td.holiday:hover {
     background: #fed7d7 !important;
     border-color: #f87171 !important;
     box-shadow: 0 2px 8px rgba(229, 62, 62, 0.2) !important;
-    transform: translateY(-1px);
-}
-#calendar-table tr td.saturday:hover {
-    background: #dbeafe !important;
-    border-color: #60a5fa !important;
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2) !important;
     transform: translateY(-1px);
 }
 #calendar-table tr td.vacation:hover {
@@ -169,19 +231,25 @@
 }
 
 #prev_button, #next_button {
-    border: none !important;
-    background: transparent !important;
+    border: 1px solid var(--border) !important;
+    background: var(--surface) !important;
     color: var(--text-muted) !important;
-    font-size: 18px !important;
-    font-weight: 700;
-    padding: 4px 12px !important;
-    border-radius: var(--radius) !important;
-    transition: background 0.15s, color 0.15s;
+    font-size: 26px !important;
+    font-weight: 300;
+    line-height: 1;
+    width: 40px;
+    height: 40px;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    box-shadow: var(--shadow-sm);
+    transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 
 #prev_button:hover, #next_button:hover {
     background: var(--primary-light) !important;
     color: var(--primary) !important;
+    border-color: #a5b4fc !important;
+    box-shadow: 0 2px 8px rgba(67, 97, 238, 0.15) !important;
 }
 
 /* 날짜 셀 내부 <br> 숨김 (h6가 absolute로 배치되므로 불필요) */
