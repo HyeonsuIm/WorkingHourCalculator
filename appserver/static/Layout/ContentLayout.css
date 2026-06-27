@@ -2,6 +2,7 @@ body {
     background: var(--surface-alt);
     font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     color: var(--text);
+    transition: background 0.2s, color 0.2s;
 }
 
 .content {
@@ -229,6 +230,53 @@ i.fa-info-circle:hover {
 /* working-hour-table (최대/최소 근무시간) */
 #working-hour-table {
     margin: 0;
+}
+
+/* ── 다크모드 오버라이드 ── */
+[data-theme="dark"] .form-control {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+}
+
+[data-theme="dark"] .form-control:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(107,138,245,0.2) !important;
+}
+
+[data-theme="dark"] .nav-tabs {
+    background: var(--surface) !important;
+    border-color: var(--border) !important;
+}
+
+[data-theme="dark"] .tab-content {
+    background: var(--surface) !important;
+    border-color: var(--border) !important;
+}
+
+[data-theme="dark"] .modal-content {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+}
+
+[data-theme="dark"] .modal-header,
+[data-theme="dark"] .modal-footer {
+    border-color: var(--border) !important;
+}
+
+[data-theme="dark"] .btn-secondary {
+    background: var(--surface-alt) !important;
+    border-color: var(--border) !important;
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+    background: var(--border) !important;
+    color: var(--text) !important;
+}
+
+[data-theme="dark"] input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
 }
 
 /* 라디오 그룹 간격 */

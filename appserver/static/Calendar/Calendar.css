@@ -139,8 +139,8 @@
 
 /* 주간 합계 열 (id 없는 td) */
 #calendar-table tr td:not([id]):not(.calendar_header) {
-    background: #fafbff;
-    border-color: #e0e4f5;
+    background: var(--cell-summary-bg);
+    border-color: var(--cell-summary-border);
     font-size: 13px;
     font-weight: 500;
     color: var(--text-muted);
@@ -165,13 +165,13 @@
 /* 오늘이 일요일/공휴일인 경우 */
 #calendar-table tr #month-day-today.sunday,
 #calendar-table tr #month-day-today.holiday {
-    background: #fff0f0 !important;
+    background: var(--cell-today-sunday-bg) !important;
     border: 2px solid var(--sunday) !important;
 }
 
 /* 오늘이 토요일인 경우 */
 #calendar-table tr #month-day-today.saturday {
-    background: #eff4ff !important;
+    background: var(--cell-today-saturday-bg) !important;
     border: 2px solid var(--saturday) !important;
 }
 
@@ -185,29 +185,29 @@
 #calendar-table tr td.sunday,
 #calendar-table tr td.holiday {
     color: var(--sunday);
-    background: #fff5f5;
-    border-color: #fed7d7;
+    background: var(--cell-holiday-bg);
+    border-color: var(--cell-holiday-border);
 }
 
 /* 토요일 */
 #calendar-table tr td.saturday {
     color: var(--saturday);
-    background: #eff6ff;
-    border-color: #bfdbfe;
+    background: var(--cell-saturday-bg);
+    border-color: var(--cell-saturday-border);
 }
 
 /* 휴가 */
 #calendar-table tr td.vacation {
     color: var(--vacation);
-    background: #f0fdf4;
-    border-color: #bbf7d0;
+    background: var(--cell-vacation-bg);
+    border-color: var(--cell-vacation-border);
 }
 
 /* 반차 */
 #calendar-table tr td.half_vacation {
     color: #0d9488;
-    background: #f0fdfa;
-    border-color: #99f6e4;
+    background: var(--cell-half-vacation-bg);
+    border-color: var(--cell-half-vacation-border);
 }
 
 /* hover: 각 타입별 색상 유지 + 공통 lift 효과 */
@@ -285,23 +285,23 @@
 #calendar-table tr td.sunday h6,
 #calendar-table tr td.holiday h6 {
     color: var(--sunday);
-    background: #fff5f5;
-    border-color: #fed7d7;
+    background: var(--cell-holiday-bg);
+    border-color: var(--cell-holiday-border);
 }
 #calendar-table tr td.saturday h6 {
     color: var(--saturday);
-    background: #eff6ff;
-    border-color: #bfdbfe;
+    background: var(--cell-saturday-bg);
+    border-color: var(--cell-saturday-border);
 }
 #calendar-table tr td.vacation h6 {
     color: var(--vacation);
-    background: #f0fdf4;
-    border-color: #bbf7d0;
+    background: var(--cell-vacation-bg);
+    border-color: var(--cell-vacation-border);
 }
 #calendar-table tr td.half_vacation h6 {
     color: #0d9488;
-    background: #f0fdfa;
-    border-color: #99f6e4;
+    background: var(--cell-half-vacation-bg);
+    border-color: var(--cell-half-vacation-border);
 }
 
 /* 공휴일 이름 뱃지 */
@@ -322,5 +322,34 @@
 #calendar-table tr td:not([id]) h6 {
     color: var(--primary);
     background: var(--primary-light);
-    border-color: #c7d2fe;
+    border-color: var(--cell-summary-border);
+}
+
+/* ── 요일 셀 다크모드 ── */
+[data-theme="dark"] #calendar-table tr td.sunday#month-weekday {
+    background: var(--cell-holiday-bg) !important;
+    border-color: var(--cell-holiday-border) !important;
+}
+[data-theme="dark"] #calendar-table tr td.saturday#month-weekday {
+    background: var(--cell-saturday-bg) !important;
+    border-color: var(--cell-saturday-border) !important;
+}
+
+/* hover 다크모드 */
+[data-theme="dark"] #calendar-table tr td.holiday:hover {
+    background: #3d1c1c !important;
+    border-color: #7a3030 !important;
+}
+[data-theme="dark"] #calendar-table tr td.vacation:hover {
+    background: #173d25 !important;
+    border-color: #246a3e !important;
+}
+[data-theme="dark"] #calendar-table tr td.half_vacation:hover {
+    background: #173d36 !important;
+    border-color: #246a5c !important;
+}
+[data-theme="dark"] #calendar-table tr td[id]:hover:not([id='month-weekday']):not([id='month-day-empty']):not(.calendar_header) {
+    background: var(--primary-light) !important;
+    border-color: #3a4f9a !important;
+    box-shadow: 0 2px 8px rgba(107, 138, 245, 0.2) !important;
 }

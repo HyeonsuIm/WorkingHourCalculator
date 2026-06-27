@@ -7,9 +7,18 @@ import { validateForm } from './UserInfoHandler'
 import { inputWorkingHours } from './WorkingHourInput'
 import { UpdateAllLocalStorage } from './Datas/DataStorageHandler'
 
+function toggleTheme() {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'
+    document.documentElement.setAttribute('data-theme', next)
+    localStorage.setItem('theme', next)
+    const icon = document.getElementById('theme-icon')
+    if (icon) icon.className = next === 'dark' ? 'fa fa-sun-o' : 'fa fa-moon-o'
+}
+
 declare global {
     interface Window {
         SetMonth: (diff: number) => void
+        toggleTheme: () => void
         displayModal: (element: HTMLElement) => void
         setBaseSelect: () => void
         UpdateRemainWorkingHourAndUpdate: () => void
@@ -40,8 +49,13 @@ window.inputWorkingHours = inputWorkingHours
 window.UpdateModalDatas = UpdateModalDatas
 window.UpdateGlobalDateInformation = UpdateGlobalDateInformation
 window.UpdateAllLocalStorage = UpdateAllLocalStorage
+window.toggleTheme = toggleTheme
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Sync theme icon with current theme
+    const icon = document.getElementById('theme-icon')
+    if (icon) icon.className = document.documentElement.getAttribute('data-theme') === 'dark' ? 'fa fa-sun-o' : 'fa fa-moon-o'
+
     // Set up keydown handler for work_hour_day input
     const workHourDayEl = document.getElementById("work_hour_day")
     if (workHourDayEl) {
