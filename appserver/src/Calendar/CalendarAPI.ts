@@ -42,6 +42,9 @@ export function GetCommonWorkingDayVal(year: number, month: number, day: number,
 }
 
 export function GetVacationDayVal(year: number, month: number, day: number): number {
+    // 공휴일·주말은 이미 근무일에서 제외되므로 휴가 중복 차감 방지
+    const dayOfWeek = new Date(year, month - 1, day).getDay()
+    if (IsHoliday(year, month, day) || dayOfWeek === 0 || dayOfWeek === 6) return 0;
     if (IsVacation(year, month, day)) return 1;
     if (IsHalfVacation(year, month, day)) return 0.5;
     return 0;
