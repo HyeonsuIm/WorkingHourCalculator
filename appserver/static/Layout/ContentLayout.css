@@ -233,6 +233,17 @@ i.fa-info-circle:hover {
 }
 
 /* ── 다크모드 오버라이드 ── */
+
+/* Bootstrap .table이 --bs-table-color로 색상을 고정하므로 재정의 */
+[data-theme="dark"] .table {
+    --bs-table-color: var(--text);
+    --bs-table-bg: transparent;
+    --bs-table-border-color: var(--border);
+    --bs-table-striped-color: var(--text);
+    --bs-table-hover-color: var(--text);
+    color: var(--text);
+}
+
 [data-theme="dark"] .form-control {
     background: var(--surface) !important;
     color: var(--text) !important;
